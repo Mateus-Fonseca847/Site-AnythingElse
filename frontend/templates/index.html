@@ -29,7 +29,7 @@
           <a href="#" class="brand">
             <div class="brand-logo">
               <img
-                src="{{ url_for('static', filename='img/logo.png') }}"
+                src="https://down-tx-br.img.susercontent.com/br-11134216-81z1k-mfbl6utpk551f2_tn.webp"
                 alt="Logo da marca"
               />
             </div>
@@ -187,5 +187,229 @@
         </nav>
       </div>
     </header>
+    <main>
+      <section class="promo-carousel" aria-label="Promoções em destaque">
+        <div class="promo-carousel__viewport">
+          <article
+            class="promo-slide is-active"
+            data-slide="0"
+            style="
+              background-image:
+                linear-gradient(
+                  90deg,
+                  rgba(16, 18, 27, 0.88) 0%,
+                  rgba(16, 18, 27, 0.72) 42%,
+                  rgba(16, 18, 27, 0.18) 100%
+                ),
+                url(https://tfcprw.vtexassets.com/assets/vtex.file-manager-graphql/images/178c8b09-ee11-4be8-a673-a943cf83f318___b123c1f7eef576c76285c88ed475da8c.jpg);
+            "
+          >
+            <div class="promo-slide__content">
+              <span class="promo-slide__eyebrow">Oferta da semana</span>
+              <h1 class="promo-slide__title">Coleção urbana com até 40% OFF</h1>
+              <p class="promo-slide__description">
+                Renove seu visual com peças versáteis, acabamento premium e
+                descontos exclusivos por tempo limitado.
+              </p>
+              <div class="promo-slide__actions">
+                <a href="#" class="promo-slide__button">Comprar agora</a>
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="promo-slide"
+            data-slide="1"
+            style="
+              background-image:
+                linear-gradient(
+                  90deg,
+                  rgba(28, 22, 18, 0.88) 0%,
+                  rgba(28, 22, 18, 0.7) 42%,
+                  rgba(28, 22, 18, 0.18) 100%
+                ),
+                url(https://tfcprw.vtexassets.com/assets/vtex.file-manager-graphql/images/178c8b09-ee11-4be8-a673-a943cf83f318___b123c1f7eef576c76285c88ed475da8c.jpg);
+            "
+          >
+            <div class="promo-slide__content">
+              <span class="promo-slide__eyebrow">Lançamentos</span>
+              <h1 class="promo-slide__title">
+                Acessórios que completam seu estilo
+              </h1>
+              <p class="promo-slide__description">
+                Descubra bolsas, bonés e itens exclusivos para elevar sua
+                composição com personalidade.
+              </p>
+              <div class="promo-slide__actions">
+                <a href="#" class="promo-slide__button">Ver coleção</a>
+              </div>
+            </div>
+          </article>
+
+          <article
+            class="promo-slide"
+            data-slide="2"
+            style="background-image: linear-gradient(90deg, rgba(18, 24, 30, 0.90) 0%, rgba(18, 24, 30, 0.72) 42%, rgba(18, 24, 30, 0.18) 100%), url('https://tfcprw.vtexassets.com/assets/vtex.file-manager-graphql/images/178c8b09-ee11-4be8-a673-a943cf83f318___b123c1f7eef576c76285c88ed475da8c.jpg);"
+          >
+            <div class="promo-slide__content">
+              <span class="promo-slide__eyebrow">Exclusivos</span>
+              <h1 class="promo-slide__title">
+                Itens colecionáveis para presentear
+              </h1>
+              <p class="promo-slide__description">
+                Produtos selecionados com visual marcante e condições especiais
+                para surpreender em qualquer ocasião.
+              </p>
+              <div class="promo-slide__actions">
+                <a href="#" class="promo-slide__button">Explorar ofertas</a>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="promo-carousel__footer">
+          <div
+            class="promo-carousel__tabs"
+            role="tablist"
+            aria-label="Navegação das promoções"
+          >
+            <button
+              class="promo-tab is-active"
+              type="button"
+              role="tab"
+              aria-selected="true"
+              aria-controls="promo-slide-0"
+              data-index="0"
+            >
+              <span class="promo-tab__label">Coleção urbana</span>
+              <span class="promo-tab__text"
+                >Até 40% OFF em peças selecionadas</span
+              >
+            </button>
+
+            <button
+              class="promo-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="promo-slide-1"
+              data-index="1"
+            >
+              <span class="promo-tab__label">Novos acessórios</span>
+              <span class="promo-tab__text"
+                >Itens modernos para compor seu look</span
+              >
+            </button>
+
+            <button
+              class="promo-tab"
+              type="button"
+              role="tab"
+              aria-selected="false"
+              aria-controls="promo-slide-2"
+              data-index="2"
+            >
+              <span class="promo-tab__label">Presentes exclusivos</span>
+              <span class="promo-tab__text"
+                >Seleção especial com visual premium</span
+              >
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section class="recommended-section" aria-label="Categorias recomendadas">
+        <div class="recommended-section__container">
+          <div class="recommended-section__header">
+            <h2 class="recommended-section__title">Recomendados</h2>
+          </div>
+
+          <div class="recommended-carousel">
+            <button
+              class="recommended-carousel__arrow recommended-carousel__arrow--prev"
+              type="button"
+              aria-label="Ver recomendações anteriores"
+            >
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M15 6L9 12L15 18"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+
+            <div class="recommended-carousel__track-wrapper">
+              <div class="recommended-carousel__track">
+                <a
+                  href="#"
+                  class="recommended-card"
+                  style="
+                    background-image: url('{{ url_for('static', filename='img/CamisaSurfista.png') }}');"
+                >
+                  <span class="recommended-card__label">Vestuário</span>
+                </a>
+
+                <a
+                  href="#"
+                  class="recommended-card"
+                  style="
+                    background-image: url('{{ url_for('static', filename='img/EcobagFrankstein.png') }}');"
+                >
+                  <span class="recommended-card__label">Acessórios</span>
+                </a>
+
+                <a
+                  href="#"
+                  class="recommended-card"
+                  style="
+                    background-image: url('{{ url_for('static', filename='img/LivroAnatomia.png') }}');"
+                >
+                  <span class="recommended-card__label">Livros</span>
+                </a>
+
+                <a
+                  href="#"
+                  class="recommended-card"
+                  style="
+                    background-image: url('{{ url_for('static', filename='img/FilmeYakuza.png') }}');"
+                >
+                  <span class="recommended-card__label">Filmes</span>
+                </a>
+
+                <a
+                  href="#"
+                  class="recommended-card"
+                  style="
+                    background-image: url('{{ url_for('static', filename='img/GarrafaToyStory.png') }}');"
+                >
+                  <span class="recommended-card__label">Decoração</span>
+                </a>
+              </div>
+            </div>
+
+            <button
+              class="recommended-carousel__arrow recommended-carousel__arrow--next"
+              type="button"
+              aria-label="Ver próximas recomendações"
+            >
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9 6L15 12L9 18"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>

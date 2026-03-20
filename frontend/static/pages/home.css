@@ -1,0 +1,435 @@
+.promo-carousel {
+  position: relative;
+  width: 100%;
+  background: #f3f4f8;
+  overflow: hidden;
+}
+
+.promo-carousel__viewport {
+  position: relative;
+  width: 100%;
+  min-height: 620px;
+  background: #111827;
+}
+
+.promo-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.02);
+  transition:
+    opacity 0.55s ease,
+    visibility 0.55s ease,
+    transform 0.7s ease;
+}
+
+.promo-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: scale(1);
+  z-index: 2;
+}
+
+.promo-slide__content {
+  width: min(92%, 1280px);
+  margin: 0 auto;
+  padding: 72px 0 140px;
+  color: #ffffff;
+}
+
+.promo-slide__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  margin-bottom: 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.promo-slide__title {
+  max-width: 640px;
+  margin: 0 0 18px;
+  font-size: clamp(2.3rem, 5vw, 4.8rem);
+  line-height: 0.96;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+}
+
+.promo-slide__description {
+  max-width: 580px;
+  margin: 0 0 28px;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.promo-slide__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.promo-slide__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 26px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #e2a012, #dfb93c);
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    opacity 0.2s ease;
+  box-shadow: 0 16px 30px rgba(225, 29, 72, 0.28);
+}
+
+.promo-slide__button:hover {
+  transform: translateY(-2px);
+  opacity: 0.96;
+}
+
+.promo-carousel__footer {
+  position: relative;
+  width: min(92%, 1280px);
+  margin: -96px auto 0;
+  z-index: 5;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 18px;
+}
+
+.promo-carousel__tabs {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+  backdrop-filter: blur(14px);
+}
+
+.promo-tab {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px 22px 22px;
+  border: none;
+  border-top: 4px solid transparent;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.promo-tab:hover {
+  background: #f8fafc;
+}
+
+.promo-tab.is-active {
+  border-top-color: #dfb93c;
+  background: #ffffff;
+}
+
+.promo-tab__label {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.promo-tab__text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #475569;
+}
+
+.promo-carousel__controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.promo-control {
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+  cursor: pointer;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.12);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.promo-control:hover {
+  transform: translateY(-2px);
+  background: #ffffff;
+}
+
+.promo-control svg {
+  width: 22px;
+  height: 22px;
+}
+
+@media (max-width: 1100px) {
+  .promo-carousel__viewport {
+    min-height: 560px;
+  }
+
+  .promo-carousel__footer {
+    flex-direction: column;
+    margin-top: -72px;
+  }
+
+  .promo-carousel__tabs {
+    grid-template-columns: 1fr;
+  }
+
+  .promo-carousel__controls {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 768px) {
+  .promo-slide__content {
+    padding: 56px 0 120px;
+  }
+
+  .promo-slide__title {
+    max-width: 100%;
+    font-size: clamp(2rem, 9vw, 3rem);
+  }
+
+  .promo-slide__description {
+    max-width: 100%;
+    font-size: 0.98rem;
+    line-height: 1.6;
+  }
+
+  .promo-carousel__footer {
+    width: min(94%, 1280px);
+    margin-top: -54px;
+  }
+
+  .promo-tab {
+    padding: 18px 16px;
+  }
+
+  .promo-tab__label {
+    font-size: 0.95rem;
+  }
+
+  .promo-tab__text {
+    font-size: 0.88rem;
+  }
+
+  .promo-control {
+    width: 50px;
+    height: 50px;
+    border-radius: 16px;
+  }
+}
+
+.recommended-section {
+  width: 100%;
+  padding: 56px 0 72px;
+  background: linear-gradient(180deg, #fff8ef 0%, #fff3df 100%);
+}
+
+.recommended-section__container {
+  width: min(92%, 1280px);
+  margin: 0 auto;
+}
+
+.recommended-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.recommended-section__title {
+  margin: 0;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #301606;
+}
+
+.recommended-carousel {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) 56px;
+  align-items: center;
+  gap: 18px;
+  min-height: 440px;
+}
+
+.recommended-carousel__track-wrapper {
+  overflow: hidden;
+}
+
+.recommended-carousel__track {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(220px, 1fr));
+  gap: 18px;
+  transition: transform 0.45s ease;
+  will-change: transform;
+}
+
+.recommended-card {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 360px;
+  padding: 22px;
+  border-radius: 26px;
+  overflow: hidden;
+  text-decoration: none;
+  background-color: #f59e0b;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 18px 45px rgba(180, 92, 0, 0.18);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    filter 0.25s ease;
+}
+
+.recommended-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 179, 0, 0.08) 0%,
+    rgba(0, 0, 0, 0.34) 100%
+  );
+}
+
+.recommended-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 55px rgba(180, 92, 0, 0.24);
+  filter: saturate(1.05);
+}
+
+.recommended-card__label {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  max-width: 100%;
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #ffffff;
+  text-shadow: 0 4px 18px rgba(0, 0, 0, 0.32);
+}
+
+.recommended-carousel__arrow {
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 18px;
+  background: #ffffff;
+  color: #8a4a00;
+  cursor: pointer;
+  box-shadow: 0 14px 28px rgba(179, 100, 2, 0.16);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.recommended-carousel__arrow:hover {
+  transform: translateY(-2px);
+  background: #fffaf2;
+  box-shadow: 0 18px 34px rgba(179, 100, 2, 0.22);
+}
+
+.recommended-carousel__arrow svg {
+  width: 22px;
+  height: 22px;
+}
+
+@media (max-width: 1100px) {
+  .recommended-section {
+    padding: 48px 0 64px;
+  }
+
+  .recommended-carousel {
+    grid-template-columns: 48px minmax(0, 1fr) 48px;
+    min-height: 390px;
+    gap: 14px;
+  }
+
+  .recommended-carousel__track {
+    grid-template-columns: repeat(5, minmax(260px, 1fr));
+  }
+
+  .recommended-card {
+    min-height: 320px;
+    border-radius: 22px;
+  }
+
+  .recommended-card__label {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .recommended-section {
+    padding: 42px 0 56px;
+  }
+
+  .recommended-carousel {
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+    min-height: 350px;
+    gap: 10px;
+  }
+
+  .recommended-carousel__track {
+    grid-template-columns: repeat(5, minmax(78vw, 1fr));
+    gap: 12px;
+  }
+
+  .recommended-card {
+    min-height: 260px;
+    padding: 18px;
+    border-radius: 20px;
+  }
+
+  .recommended-card__label {
+    font-size: 1.08rem;
+  }
+
+  .recommended-carousel__arrow {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+  }
+}
