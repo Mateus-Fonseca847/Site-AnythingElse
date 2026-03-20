@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AnythingElse</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='base.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='layout.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='components.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='pages/home.css') }}"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-container">
+        <div class="header-top">
+          <a href="#" class="brand">
+            <div class="brand-logo">
+              <img
+                src="{{ url_for('static', filename='img/logo.png') }}"
+                alt="Logo da marca"
+              />
+            </div>
+          </a>
+
+          <div class="search-wrapper">
+            <form class="search-bar">
+              <input type="text" placeholder="Olá, o que você procura?" />
+              <button type="submit" aria-label="Pesquisar">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="7"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  ></circle>
+                  <path
+                    d="M20 20L16.65 16.65"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  ></path>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <div class="header-tools">
+            <a href="#" class="tool-item">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="2"
+                ></circle>
+                <path
+                  d="M9.09 9A3 3 0 0 1 15 10c0 2-3 2-3 4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                ></path>
+                <circle cx="12" cy="17" r="1" fill="currentColor"></circle>
+              </svg>
+              <div class="tool-text">
+                <span>Central de</span>
+                <strong>Atendimento</strong>
+              </div>
+            </a>
+
+            <a href="#" class="tool-item">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="12"
+                  cy="8"
+                  r="4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                ></circle>
+                <path
+                  d="M4 20C4 16.6863 7.58172 14 12 14C16.4183 14 20 16.6863 20 20"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                ></path>
+              </svg>
+              <div class="tool-text">
+                <span>Entre ou</span>
+                <strong>Cadastre-se</strong>
+              </div>
+            </a>
+
+            <a href="#" class="tool-item cart-tool">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M6 7H18L17 20H7L6 7Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                ></path>
+              </svg>
+              <div class="tool-text">
+                <span>Minha Sacola</span>
+                <strong>R$0,00</strong>
+              </div>
+              <span class="cart-count">0</span>
+            </a>
+          </div>
+        </div>
+
+        <nav class="header-nav">
+          <ul class="nav-menu">
+            <li><a href="#">Novidades</a></li>
+
+            <li class="has-dropdown">
+              <a href="#">Vestuário</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Camisetas</a></li>
+                <li><a href="#">Calças</a></li>
+                <li><a href="#">Jaquetas</a></li>
+                <li><a href="#">Moletons</a></li>
+                <li><a href="#">Baby Look</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#">Acessórios</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Bonés</a></li>
+                <li><a href="#">Bolsas</a></li>
+                <li><a href="#">Canecas</a></li>
+                <li><a href="#">Chaveiros</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#">Livros</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Romance</a></li>
+                <li><a href="#">Fantasia</a></li>
+                <li><a href="#">Terror</a></li>
+                <li><a href="#">Quadrinhos</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#">Filmes</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Ação</a></li>
+                <li><a href="#">Drama</a></li>
+                <li><a href="#">Ficção</a></li>
+                <li><a href="#">Animação</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#">Decoração</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Quadros</a></li>
+                <li><a href="#">Luminárias</a></li>
+                <li><a href="#">Almofadas</a></li>
+                <li><a href="#">Tapetes</a></li>
+              </ul>
+            </li>
+
+            <li><a href="#">Personalize</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+  </body>
+</html>
