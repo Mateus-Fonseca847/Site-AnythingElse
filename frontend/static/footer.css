@@ -11,10 +11,10 @@
 }
 
 .site-footer__top {
-  display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  gap: 48px;
-  align-items: start;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 60px;
 }
 
 .site-footer__brand {
@@ -68,25 +68,36 @@
   opacity: 0.9;
 }
 
-.site-footer__contact-icon,
-.site-footer__contact-icon img,
-.site-footer__contact-icon svg {
-  background: #f59e0b; /* laranja */
+.site-footer__contact-row svg {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
   padding: 8px;
   border-radius: 50%;
+  background: #e2a012;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  display: block;
 }
+
+.site-footer__contact-row svg path {
+  fill: #ffffff;
 }
 
 .site-footer__columns {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 36px;
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+  width: 100%;
 }
 
 .site-footer__column {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  min-width: 180px;
+  flex: 1;
 }
 
 .site-footer__title {
@@ -169,7 +180,7 @@
 }
 
 .site-footer__image-grid--security {
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .site-footer__badge-link,
@@ -190,19 +201,65 @@
 }
 
 .site-footer__badge {
-  height: 34px;
+  height: 16px;
   max-width: 96px;
   object-fit: contain;
   display: block;
 }
 
 .site-footer__seal {
-  height: 78px;
+  height: 50px;
   max-width: 120px;
   object-fit: contain;
   display: block;
 }
 
+.site-footer__seal-rating {
+  text-decoration: none;
+  display: inline-flex;
+}
+
+.footer-rating {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 12px 16px;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.footer-rating:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+}
+
+.footer-rating__top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-rating__star {
+  color: #f59e0b;
+  font-size: 1.1rem;
+}
+
+.footer-rating__value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111111;
+}
+
+.footer-rating__count {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
 @media (max-width: 1180px) {
   .site-footer__top {
     grid-template-columns: 1fr;
