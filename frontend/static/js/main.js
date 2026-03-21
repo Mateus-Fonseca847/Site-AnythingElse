@@ -137,3 +137,64 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateCarousel();
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const newsSection = document.querySelector(".news-section");
+
+  if (!newsSection) return;
+
+  const track = newsSection.querySelector(".news-carousel__track");
+  const cards = Array.from(newsSection.querySelectorAll(".product-card"));
+  const prevButton = newsSection.querySelector(".news-section__arrow--prev");
+  const nextButton = newsSection.querySelector(".news-section__arrow--next");
+
+  let currentIndex = 0;
+
+  function getVisibleCards() {
+    if (window.innerWidth <= 768) return 1;
+    if (window.innerWidth <= 1100) return 2;
+    return 4;
+  }
+
+  function updateNewsCarousel() {
+    const visibleCards = getVisibleCards();
+    const maxIndex = Math.max(0, cards.length - visibleCards);
+    currentIndex = Math.min(currentIndex, maxIndex);
+
+    if (!cards.length) return;
+
+    const cardWidth = cards[0].offsetWidth;
+    const gap = parseFloat(getComputedStyle(track).gap) || 0;
+    const translateX = currentIndex * (cardWidth + gap);
+
+    track.style.transform = `translateX(-${translateX}px)`;
+
+    if (prevButton) prevButton.disabled = currentIndex === 0;
+    if (nextButton) nextButton.disabled = currentIndex >= maxIndex;
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener("click", () => {
+      const visibleCards = getVisibleCards();
+      const maxIndex = Math.max(0, cards.length - visibleCards);
+
+      if (currentIndex < maxIndex) {
+        currentIndex += 1;
+        updateNewsCarousel();
+      }
+    });
+  }
+
+  if (prevButton) {
+    prevButton.addEventListener("click", () => {
+      if (currentIndex > 0) {
+        currentIndex -= 1;
+        updateNewsCarousel();
+      }
+    });
+  }
+
+  window.addEventListener("resize", updateNewsCarousel);
+
+  updateNewsCarousel();
+});
