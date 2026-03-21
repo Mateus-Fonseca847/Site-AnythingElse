@@ -1,0 +1,263 @@
+.site-footer {
+  width: 100%;
+  padding: 56px 0 24px;
+  background: #f3f4f6;
+  border-top: 1px solid #e5e7eb;
+}
+
+.site-footer__container {
+  width: min(92%, 1280px);
+  margin: 0 auto;
+}
+
+.site-footer__top {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.site-footer__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.site-footer__brand-logo-link {
+  display: inline-flex;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  text-decoration: none;
+  background: #111827;
+  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.12);
+}
+
+.site-footer__brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.site-footer__socials {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.site-footer__social-link {
+  width: 34px;
+  height: 34px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 10px;
+  background: transparent;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.site-footer__social-link:hover {
+  transform: translateY(-2px);
+  opacity: 0.9;
+}
+
+.site-footer__contact-icon,
+.site-footer__contact-icon img,
+.site-footer__contact-icon svg {
+  background: #f59e0b; /* laranja */
+  padding: 8px;
+  border-radius: 50%;
+}
+}
+
+.site-footer__columns {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 36px;
+}
+
+.site-footer__column {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.site-footer__title {
+  margin: 0 0 18px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: #111111;
+}
+
+.site-footer__link {
+  display: inline-block;
+  margin-bottom: 12px;
+  text-decoration: none;
+  color: #111111;
+  font-size: 1rem;
+  line-height: 1.45;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.site-footer__link:hover {
+  color: #d97706;
+  transform: translateX(2px);
+}
+
+.site-footer__contact-row {
+  width: 100%;
+  display: flex;
+  align-items: center; /* antes estava flex-start */
+  gap: 14px;
+  text-decoration: none;
+  color: #111111;
+  padding: 0 0 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  transition: color 0.2s ease;
+}
+
+.site-footer__contact-row:hover {
+  color: #d97706;
+}
+
+.site-footer__contact-row--static:hover {
+  color: #111111;
+}
+
+.site-footer__hours-text {
+  margin: 6px 0 0 32px;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: #111111;
+}
+
+.site-footer__divider {
+  width: 100%;
+  height: 1px;
+  margin: 42px 0 26px;
+  background: #dcdfe4;
+}
+
+.site-footer__bottom {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
+}
+
+.site-footer__payments,
+.site-footer__security {
+  flex: 1;
+}
+
+.site-footer__image-grid {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.site-footer__image-grid--security {
+  justify-content: flex-end;
+}
+
+.site-footer__badge-link,
+.site-footer__seal-link {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.site-footer__badge-link:hover,
+.site-footer__seal-link:hover {
+  transform: translateY(-2px);
+  opacity: 0.94;
+}
+
+.site-footer__badge {
+  height: 34px;
+  max-width: 96px;
+  object-fit: contain;
+  display: block;
+}
+
+.site-footer__seal {
+  height: 78px;
+  max-width: 120px;
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 1180px) {
+  .site-footer__top {
+    grid-template-columns: 1fr;
+    gap: 34px;
+  }
+
+  .site-footer__brand {
+    align-items: center;
+  }
+
+  .site-footer__columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site-footer__bottom {
+    flex-direction: column;
+  }
+
+  .site-footer__image-grid--security {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .site-footer {
+    padding: 42px 0 20px;
+  }
+
+  .site-footer__brand-logo-link {
+    width: 132px;
+    height: 132px;
+  }
+
+  .site-footer__columns {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  .site-footer__title {
+    font-size: 1.2rem;
+    margin-bottom: 14px;
+  }
+
+  .site-footer__link {
+    margin-bottom: 10px;
+    font-size: 0.96rem;
+  }
+
+  .site-footer__badge {
+    height: 30px;
+    max-width: 88px;
+  }
+
+  .site-footer__seal {
+    height: 64px;
+    max-width: 110px;
+  }
+}

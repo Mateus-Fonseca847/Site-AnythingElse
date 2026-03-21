@@ -21,6 +21,10 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='pages/home.css') }}"
     />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='footer.css') }}"
+    />
   </head>
   <body>
     <header class="site-header">
@@ -194,15 +198,15 @@
             class="promo-slide is-active"
             data-slide="0"
             style="
-              background-image:
+              background-image: 
                 linear-gradient(
                   90deg,
                   rgba(16, 18, 27, 0.88) 0%,
                   rgba(16, 18, 27, 0.72) 42%,
                   rgba(16, 18, 27, 0.18) 100%
                 ),
-                url(https://tfcprw.vtexassets.com/assets/vtex.file-manager-graphql/images/178c8b09-ee11-4be8-a673-a943cf83f318___b123c1f7eef576c76285c88ed475da8c.jpg);
-            "
+                url('{{ url_for('static', filename='img/banner.png') }}')"
+            ;
           >
             <div class="promo-slide__content">
               <span class="promo-slide__eyebrow">Oferta da semana</span>
@@ -725,7 +729,402 @@
           </div>
         </div>
       </section>
+
+      <section class="brand-social-section" aria-label="Apresentação da marca">
+        <div class="brand-social-section__container">
+          <div class="brand-social-section__logo-wrap">
+            <img
+              class="brand-social-section__logo"
+              src="https://down-tx-br.img.susercontent.com/br-11134216-81z1k-mfbl6utpk551f2_tn.webp"
+              alt="Logo da AnythingElse"
+            />
+          </div>
+
+          <p class="brand-social-section__text">
+            Vista cultura, expressão e personalidade. Acompanhe a AnythingElse
+            nas redes e fique por dentro das novidades.
+          </p>
+
+          <div class="brand-social-section__socials" aria-label="Redes sociais">
+            <a
+              href="https://www.instagram.com/anythingelsebr/"
+              class="brand-social-section__social-link"
+              aria-label="Instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect
+                  x="3"
+                  y="3"
+                  width="18"
+                  height="18"
+                  rx="5"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="4.2"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+                <circle cx="17.2" cy="6.8" r="1.2" fill="currentColor" />
+              </svg>
+            </a>
+
+            <a
+              href="#"
+              class="brand-social-section__social-link"
+              aria-label="TikTok"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M14 4C14.5 6 16.2 7.7 18.4 8V11C16.8 11 15.3 10.5 14 9.6V14.6C14 17.6 11.6 20 8.6 20C5.6 20 3.2 17.6 3.2 14.6C3.2 11.6 5.6 9.2 8.6 9.2C9.1 9.2 9.5 9.2 10 9.4V12.3C9.6 12.1 9.1 12 8.6 12C7.2 12 6 13.2 6 14.6C6 16 7.2 17.2 8.6 17.2C10 17.2 11.2 16 11.2 14.6V4H14Z"
+                  fill="currentColor"
+                />
+              </svg>
+            </a>
+
+            <a
+              href="https://shopee.com.br/caamchaves22?fbclid=PAZXh0bgNhZW0CMTEAc3J0YwZhcHBfaWQMMjU2MjgxMDQwNTU4AAGngmtaThyt4qzcBqfh65JNSRgDHp5z_5wjhIAVLPojVrxhio2VJ3td8AZd1kw_aem_76Z0XQTmIXY2SOWkOUpN9Q&uls_trackid=5577jebl00kh&utm_content=1111DxqWM1FK2x78JKUoTFhauu"
+              class="brand-social-section__social-link"
+              aria-label="Shopee"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="{{ url_for('static', filename='img/shopee.png') }}"
+                alt=""
+              />
+            </a>
+
+            <a
+              href="https://wa.me/5524992239258"
+              class="brand-social-section__social-link"
+              aria-label="YouTube"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                <path
+                  fill="currentColor"
+                  d="M476.9 161.1C435 119.1 379.2 96 319.9 96C197.5 96 97.9 195.6 97.9 318C97.9 357.1 108.1 395.3 127.5 429L96 544L213.7 513.1C246.1 530.8 282.6 540.1 319.8 540.1L319.9 540.1C442.2 540.1 544 440.5 544 318.1C544 258.8 518.8 203.1 476.9 161.1zM319.9 502.7C286.7 502.7 254.2 493.8 225.9 477L219.2 473L149.4 491.3L168 423.2L163.6 416.2C145.1 386.8 135.4 352.9 135.4 318C135.4 216.3 218.2 133.5 320 133.5C369.3 133.5 415.6 152.7 450.4 187.6C485.2 222.5 506.6 268.8 506.5 318.1C506.5 419.9 421.6 502.7 319.9 502.7zM421.1 364.5C415.6 361.7 388.3 348.3 383.2 346.5C378.1 344.6 374.4 343.7 370.7 349.3C367 354.9 356.4 367.3 353.1 371.1C349.9 374.8 346.6 375.3 341.1 372.5C308.5 356.2 287.1 343.4 265.6 306.5C259.9 296.7 271.3 297.4 281.9 276.2C283.7 272.5 282.8 269.3 281.4 266.5C280 263.7 268.9 236.4 264.3 225.3C259.8 214.5 255.2 216 251.8 215.8C248.6 215.6 244.9 215.6 241.2 215.6C237.5 215.6 231.5 217 226.4 222.5C221.3 228.1 207 241.5 207 268.8C207 296.1 226.9 322.5 229.6 326.2C232.4 329.9 268.7 385.9 324.4 410C359.6 425.2 373.4 426.5 391 423.9C401.7 422.3 423.8 410.5 428.4 397.5C433 384.5 433 373.4 431.6 371.1C430.3 368.6 426.6 367.2 421.1 364.5z"
+                />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="newsletter-section" aria-label="Cadastro para novidades">
+        <div class="newsletter-section__container">
+          <div class="newsletter-section__content">
+            <div class="newsletter-section__left">
+              <h2 class="newsletter-section__title">
+                Fique por dentro das tendências
+              </h2>
+              <p class="newsletter-section__description">
+                Cadastre-se e receba em primeira mão novidades, promoções e
+                conteúdos especiais da sua marca.
+              </p>
+            </div>
+
+            <div class="newsletter-section__right">
+              <p class="newsletter-section__label">
+                Deseja receber conteúdos sobre:
+              </p>
+
+              <div class="newsletter-section__preferences">
+                <button type="button" class="newsletter-chip is-active">
+                  Feminino
+                </button>
+                <button type="button" class="newsletter-chip">Masculino</button>
+              </div>
+
+              <form class="newsletter-form">
+                <input
+                  type="email"
+                  class="newsletter-form__input"
+                  placeholder="Digite seu e-mail"
+                />
+                <button type="submit" class="newsletter-form__button">
+                  Enviar
+                </button>
+              </form>
+
+              <p class="newsletter-form__hint">
+                Ao clicar em “Enviar”, você aceita os termos de uso.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
+    <footer class="site-footer" aria-label="Rodapé do site">
+      <div class="site-footer__container">
+        <div class="site-footer__top">
+          <div class="site-footer__brand">
+            <a
+              href="#"
+              class="site-footer__brand-logo-link"
+              aria-label="Página inicial"
+            >
+              <img
+                src="{{ url_for('static', filename='img/footer-logo.png') }}"
+                alt="Logo da marca"
+                class="site-footer__brand-logo"
+              />
+            </a>
+
+            <div class="site-footer__socials" aria-label="Redes sociais">
+              <a
+                href="#"
+                class="site-footer__social-link"
+                aria-label="WhatsApp"
+              >
+                <img
+                  src="{{ url_for('static', filename='icon/whatsapp.svg') }}"
+                  alt=""
+                />
+              </a>
+              <a
+                href="#"
+                class="site-footer__social-link"
+                aria-label="Instagram"
+              >
+                <img
+                  src="{{ url_for('static', filename='icon/instagram.svg') }}"
+                  alt=""
+                />
+              </a>
+              <a
+                href="#"
+                class="site-footer__social-link"
+                aria-label="Facebook"
+              >
+                <img
+                  src="{{ url_for('static', filename='icon/facebook.svg') }}"
+                  alt=""
+                />
+              </a>
+              <a
+                href="#"
+                class="site-footer__social-link"
+                aria-label="Pinterest"
+              >
+                <img
+                  src="{{ url_for('static', filename='icon/pinterest.svg') }}"
+                  alt=""
+                />
+              </a>
+              <a href="#" class="site-footer__social-link" aria-label="TikTok">
+                <img
+                  src="{{ url_for('static', filename='icon/tiktok.svg') }}"
+                  alt=""
+                />
+              </a>
+            </div>
+          </div>
+
+          <div class="site-footer__columns">
+            <div class="site-footer__column">
+              <h3 class="site-footer__title">Categorias</h3>
+              <a href="#" class="site-footer__link">Novidades</a>
+              <a href="#" class="site-footer__link">Camisetas</a>
+              <a href="#" class="site-footer__link">Baby Look</a>
+              <a href="#" class="site-footer__link">Moletom</a>
+              <a href="#" class="site-footer__link">Acessórios</a>
+              <a href="#" class="site-footer__link">Personalize</a>
+            </div>
+
+            <div class="site-footer__column">
+              <h3 class="site-footer__title">Institucional</h3>
+              <a href="#" class="site-footer__link">Nosso blog</a>
+              <a href="#" class="site-footer__link">Sobre a marca</a>
+              <a href="#" class="site-footer__link">Parcerias</a>
+            </div>
+
+            <div class="site-footer__column">
+              <h3 class="site-footer__title">Ajuda e Suporte</h3>
+              <a href="#" class="site-footer__link">Fale Conosco</a>
+              <a href="#" class="site-footer__link">Política de privacidade</a>
+              <a href="#" class="site-footer__link">Dúvidas frequentes</a>
+              <a href="#" class="site-footer__link">Sobre nós</a>
+              <a href="#" class="site-footer__link">Cashback</a>
+              <a href="#" class="site-footer__link">Frete e entrega</a>
+              <a href="#" class="site-footer__link">Nossos produtos</a>
+              <a href="#" class="site-footer__link">Seja um afiliado</a>
+              <a href="#" class="site-footer__link">Trocas e devoluções</a>
+              <a href="#" class="site-footer__link">Meus pedidos</a>
+            </div>
+
+            <div class="site-footer__column">
+              <h3 class="site-footer__title">Atendimento</h3>
+
+              <a
+                href="https://wa.me/5500000000000"
+                class="site-footer__contact-row"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                  <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                  <path
+                    fill="#e2a012"
+                    d="M476.9 161.1C435 119.1 379.2 96 319.9 96C197.5 96 97.9 195.6 97.9 318C97.9 357.1 108.1 395.3 127.5 429L96 544L213.7 513.1C246.1 530.8 282.6 540.1 319.8 540.1L319.9 540.1C442.2 540.1 544 440.5 544 318.1C544 258.8 518.8 203.1 476.9 161.1zM319.9 502.7C286.7 502.7 254.2 493.8 225.9 477L219.2 473L149.4 491.3L168 423.2L163.6 416.2C145.1 386.8 135.4 352.9 135.4 318C135.4 216.3 218.2 133.5 320 133.5C369.3 133.5 415.6 152.7 450.4 187.6C485.2 222.5 506.6 268.8 506.5 318.1C506.5 419.9 421.6 502.7 319.9 502.7zM421.1 364.5C415.6 361.7 388.3 348.3 383.2 346.5C378.1 344.6 374.4 343.7 370.7 349.3C367 354.9 356.4 367.3 353.1 371.1C349.9 374.8 346.6 375.3 341.1 372.5C308.5 356.2 287.1 343.4 265.6 306.5C259.9 296.7 271.3 297.4 281.9 276.2C283.7 272.5 282.8 269.3 281.4 266.5C280 263.7 268.9 236.4 264.3 225.3C259.8 214.5 255.2 216 251.8 215.8C248.6 215.6 244.9 215.6 241.2 215.6C237.5 215.6 231.5 217 226.4 222.5C221.3 228.1 207 241.5 207 268.8C207 296.1 226.9 322.5 229.6 326.2C232.4 329.9 268.7 385.9 324.4 410C359.6 425.2 373.4 426.5 391 423.9C401.7 422.3 423.8 410.5 428.4 397.5C433 384.5 433 373.4 431.6 371.1C430.3 368.6 426.6 367.2 421.1 364.5z"
+                  />
+                </svg>
+                <span>WhatsApp: <strong>(11) 99999-9999</strong></span>
+              </a>
+
+              <a
+                href="mailto:contato@sualoja.com.br"
+                class="site-footer__contact-row"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                  <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                  <path
+                    fill="rgb(226, 160, 18)"
+                    d="M112 128C85.5 128 64 149.5 64 176C64 191.1 71.1 205.3 83.2 214.4L291.2 370.4C308.3 383.2 331.7 383.2 348.8 370.4L556.8 214.4C568.9 205.3 576 191.1 576 176C576 149.5 554.5 128 528 128L112 128zM64 260L64 448C64 483.3 92.7 512 128 512L512 512C547.3 512 576 483.3 576 448L576 260L377.6 408.8C343.5 434.4 296.5 434.4 262.4 408.8L64 260z"
+                  />
+                </svg>
+                <span>E-mail: <strong>contato@sualoja.com.br</strong></span>
+              </a>
+
+              <div class="site-footer__hours">
+                <div
+                  class="site-footer__contact-row site-footer__contact-row--static"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                    <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                    <path
+                      fill="rgb(226, 160, 18)"
+                      d="M320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64zM296 184L296 320C296 328 300 335.5 306.7 340L402.7 404C413.7 411.4 428.6 408.4 436 397.3C443.4 386.2 440.4 371.4 429.3 364L344 307.2L344 184C344 170.7 333.3 160 320 160C306.7 160 296 170.7 296 184z"
+                    />
+                  </svg>
+                  <span>Horário de atendimento:</span>
+                </div>
+                <p class="site-footer__hours-text">
+                  Segunda a Sexta, das 9:00h às 17:30h.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="site-footer__divider"></div>
+
+        <div class="site-footer__bottom">
+          <div class="site-footer__payments">
+            <h3 class="site-footer__title">Formas de Pagamento</h3>
+            <div class="site-footer__image-grid">
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="{{ url_for('static', filename='img/pay-mercadopago.png') }}"
+                  alt="Mercado Pago"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="{{ url_for('static', filename='img/pay-paghiper.png') }}"
+                  alt="PagHiper"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="{{ url_for('static', filename='img/pay-visa.png') }}"
+                  alt="Visa"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="{{ url_for('static', filename='img/pay-mastercard.png') }}"
+                  alt="Mastercard"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="{{ url_for('static', filename='img/pay-hipercard.png') }}"
+                  alt="Hipercard"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="{{ url_for('static', filename='img/pay-amex.png') }}"
+                  alt="American Express"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="{{ url_for('static', filename='img/pay-diners.png') }}"
+                  alt="Diners Club"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="{{ url_for('static', filename='img/pay-elo.png') }}"
+                  alt="Elo"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="{{ url_for('static', filename='img/pay-pix.png') }}"
+                  alt="Pix"
+                  class="site-footer__badge"
+                />
+              </a>
+            </div>
+          </div>
+
+          <div class="site-footer__security">
+            <h3 class="site-footer__title">Avaliação e Segurança</h3>
+            <div
+              class="site-footer__image-grid site-footer__image-grid--security"
+            >
+              <a href="#" class="site-footer__seal-link">
+                <img
+                  src="{{ url_for('static', filename='img/seal-rating.png') }}"
+                  alt="Avaliações"
+                  class="site-footer__seal"
+                />
+              </a>
+              <a href="#" class="site-footer__seal-link">
+                <img
+                  src="{{ url_for('static', filename='img/seal-norton.png') }}"
+                  alt="Segurança"
+                  class="site-footer__seal"
+                />
+              </a>
+              <a href="#" class="site-footer__seal-link">
+                <img
+                  src="{{ url_for('static', filename='img/seal-store.png') }}"
+                  alt="Loja confiável"
+                  class="site-footer__seal"
+                />
+              </a>
+              <a href="#" class="site-footer__seal-link">
+                <img
+                  src="{{ url_for('static', filename='img/seal-google.png') }}"
+                  alt="Google Safe Browsing"
+                  class="site-footer__seal"
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>

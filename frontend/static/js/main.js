@@ -198,3 +198,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateNewsCarousel();
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const chips = document.querySelectorAll(".newsletter-chip");
+
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      chips.forEach((item) => item.classList.remove("is-active"));
+      chip.classList.add("is-active");
+    });
+  });
+});
