@@ -209,3 +209,461 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+document.addEventListener("DOMContentLoaded", () => {
+  const loginTrigger = document.querySelector(".header-login-trigger");
+  const authModal = document.querySelector(".auth-modal");
+  const authOverlay = document.querySelector(".auth-modal__overlay");
+  const authClose = document.querySelector(".auth-modal__close");
+  const authBack = document.querySelector(".auth-modal__back");
+
+  const cartTrigger = document.querySelector(".header-cart-trigger");
+  const cartDrawer = document.querySelector(".cart-drawer");
+  const cartOverlay = document.querySelector(".cart-drawer__overlay");
+  const cartClose = document.querySelector(".cart-drawer__close");
+  const cartItemsContainer = document.querySelector(".cart-drawer__items");
+  const cartEmptyState = document.querySelector(".cart-drawer__empty");
+  const cartCount = document.querySelector(".cart-count");
+  const cartTotal = document.querySelector(".header-cart-total");
+
+  const addToCartButtons = Array.from(
+    document.querySelectorAll(".product-card__button"),
+  );
+
+  const authForm = document.getElementById("authForm");
+  const authTabs = Array.from(document.querySelectorAll(".auth-modal__tab"));
+  const authTitle = document.getElementById("auth-modal-title");
+  const authNameField = document.querySelector(".auth-modal__field--name");
+  const authConfirmField = document.querySelector(
+    ".auth-modal__field--confirm",
+  );
+  const authForgot = document.querySelector(".auth-modal__forgot-link");
+  const authSwitchMode = document.querySelector(".auth-modal__switch-mode");
+  const authMessage = document.getElementById("authMessage");
+  const authSubmitButton = document.getElementById("authSubmitButton");
+
+  const authName = document.getElementById("authName");
+  const authEmail = document.getElementById("authEmail");
+  const authPassword = document.getElementById("authPassword");
+  const authConfirmPassword = document.getElementById("authConfirmPassword");
+
+  const loginTextStrong = loginTrigger?.querySelector(".tool-text strong");
+  const loginTextSpan = loginTrigger?.querySelector(".tool-text span");
+
+  const accountMenu = document.querySelector(".account-menu");
+  const accountMenuOverlay = document.querySelector(".account-menu__overlay");
+  const accountMenuClose = document.querySelector(".account-menu__close");
+  const accountMenuUser = document.getElementById("accountMenuUser");
+  const switchUserButton = document.getElementById("switchUserButton");
+  const logoutButton = document.getElementById("logoutButton");
+
+  let cart = [];
+  let authMode = "login";
+  let currentUser = null;
+
+  function lockScroll(shouldLock) {
+    document.body.style.overflow = shouldLock ? "hidden" : "";
+  }
+
+  function positionPopupBelowButton(dialogElement, triggerElement) {
+    if (!dialogElement || !triggerElement) return;
+
+    const rect = triggerElement.getBoundingClientRect();
+    const scrollTop = window.scrollY || window.pageYOffset;
+    const scrollLeft = window.scrollX || window.pageXOffset;
+    const dialogWidth = dialogElement.offsetWidth || 320;
+
+    dialogElement.style.top = `${rect.bottom + scrollTop + 8}px`;
+    dialogElement.style.left = `${rect.right + scrollLeft - dialogWidth}px`;
+  }
+
+  function openAuthModal() {
+    if (!authModal || !loginTrigger) return;
+
+    const dialog = authModal.querySelector(".auth-modal__dialog");
+    positionPopupBelowButton(dialog, loginTrigger);
+
+    authModal.classList.add("is-open");
+    authModal.setAttribute("aria-hidden", "false");
+    lockScroll(true);
+  }
+
+  function closeAuthModal() {
+    if (!authModal) return;
+    authModal.classList.remove("is-open");
+    authModal.setAttribute("aria-hidden", "true");
+
+    if (
+      !cartDrawer?.classList.contains("is-open") &&
+      !accountMenu?.classList.contains("is-open")
+    ) {
+      lockScroll(false);
+    }
+  }
+
+  function openCartDrawer() {
+    if (!cartDrawer) return;
+    cartDrawer.classList.add("is-open");
+    cartDrawer.setAttribute("aria-hidden", "false");
+    lockScroll(true);
+  }
+
+  function closeCartDrawer() {
+    if (!cartDrawer) return;
+    cartDrawer.classList.remove("is-open");
+    cartDrawer.setAttribute("aria-hidden", "true");
+
+    if (
+      !authModal?.classList.contains("is-open") &&
+      !accountMenu?.classList.contains("is-open")
+    ) {
+      lockScroll(false);
+    }
+  }
+
+  function openAccountMenu() {
+    if (!accountMenu || !loginTrigger) return;
+
+    const dialog = accountMenu.querySelector(".account-menu__dialog");
+    positionPopupBelowButton(dialog, loginTrigger);
+
+    if (accountMenuUser && currentUser) {
+      accountMenuUser.textContent = `${currentUser.name} • ${currentUser.email}`;
+    }
+
+    accountMenu.classList.add("is-open");
+    accountMenu.setAttribute("aria-hidden", "false");
+    lockScroll(true);
+  }
+
+  function closeAccountMenu() {
+    if (!accountMenu) return;
+    accountMenu.classList.remove("is-open");
+    accountMenu.setAttribute("aria-hidden", "true");
+
+    if (
+      !authModal?.classList.contains("is-open") &&
+      !cartDrawer?.classList.contains("is-open")
+    ) {
+      lockScroll(false);
+    }
+  }
+
+  function setLoggedUser(user) {
+    currentUser = user;
+
+    if (loginTextSpan) loginTextSpan.textContent = "Olá,";
+    if (loginTextStrong)
+      loginTextStrong.textContent = user?.name || "Cadastre-se";
+  }
+
+  function clearLoggedUser() {
+    currentUser = null;
+
+    if (loginTextSpan) loginTextSpan.textContent = "Entre ou";
+    if (loginTextStrong) loginTextStrong.textContent = "Cadastre-se";
+  }
+
+  function setAuthMessage(message = "", isSuccess = false) {
+    if (!authMessage) return;
+    authMessage.textContent = message;
+    authMessage.classList.toggle("is-success", isSuccess);
+  }
+
+  function updateAuthMode(mode) {
+    authMode = mode;
+
+    authTabs.forEach((tab) => {
+      tab.classList.toggle("is-active", tab.dataset.authMode === mode);
+    });
+
+    const isRegister = mode === "register";
+
+    if (authTitle) {
+      authTitle.textContent = isRegister
+        ? "Crie sua conta"
+        : "Entre com email e senha";
+    }
+
+    if (authNameField) authNameField.hidden = !isRegister;
+    if (authConfirmField) authConfirmField.hidden = !isRegister;
+    if (authForgot) {
+      authForgot.style.display = isRegister ? "none" : "inline-flex";
+    }
+    if (authSubmitButton) {
+      authSubmitButton.textContent = isRegister ? "Cadastrar" : "Entrar";
+    }
+    if (authSwitchMode) {
+      authSwitchMode.textContent = isRegister ? "Entrar" : "Cadastre-se";
+    }
+
+    setAuthMessage("");
+  }
+
+  async function requestAuth(url, payload) {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await response.json();
+    return { response, data };
+  }
+
+  async function updateHeaderUser() {
+    try {
+      const response = await fetch("/auth/me");
+      const data = await response.json();
+
+      if (!response.ok || !data.user) {
+        clearLoggedUser();
+        return;
+      }
+
+      setLoggedUser(data.user);
+    } catch (error) {
+      clearLoggedUser();
+      console.error(error);
+    }
+  }
+
+  function parsePrice(priceText) {
+    return Number(
+      priceText.replace("R$", "").replace(/\./g, "").replace(",", ".").trim(),
+    );
+  }
+
+  function formatPrice(value) {
+    return value.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+  }
+
+  function updateCartUI() {
+    if (!cartItemsContainer || !cartEmptyState || !cartCount || !cartTotal) {
+      return;
+    }
+
+    cartItemsContainer.innerHTML = "";
+
+    if (cart.length === 0) {
+      cartEmptyState.hidden = false;
+      cartItemsContainer.hidden = true;
+      cartCount.textContent = "0";
+      cartTotal.textContent = "R$0,00";
+      return;
+    }
+
+    cartEmptyState.hidden = true;
+    cartItemsContainer.hidden = false;
+
+    let total = 0;
+
+    cart.forEach((item, index) => {
+      total += item.price;
+
+      const itemElement = document.createElement("div");
+      itemElement.className = "cart-item";
+      itemElement.innerHTML = `
+        <img class="cart-item__image" src="${item.image}" alt="${item.title}">
+        <div>
+          <p class="cart-item__title">${item.title}</p>
+          <p class="cart-item__price">${formatPrice(item.price)}</p>
+        </div>
+        <button type="button" class="cart-item__remove" data-index="${index}" aria-label="Remover item">×</button>
+      `;
+
+      cartItemsContainer.appendChild(itemElement);
+    });
+
+    cartCount.textContent = String(cart.length);
+    cartTotal.textContent = formatPrice(total);
+
+    cartItemsContainer
+      .querySelectorAll(".cart-item__remove")
+      .forEach((button) => {
+        button.addEventListener("click", () => {
+          const index = Number(button.dataset.index);
+          cart.splice(index, 1);
+          updateCartUI();
+        });
+      });
+  }
+
+  addToCartButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+
+      const productCard = button.closest(".product-card");
+      if (!productCard) return;
+
+      const title =
+        productCard.querySelector(".product-card__title")?.textContent.trim() ||
+        "Produto";
+
+      const priceText =
+        productCard.querySelector(".product-card__price")?.textContent.trim() ||
+        "R$0,00";
+
+      const image =
+        productCard
+          .querySelector(".product-card__image--main")
+          ?.getAttribute("src") || "";
+
+      cart.push({
+        title,
+        price: parsePrice(priceText),
+        image,
+      });
+
+      updateCartUI();
+      openCartDrawer();
+    });
+  });
+
+  loginTrigger?.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    if (currentUser) {
+      openAccountMenu();
+    } else {
+      openAuthModal();
+    }
+  });
+
+  authOverlay?.addEventListener("click", closeAuthModal);
+  authClose?.addEventListener("click", closeAuthModal);
+  authBack?.addEventListener("click", closeAuthModal);
+
+  cartTrigger?.addEventListener("click", (event) => {
+    event.preventDefault();
+    openCartDrawer();
+  });
+
+  cartOverlay?.addEventListener("click", closeCartDrawer);
+  cartClose?.addEventListener("click", closeCartDrawer);
+
+  accountMenuOverlay?.addEventListener("click", closeAccountMenu);
+  accountMenuClose?.addEventListener("click", closeAccountMenu);
+
+  switchUserButton?.addEventListener("click", () => {
+    closeAccountMenu();
+    openAuthModal();
+  });
+
+  logoutButton?.addEventListener("click", async () => {
+    try {
+      const response = await fetch("/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.ok) {
+        return;
+      }
+
+      clearLoggedUser();
+      closeAccountMenu();
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  authTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      updateAuthMode(tab.dataset.authMode);
+    });
+  });
+
+  authSwitchMode?.addEventListener("click", (event) => {
+    event.preventDefault();
+    updateAuthMode(authMode === "login" ? "register" : "login");
+  });
+
+  authForm?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    setAuthMessage("");
+
+    const email = authEmail?.value.trim() || "";
+    const password = authPassword?.value || "";
+
+    authSubmitButton.disabled = true;
+    const originalText = authSubmitButton.textContent;
+    authSubmitButton.textContent =
+      authMode === "register" ? "Cadastrando..." : "Entrando...";
+
+    try {
+      if (authMode === "register") {
+        const name = authName?.value.trim() || "";
+        const confirmPassword = authConfirmPassword?.value || "";
+
+        const { response, data } = await requestAuth("/auth/register", {
+          name,
+          email,
+          password,
+          confirm_password: confirmPassword,
+        });
+
+        if (!response.ok) {
+          setAuthMessage(data.message || "Não foi possível criar sua conta.");
+          return;
+        }
+
+        setAuthMessage(data.message || "Conta criada com sucesso.", true);
+        setLoggedUser(data.user);
+
+        setTimeout(() => {
+          closeAuthModal();
+        }, 700);
+      } else {
+        const { response, data } = await requestAuth("/auth/login", {
+          email,
+          password,
+        });
+
+        if (!response.ok) {
+          setAuthMessage(data.message || "Não foi possível entrar.");
+          return;
+        }
+
+        setAuthMessage(data.message || "Login realizado com sucesso.", true);
+        setLoggedUser(data.user);
+
+        setTimeout(() => {
+          closeAuthModal();
+        }, 700);
+      }
+    } catch (error) {
+      setAuthMessage("Ocorreu um erro ao conectar com o servidor.");
+      console.error(error);
+    } finally {
+      authSubmitButton.disabled = false;
+      authSubmitButton.textContent = originalText;
+    }
+  });
+
+  const authEye = document.querySelector(".auth-modal__eye");
+  authEye?.addEventListener("click", () => {
+    if (!authPassword) return;
+    authPassword.type = authPassword.type === "password" ? "text" : "password";
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeAuthModal();
+      closeCartDrawer();
+      closeAccountMenu();
+    }
+  });
+
+  updateCartUI();
+  updateAuthMode("login");
+  updateHeaderUser();
+});
