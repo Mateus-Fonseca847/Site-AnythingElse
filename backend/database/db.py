@@ -1,17 +1,19 @@
 import sqlite3
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DB_PATH = BASE_DIR / "backend" / "database" / "app.db"
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+DB_PATH = BASE_DIR / "database" / "app.db"
 
 
-def get_connection():
+def get_connection() -> sqlite3.Connection:
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
 
 
-def init_db():
+def init_db() -> None:
     conn = get_connection()
     cursor = conn.cursor()
 
@@ -33,49 +35,49 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             codigo TEXT NOT NULL UNIQUE,
             nome TEXT NOT NULL,
-            descricao TEXT,
+            descricao TEXT DEFAULT '',
             qtd_estoque INTEGER NOT NULL DEFAULT 0,
             qtd_minima INTEGER NOT NULL DEFAULT 0,
             preco REAL NOT NULL DEFAULT 0,
             custo REAL NOT NULL DEFAULT 0,
-            fornecedor TEXT,
-            garantia TEXT,
-            validade TEXT,
-            lote TEXT,
-            status TEXT,
-            tipo_produto TEXT,
-            imagem TEXT,
-            ativo INTEGER NOT NULL DEFAULT 1
+            fornecedor TEXT DEFAULT '',
+            garantia TEXT DEFAULT '',
+            validade TEXT DEFAULT '',
+            lote TEXT DEFAULT '',
+            status TEXT NOT NULL DEFAULT 'Disponível',
+            tipo_produto TEXT DEFAULT '',
+            imagem TEXT DEFAULT '',
+            ativo INTEGER NOT NULL DEFAULT 1,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
         """
     )
 
     cursor.execute(
-    """
-    CREATE TABLE IF NOT EXISTS stock_movements (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        codigo_produto TEXT NOT NULL,
-        nome_produto TEXT NOT NULL,
-        tipo TEXT NOT NULL,
-        quantidade INTEGER NOT NULL,
-        origem TEXT NOT NULL,
-        observacao TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        """
+        CREATE TABLE IF NOT EXISTS stock_movements (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            codigo_produto TEXT NOT NULL,
+            nome_produto TEXT NOT NULL,
+            tipo TEXT NOT NULL,
+            quantidade INTEGER NOT NULL,
+            origem TEXT NOT NULL,
+            observacao TEXT DEFAULT '',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """
     )
-    """
-)
-    
 
     conn.commit()
     conn.close()
 
 
-def seed_products():
+def seed_products() -> None:
     conn = get_connection()
     cursor = conn.cursor()
 
-    existing = cursor.execute("SELECT COUNT(*) as total FROM products").fetchone()
-
+    existing = cursor.execute("SELECT COUNT(*) AS total FROM products").fetchone()
     if existing["total"] > 0:
         conn.close()
         return
@@ -129,7 +131,6 @@ def seed_products():
             "tipo_produto": "Camisa esportiva",
             "imagem": "img/produto-3-a.png",
         },
-
         {
             "codigo": "SUR-2026-004",
             "nome": "Camiseta Surfista Prateado",
@@ -164,32 +165,19 @@ def seed_products():
         },
     ]
 
-    for product in products:
-        cursor.execute(
-            """
-            INSERT INTO products (
-                codigo, nome, descricao, qtd_estoque, qtd_minima, preco, custo,
-                fornecedor, garantia, validade, lote, status, tipo_produto, imagem, ativo
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
-            """,
-            (
-                product["codigo"],
-                product["nome"],
-                product["descricao"],
-                product["qtd_estoque"],
-                product["qtd_minima"],
-                product["preco"],
-                product["custo"],
-                product["fornecedor"],
-                product["garantia"],
-                product["validade"],
-                product["lote"],
-                product["status"],
-                product["tipo_produto"],
-                product["imagem"],
-            ),
+    cursor.executemany(
+        """
+        INSERT INTO products (
+            codigo, nome, descricao, qtd_estoque, qtd_minima, preco, custo,
+            fornecedor, garantia, validade, lote, status, tipo_produto, imagem, ativo
         )
+        VALUES (
+            :codigo, :nome, :descricao, :qtd_estoque, :qtd_minima, :preco, :custo,
+            :fornecedor, :garantia, :validade, :lote, :status, :tipo_produto, :imagem, 1
+        )
+        """,
+        products,
+    )
 
     conn.commit()
     conn.close()
