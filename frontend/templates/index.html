@@ -523,209 +523,49 @@
           <div class="news-carousel">
             <div class="news-carousel__viewport">
               <div class="news-carousel__track">
-                <article class="product-card">
+                {% for product in products[:6] %}
+                <article class="product-card" data-sku="{{ product.codigo }}">
                   <a href="#" class="product-card__image-link">
                     <div class="product-card__image-box">
                       <img
                         class="product-card__image product-card__image--main"
-                        src="{{ url_for('static', filename='img/produto-1-a.png') }}"
-                        alt="Camiseta O Brasil Me Obriga a Beber"
+                        src="{{ url_for('static', filename=product.imagem) }}"
+                        alt="{{ product.nome }}"
                       />
                       <img
                         class="product-card__image product-card__image--hover"
-                        src="{{ url_for('static', filename='img/produto-1-b.png') }}"
+                        src="{{ url_for('static', filename=product.imagem) }}"
                         alt=""
                       />
                     </div>
                   </a>
 
                   <div class="product-card__content">
-                    <h3 class="product-card__title">
-                      Camiseta Surfista Prateado
-                    </h3>
+                    <h3 class="product-card__title">{{ product.nome }}</h3>
 
                     <div class="product-card__rating">★★★★★</div>
 
-                    <div class="product-card__price">R$89,90</div>
-                    <div class="product-card__installments">
-                      2x de R$44,95 sem juros
+                    <div class="product-card__price">
+                      R${{ "%.2f"|format(product.preco)|replace(".", ",") }}
                     </div>
+
+                    <div class="product-card__installments">
+                      2x de R${{ "%.2f"|format(product.preco / 2)|replace(".",
+                      ",") }} sem juros
+                    </div>
+
                     <div class="product-card__pix">
-                      <span>R$87,20</span> com PIX (-3%)
+                      <span
+                        >R${{ "%.2f"|format(product.preco * 0.95)|replace(".",
+                        ",") }}</span
+                      >
+                      com PIX (-5%)
                     </div>
 
                     <a href="#" class="product-card__button">Comprar</a>
                   </div>
                 </article>
-
-                <article class="product-card">
-                  <a href="#" class="product-card__image-link">
-                    <div class="product-card__image-box">
-                      <img
-                        class="product-card__image product-card__image--main"
-                        src="{{ url_for('static', filename='img/produto-2-a.png') }}"
-                        alt="Camiseta Rocky vs Drago"
-                      />
-                      <img
-                        class="product-card__image product-card__image--hover"
-                        src="{{ url_for('static', filename='img/produto-2-b.png') }}"
-                        alt=""
-                      />
-                    </div>
-                  </a>
-
-                  <div class="product-card__content">
-                    <h3 class="product-card__title">Camiseta Doomsday</h3>
-
-                    <div class="product-card__rating">★★★★★</div>
-
-                    <div class="product-card__price">R$89,90</div>
-                    <div class="product-card__installments">
-                      2x de R$44,95 sem juros
-                    </div>
-                    <div class="product-card__pix">
-                      <span>R$87,20</span> com PIX (-3%)
-                    </div>
-
-                    <a href="#" class="product-card__button">Comprar</a>
-                  </div>
-                </article>
-
-                <article class="product-card">
-                  <a href="#" class="product-card__image-link">
-                    <div class="product-card__image-box">
-                      <img
-                        class="product-card__image product-card__image--main"
-                        src="{{ url_for('static', filename='img/produto-3-a.png') }}"
-                        alt="Camiseta Monstros Clássicos de RPG"
-                      />
-                      <img
-                        class="product-card__image product-card__image--hover"
-                        src="{{ url_for('static', filename='img/produto-3-b.png') }}"
-                        alt=""
-                      />
-                    </div>
-                  </a>
-
-                  <div class="product-card__content">
-                    <h3 class="product-card__title">
-                      Camiseta Quarteto Fantástico
-                    </h3>
-
-                    <div class="product-card__rating">★★★★★</div>
-
-                    <div class="product-card__price">R$89,90</div>
-                    <div class="product-card__installments">
-                      2x de R$44,95 sem juros
-                    </div>
-                    <div class="product-card__pix">
-                      <span>R$87,20</span> com PIX (-3%)
-                    </div>
-
-                    <a href="#" class="product-card__button">Comprar</a>
-                  </div>
-                </article>
-
-                <article class="product-card">
-                  <a href="#" class="product-card__image-link">
-                    <div class="product-card__image-box">
-                      <img
-                        class="product-card__image product-card__image--main"
-                        src="{{ url_for('static', filename='img/produto-4-a.png') }}"
-                        alt="Camiseta Bruce Lee's Jeet Kune Do"
-                      />
-                      <img
-                        class="product-card__image product-card__image--hover"
-                        src="{{ url_for('static', filename='img/produto-4-b.png') }}"
-                        alt=""
-                      />
-                    </div>
-                  </a>
-
-                  <div class="product-card__content">
-                    <h3 class="product-card__title">Camiseta X-Men</h3>
-
-                    <div class="product-card__rating">★★★★★</div>
-
-                    <div class="product-card__price">R$89,90</div>
-                    <div class="product-card__installments">
-                      2x de R$44,95 sem juros
-                    </div>
-                    <div class="product-card__pix">
-                      <span>R$87,20</span> com PIX (-3%)
-                    </div>
-
-                    <a href="#" class="product-card__button">Comprar</a>
-                  </div>
-                </article>
-
-                <article class="product-card">
-                  <a href="#" class="product-card__image-link">
-                    <div class="product-card__image-box">
-                      <img
-                        class="product-card__image product-card__image--main"
-                        src="{{ url_for('static', filename='img/produto-5-a.png') }}"
-                        alt="Camiseta Vintage Arcade"
-                      />
-                      <img
-                        class="product-card__image product-card__image--hover"
-                        src="{{ url_for('static', filename='img/produto-5-b.png') }}"
-                        alt=""
-                      />
-                    </div>
-                  </a>
-
-                  <div class="product-card__content">
-                    <h3 class="product-card__title">
-                      Ecobag Quarteto Fantástico
-                    </h3>
-
-                    <div class="product-card__rating">★★★★★</div>
-
-                    <div class="product-card__price">R$89,90</div>
-                    <div class="product-card__installments">
-                      2x de R$44,95 sem juros
-                    </div>
-                    <div class="product-card__pix">
-                      <span>R$87,20</span> com PIX (-3%)
-                    </div>
-
-                    <a href="#" class="product-card__button">Comprar</a>
-                  </div>
-                </article>
-
-                <article class="product-card">
-                  <a href="#" class="product-card__image-link">
-                    <div class="product-card__image-box">
-                      <img
-                        class="product-card__image product-card__image--main"
-                        src="{{ url_for('static', filename='img/produto-6-a.png') }}"
-                        alt="Camiseta Samurai Street"
-                      />
-                      <img
-                        class="product-card__image product-card__image--hover"
-                        src="{{ url_for('static', filename='img/produto-6-b.png') }}"
-                        alt=""
-                      />
-                    </div>
-                  </a>
-
-                  <div class="product-card__content">
-                    <h3 class="product-card__title">Bolsa Superman</h3>
-
-                    <div class="product-card__rating">★★★★★</div>
-
-                    <div class="product-card__price">R$89,90</div>
-                    <div class="product-card__installments">
-                      2x de R$44,95 sem juros
-                    </div>
-                    <div class="product-card__pix">
-                      <span>R$87,20</span> com PIX (-3%)
-                    </div>
-
-                    <a href="#" class="product-card__button">Comprar</a>
-                  </div>
-                </article>
+                {% endfor %}
               </div>
             </div>
           </div>

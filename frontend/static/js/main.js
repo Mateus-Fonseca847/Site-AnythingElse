@@ -494,7 +494,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   addToCartButtons.forEach((button) => {
-    button.addEventListener("click", (event) => {
+    button.addEventListener("click", async (event) => {
       event.preventDefault();
 
       const productCard = button.closest(".product-card");
@@ -503,27 +503,58 @@ document.addEventListener("DOMContentLoaded", () => {
       const title =
         productCard.querySelector(".product-card__title")?.textContent.trim() ||
         "Produto";
-
       const priceText =
-        productCard.querySelector(".product-card__price")?.textContent.trim() ||
+        productCard.querySelector(".product-card__price")?.textContent ||
         "R$0,00";
-
       const image =
         productCard
           .querySelector(".product-card__image--main")
           ?.getAttribute("src") || "";
 
-      cart.push({
-        title,
-        price: parsePrice(priceText),
-        image,
-      });
+      const sku = productCard.getAttribute("data-sku") || "";
 
-      updateCartUI();
-      openCartDrawer();
+      try {
+        const stockResponse = await fetch(`/api/stock/${sku}`);
+        const stockData = await stockResponse.json();
+
+        if (!stockResponse.ok || !stockData.ok) {
+          alert("Erro ao consultar estoque");
+          return;
+        }
+
+        if (stockData.qtd_estoque <= 0) {
+          alert("Produto esgotado");
+          return;
+        }
+
+        await fetch("/api/stock/exit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            codigo: sku,
+            quantidade: 1,
+          }),
+        });
+
+        cart.push({
+          sku,
+          title,
+          price: parsePrice(priceText),
+          image,
+        });
+
+        saveCart();
+        renderCartItems();
+
+        openCart();
+      } catch (error) {
+        console.error(error);
+        alert("Erro ao processar compra");
+      }
     });
   });
-
   loginTrigger?.addEventListener("click", (event) => {
     event.preventDefault();
 
