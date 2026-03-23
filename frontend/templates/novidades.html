@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Novidades | AnythingElse</title>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='layout.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='components.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='pages/novidades.css') }}">
+</head>
+<body>
+  <header class="nov-header">
+    <div class="nov-header-top container">
+      <a href="/" class="nov-logo">ANYTHINGELSE</a>
+
+      <form class="nov-search" action="/novidades" method="GET">
+        <input
+          type="text"
+          name="q"
+          placeholder="Olá, o que você procura?"
+          aria-label="Buscar produtos"
+        />
+        <button type="submit">⌕</button>
+      </form>
+
+      <div class="nov-actions">
+        <a href="#">Central de Atendimento</a>
+        <a href="#">Entre ou Cadastre-se</a>
+        <a href="#">Minha Sacola <strong>R$0,00</strong></a>
+      </div>
+    </div>
+
+    <nav class="nov-nav container">
+      <a href="/novidades" class="active">Novidades</a>
+      <a href="#"> Vestuario</a>
+      <a href="#">Acessórios</a>
+      <a href="#">Livros</a>
+      <a href="#">Filmes</a>
+      <a href="#">Personalize</a>
+    </nav>
+  </header>
+
+  <main class="nov-page container">
+    <div class="nov-breadcrumb">
+      <a href="/">Página inicial</a>
+      <span>›</span>
+      <strong>NOVIDADES</strong>
+    </div>
+
+    <section class="nov-toolbar">
+      <div>
+        <h1>NOVIDADES</h1>
+      </div>
+
+      <div class="nov-toolbar-right">
+        <span id="productCount">{{ products|length }} produtos</span>
+
+        <select id="sortProducts" aria-label="Ordenar produtos">
+          <option value="recentes">Ordenar por: NOVIDADES</option>
+          <option value="menor-preco">Menor preço</option>
+          <option value="maior-preco">Maior preço</option>
+          <option value="nome">Nome A-Z</option>
+        </select>
+      </div>
+    </section>
+
+    <section class="nov-layout">
+      <aside class="nov-sidebar">
+        <div class="filter-box">
+          <h3>Cor</h3>
+          <div class="filter-divider"></div>
+
+          <div class="color-options">
+            <button class="color-dot azul" type="button" aria-label="Azul"></button>
+            <button class="color-dot cinza" type="button" aria-label="Cinza"></button>
+            <button class="color-dot branco" type="button" aria-label="Branco"></button>
+            <button class="color-dot preto" type="button" aria-label="Preto"></button>
+          </div>
+        </div>
+
+        <div class="filter-box">
+          <h3>Tamanho</h3>
+          <div class="filter-divider"></div>
+
+          <div class="size-options">
+            <button type="button">2P</button>
+            <button type="button">P</button>
+            <button type="button">M</button>
+            <button type="button">G</button>
+            <button type="button">2G</button>
+            <button type="button">3G</button>
+            <button type="button">4G</button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="nov-products">
+        <div class="products-grid" id="productsGrid">
+          {% for product in products %}
+          <article
+            class="product-card"
+            data-name="{{ product.nome|lower }}"
+            data-price="{{ product.preco }}"
+          >
+            <a href="#" class="product-image-wrap">
+              {% if product.imagem %}
+                <img
+                  src="{{ product.imagem }}"
+                  alt="{{ product.nome }}"
+                  class="product-image"
+                  loading="lazy"
+                  onerror="this.src='https://via.placeholder.com/500x620?text=Produto';"
+                >
+              {% else %}
+                <img
+                  src="https://via.placeholder.com/500x620?text=Produto"
+                  alt="{{ product.nome }}"
+                  class="product-image"
+                  loading="lazy"
+                >
+              {% endif %}
+            </a>
+
+            <div class="product-info">
+              <h3 class="product-title">{{ product.nome }}</h3>
+
+              <div class="product-rating">★★★★★</div>
+
+              <div class="product-price">
+                R${{ "%.2f"|format(product.preco)|replace(".", ",") }}
+              </div>
+
+              <div class="product-installments">
+                2x de
+                <strong>
+                  R${{ "%.2f"|format(product.preco / 2)|replace(".", ",") }}
+                </strong>
+                sem juros
+              </div>
+
+              <div class="product-pix">
+                <strong>
+                  R${{ "%.2f"|format(product.preco * 0.97)|replace(".", ",") }}
+                </strong>
+                com PIX (-3%)
+              </div>
+
+              <button class="buy-btn" type="button">COMPRAR</button>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='js/novidades.js') }}"></script>
+</body>
+</html>
