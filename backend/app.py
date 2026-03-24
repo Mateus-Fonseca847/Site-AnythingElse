@@ -47,8 +47,16 @@ def novidades():
     Página de novidades - exibe TODOS os produtos em grid
     """
     products = list_products()
-    return render_template("novidades.html", products=products)
 
+    product_types = sorted(
+        {product["tipo_produto"] for product in products if product["tipo_produto"]}
+    )
+
+    return render_template(
+        "novidades.html",
+        products=products,
+        product_types=product_types,
+    )
 
 # =========================
 # INICIALIZAÇÃO DO SISTEMA
