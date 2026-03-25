@@ -52,7 +52,7 @@
 
           <div class="search-wrapper">
             <form class="search-bar">
-              <input type="text" placeholder="Olá, qual livro você procura?" />
+              <input type="text" placeholder="Olá, o que você procura?" />
               <button type="submit" aria-label="Pesquisar">
                 <svg viewBox="0 0 24 24" fill="none">
                   <circle
@@ -147,15 +147,33 @@
         <nav class="header-nav">
           <ul class="nav-menu">
             <li>
-              <a href="{{ url_for('livros') }}" class="is-active">
-                LIVROS
-              </a>
+              <a href="{{ url_for('novidades') }}">NOVIDADES</a>
             </li>
 
             <li class="has-dropdown">
-              <a href="#">Livros</a>
+              <a href="{{ url_for('camisetas') }}">Vestuário</a>
               <ul class="dropdown-menu">
-                <li><a href="{{ url_for('livros') }}">Todos os livros</a></li>
+                <li><a href="#">Camisetas</a></li>
+                <li><a href="#">Calças</a></li>
+                <li><a href="#">Jaquetas</a></li>
+                <li><a href="#">Moletons</a></li>
+                <li><a href="#">Baby Look</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#">Acessórios</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Bonés</a></li>
+                <li><a href="#">Bolsas</a></li>
+                <li><a href="#">Canecas</a></li>
+                <li><a href="#">Chaveiros</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#" class="is-active">Livros</a>
+              <ul class="dropdown-menu">
                 <li><a href="#">Romance</a></li>
                 <li><a href="#">Fantasia</a></li>
                 <li><a href="#">Terror</a></li>
@@ -164,35 +182,26 @@
             </li>
 
             <li class="has-dropdown">
-              <a href="#">Autores</a>
+              <a href="#">Filmes</a>
               <ul class="dropdown-menu">
-                <li><a href="#">Nacionais</a></li>
-                <li><a href="#">Internacionais</a></li>
-                <li><a href="#">Independentes</a></li>
-              </ul>
-            </li>
-
-            <li class="has-dropdown">
-              <a href="#">Gêneros</a>
-              <ul class="dropdown-menu">
+                <li><a href="#">Ação</a></li>
+                <li><a href="#">Drama</a></li>
                 <li><a href="#">Ficção</a></li>
-                <li><a href="#">Não Ficção</a></li>
-                <li><a href="#">Biografia</a></li>
-                <li><a href="#">Suspense</a></li>
+                <li><a href="#">Animação</a></li>
               </ul>
             </li>
 
             <li class="has-dropdown">
-              <a href="#">Coleções</a>
+              <a href="#">Decoração</a>
               <ul class="dropdown-menu">
-                <li><a href="#">Box especiais</a></li>
-                <li><a href="#">Lançamentos</a></li>
-                <li><a href="#">Mais vendidos</a></li>
+                <li><a href="#">Quadros</a></li>
+                <li><a href="#">Luminárias</a></li>
+                <li><a href="#">Almofadas</a></li>
+                <li><a href="#">Tapetes</a></li>
               </ul>
             </li>
 
-            <li><a href="#">Ofertas</a></li>
-            <li><a href="#">Presentes</a></li>
+            <li><a href="#">Personalize</a></li>
           </ul>
         </nav>
       </div>
@@ -209,9 +218,7 @@
         <div>
           <span class="cam-eyebrow">AnythingElse</span>
           <h1>Livros</h1>
-          <p class="cam-subtitle">
-            Confira somente os livros cadastrados no banco de dados.
-          </p>
+          <p class="cam-subtitle">Confira todos os nossos livros!</p>
         </div>
 
         <div class="cam-toolbar-right">
@@ -360,20 +367,17 @@
             <div class="filter-divider"></div>
 
             <div class="size-options">
-              <button type="button" class="size-chip" data-size="capa comum">Capa comum</button>
-              <button type="button" class="size-chip" data-size="capa dura">Capa dura</button>
-              <button type="button" class="size-chip" data-size="ebook">eBook</button>
-              <button type="button" class="size-chip" data-size="box">Box</button>
-            </div>
-          </div>
-
-          <div class="filter-box">
-            <h3>Tipo de produto</h3>
-            <div class="filter-divider"></div>
-
-            <div class="type-options">
-              <button type="button" class="type-chip active" data-type="livro">
-                Livros
+              <button type="button" class="size-chip" data-size="capa comum">
+                Capa comum
+              </button>
+              <button type="button" class="size-chip" data-size="capa dura">
+                Capa dura
+              </button>
+              <button type="button" class="size-chip" data-size="ebook">
+                eBook
+              </button>
+              <button type="button" class="size-chip" data-size="box">
+                Box
               </button>
             </div>
           </div>
@@ -417,7 +421,10 @@
                     src="{{ url_for('static', filename=product.imagem) }}"
                     alt="{{ product.nome }}"
                     loading="lazy"
-                    onerror="this.src='https://via.placeholder.com/500x620?text=Livro';"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/500x620?text=Livro'
+                    "
                   />
 
                   {% if product.imagem_hover %}
@@ -426,7 +433,10 @@
                     src="{{ url_for('static', filename=product.imagem_hover) }}"
                     alt=""
                     loading="lazy"
-                    onerror="this.src='https://via.placeholder.com/500x620?text=Livro';"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/500x620?text=Livro'
+                    "
                   />
                   {% else %}
                   <img
@@ -434,11 +444,12 @@
                     src="{{ url_for('static', filename=product.imagem) }}"
                     alt=""
                     loading="lazy"
-                    onerror="this.src='https://via.placeholder.com/500x620?text=Livro';"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/500x620?text=Livro'
+                    "
                   />
-                  {% endif %}
-
-                  {% else %}
+                  {% endif %} {% else %}
                   <img
                     class="product-card__image product-card__image--main"
                     src="https://via.placeholder.com/500x620?text=Livro"
@@ -465,14 +476,14 @@
                 </div>
 
                 <div class="product-card__installments">
-                  2x de
-                  R${{ "%.2f"|format(product.preco / 2)|replace(".", ",") }}
-                  sem juros
+                  2x de R${{ "%.2f"|format(product.preco / 2)|replace(".", ",")
+                  }} sem juros
                 </div>
 
                 <div class="product-card__pix">
                   <span>
-                    R${{ "%.2f"|format(product.preco * 0.95)|replace(".", ",") }}
+                    R${{ "%.2f"|format(product.preco * 0.95)|replace(".", ",")
+                    }}
                   </span>
                   com PIX (-5%)
                 </div>
@@ -565,7 +576,9 @@
           <div class="site-footer__columns">
             <div class="site-footer__column">
               <h3 class="site-footer__title">Categorias</h3>
-              <a href="{{ url_for('livros') }}" class="site-footer__link">Livros</a>
+              <a href="{{ url_for('livros') }}" class="site-footer__link"
+                >Livros</a
+              >
               <a href="#" class="site-footer__link">Romance</a>
               <a href="#" class="site-footer__link">Fantasia</a>
               <a href="#" class="site-footer__link">Terror</a>
@@ -603,7 +616,10 @@
                 <span>WhatsApp</span>
               </a>
 
-              <a href="mailto:contato@anythingelse.com" class="site-footer__contact-row">
+              <a
+                href="mailto:contato@anythingelse.com"
+                class="site-footer__contact-row"
+              >
                 <span>contato@anythingelse.com</span>
               </a>
 
@@ -616,271 +632,192 @@
       </div>
     </footer>
 
-    <script>
-      const sortDropdown = document.getElementById("sortDropdown");
-      const sortDropdownTrigger = document.getElementById("sortDropdownTrigger");
-      const sortDropdownMenu = document.getElementById("sortDropdownMenu");
-      const sortDropdownLabel = document.getElementById("sortDropdownLabel");
-      const sortProductsInput = document.getElementById("sortProducts");
-      const productsGrid = document.getElementById("productsGrid");
-      const productCount = document.getElementById("productCount");
-      const colorButtons = Array.from(document.querySelectorAll(".color-dot"));
-      const sizeButtons = Array.from(document.querySelectorAll(".size-chip"));
-      const typeButtons = Array.from(document.querySelectorAll(".type-chip"));
-      const activeFilters = document.getElementById("activeFilters");
-      const activeFiltersList = document.getElementById("activeFiltersList");
-      const clearAllFilters = document.getElementById("clearAllFilters");
+    <div class="auth-modal" aria-hidden="true">
+      <div class="auth-modal__overlay"></div>
 
-      let selectedColors = [];
-      let selectedSizes = [];
-      let selectedTypes = [];
-      let currentSort = "relevancia";
+      <div
+        class="auth-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="auth-modal-title"
+      >
+        <button type="button" class="auth-modal__close" aria-label="Fechar">
+          ×
+        </button>
 
-      function getProductCards() {
-        return Array.from(productsGrid.querySelectorAll(".product-card"));
-      }
+        <div class="auth-modal__tabs">
+          <button
+            type="button"
+            class="auth-modal__tab is-active"
+            data-auth-mode="login"
+          >
+            Entrar
+          </button>
+          <button
+            type="button"
+            class="auth-modal__tab"
+            data-auth-mode="register"
+          >
+            Cadastrar
+          </button>
+        </div>
 
-      function normalizeText(value) {
-        return (value || "").toString().trim().toLowerCase();
-      }
+        <p class="auth-modal__subtitle" id="auth-modal-title">
+          Entre com email e senha
+        </p>
 
-      function hasSize(productSizes, selectedSize) {
-        const normalized = normalizeText(productSizes);
-        if (!normalized) return false;
-        return normalized
-          .split(",")
-          .map((item) => item.trim())
-          .includes(normalizeText(selectedSize));
-      }
+        <form class="auth-modal__form" id="authForm">
+          <div class="auth-modal__field auth-modal__field--name" hidden>
+            <input
+              type="text"
+              class="auth-modal__input"
+              id="authName"
+              placeholder="Digite seu nome"
+            />
+          </div>
 
-      function applyFilters() {
-        const cards = getProductCards();
-        let visibleCount = 0;
+          <div class="auth-modal__field">
+            <input
+              type="email"
+              class="auth-modal__input"
+              id="authEmail"
+              placeholder="Ex.: exemplo@mail.com"
+            />
+          </div>
 
-        cards.forEach((card) => {
-          const cardColor = normalizeText(card.dataset.color);
-          const cardSizes = normalizeText(card.dataset.sizes);
-          const cardType = normalizeText(card.dataset.type);
+          <div class="auth-modal__password-wrap">
+            <input
+              type="password"
+              class="auth-modal__input"
+              id="authPassword"
+              placeholder="Adicione sua senha"
+            />
+            <button
+              type="button"
+              class="auth-modal__eye"
+              aria-label="Mostrar senha"
+            >
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M2 12C4.4 7.8 8 5.7 12 5.7C16 5.7 19.6 7.8 22 12C19.6 16.2 16 18.3 12 18.3C8 18.3 4.4 16.2 2 12Z"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+                <circle cx="12" cy="12" r="3" fill="currentColor" />
+              </svg>
+            </button>
+          </div>
 
-          const matchColor =
-            selectedColors.length === 0 || selectedColors.includes(cardColor);
+          <div class="auth-modal__field auth-modal__field--confirm" hidden>
+            <input
+              type="password"
+              class="auth-modal__input"
+              id="authConfirmPassword"
+              placeholder="Confirme sua senha"
+            />
+          </div>
 
-          const matchSize =
-            selectedSizes.length === 0 ||
-            selectedSizes.some((size) => hasSize(cardSizes, size));
+          <a href="#" class="auth-modal__forgot auth-modal__forgot-link">
+            Esqueci minha senha
+          </a>
 
-          const matchType =
-            selectedTypes.length === 0 || selectedTypes.includes(cardType);
+          <p class="auth-modal__message" id="authMessage"></p>
 
-          const visible = matchColor && matchSize && matchType;
-          card.style.display = visible ? "" : "none";
+          <div class="auth-modal__actions">
+            <button type="button" class="auth-modal__back">← Voltar</button>
+            <button
+              type="submit"
+              class="auth-modal__submit"
+              id="authSubmitButton"
+            >
+              Entrar
+            </button>
+          </div>
 
-          if (visible) visibleCount += 1;
-        });
+          <p class="auth-modal__register">
+            Não tem uma conta?
+            <a href="#" class="auth-modal__switch-mode">Cadastre-se</a>
+          </p>
+        </form>
+      </div>
+    </div>
 
-        if (productCount) {
-          productCount.textContent = `${visibleCount} livro${visibleCount !== 1 ? "s" : ""}`;
-        }
+    <div class="account-menu" aria-hidden="true">
+      <div class="account-menu__overlay"></div>
 
-        updateActiveFilters();
-      }
+      <div class="account-menu__dialog">
+        <button type="button" class="account-menu__close" aria-label="Fechar">
+          ×
+        </button>
 
-      function sortCards(value) {
-        currentSort = value;
-        const cards = getProductCards();
+        <p class="account-menu__title">Minha conta</p>
+        <p class="account-menu__user" id="accountMenuUser">Usuário logado</p>
 
-        cards.sort((a, b) => {
-          const nameA = normalizeText(a.dataset.name);
-          const nameB = normalizeText(b.dataset.name);
-          const priceA = parseFloat(a.dataset.price || "0");
-          const priceB = parseFloat(b.dataset.price || "0");
-          const salesA = parseInt(a.dataset.sales || "0", 10);
-          const salesB = parseInt(b.dataset.sales || "0", 10);
-          const discountA = parseFloat(a.dataset.discount || "0");
-          const discountB = parseFloat(b.dataset.discount || "0");
-          const dateA = new Date(a.dataset.releaseDate || "1970-01-01").getTime();
-          const dateB = new Date(b.dataset.releaseDate || "1970-01-01").getTime();
+        <div class="account-menu__actions">
+          <button
+            type="button"
+            class="account-menu__button"
+            id="switchUserButton"
+          >
+            Trocar usuário
+          </button>
 
-          switch (value) {
-            case "mais-vendidos":
-              return salesB - salesA;
-            case "novidades":
-              return dateB - dateA;
-            case "melhor-desconto":
-              return discountB - discountA;
-            case "maior-preco":
-              return priceB - priceA;
-            case "menor-preco":
-              return priceA - priceB;
-            case "nome-az":
-              return nameA.localeCompare(nameB, "pt-BR");
-            case "nome-za":
-              return nameB.localeCompare(nameA, "pt-BR");
-            default:
-              return 0;
-          }
-        });
+          <button
+            type="button"
+            class="account-menu__button account-menu__button--danger"
+            id="logoutButton"
+          >
+            Sair
+          </button>
+        </div>
+      </div>
+    </div>
 
-        cards.forEach((card) => productsGrid.appendChild(card));
-        applyFilters();
-      }
+    <div class="cart-drawer" aria-hidden="true">
+      <div class="cart-drawer__overlay"></div>
 
-      function updateActiveFilters() {
-        const chips = [];
+      <aside
+        class="cart-drawer__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="cart-drawer-title"
+      >
+        <div class="cart-drawer__header">
+          <button
+            type="button"
+            class="cart-drawer__close"
+            aria-label="Fechar sacola"
+          >
+            ×
+          </button>
+          <h2 class="cart-drawer__title" id="cart-drawer-title">Sua sacola</h2>
+        </div>
 
-        selectedColors.forEach((color) => {
-          chips.push({ type: "color", value: color, label: `Gênero: ${color}` });
-        });
+        <div class="cart-drawer__body">
+          <div class="cart-drawer__empty">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M6 7H18L17 20H7L6 7Z"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M9 7V5C9 3.9 9.9 3 11 3H13C14.1 3 15 3.9 15 5V7"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+            </svg>
+            <p class="cart-drawer__empty-text">Sua sacola ainda está vazia</p>
+            <a href="#" class="cart-drawer__empty-button">Escolher produtos</a>
+          </div>
 
-        selectedSizes.forEach((size) => {
-          chips.push({ type: "size", value: size, label: `Formato: ${size}` });
-        });
+          <div class="cart-drawer__items" hidden></div>
+        </div>
+      </aside>
+    </div>
 
-        selectedTypes.forEach((type) => {
-          chips.push({ type: "type", value: type, label: `Tipo: ${type}` });
-        });
-
-        activeFiltersList.innerHTML = "";
-
-        if (chips.length === 0) {
-          activeFilters.hidden = true;
-          return;
-        }
-
-        activeFilters.hidden = false;
-
-        chips.forEach((chip) => {
-          const button = document.createElement("button");
-          button.type = "button";
-          button.className = "active-filter-chip";
-          button.innerHTML = `${chip.label} <span>×</span>`;
-
-          button.addEventListener("click", () => {
-            if (chip.type === "color") {
-              selectedColors = selectedColors.filter((item) => item !== chip.value);
-              colorButtons.forEach((btn) => {
-                if (btn.dataset.color === chip.value) btn.classList.remove("active");
-              });
-            }
-
-            if (chip.type === "size") {
-              selectedSizes = selectedSizes.filter((item) => item !== chip.value);
-              sizeButtons.forEach((btn) => {
-                if (btn.dataset.size === chip.value) btn.classList.remove("active");
-              });
-            }
-
-            if (chip.type === "type") {
-              selectedTypes = selectedTypes.filter((item) => item !== chip.value);
-              typeButtons.forEach((btn) => {
-                if (normalizeText(btn.dataset.type) === chip.value) btn.classList.remove("active");
-              });
-            }
-
-            applyFilters();
-          });
-
-          activeFiltersList.appendChild(button);
-        });
-      }
-
-      colorButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const value = normalizeText(button.dataset.color);
-          button.classList.toggle("active");
-
-          if (button.classList.contains("active")) {
-            if (!selectedColors.includes(value)) selectedColors.push(value);
-          } else {
-            selectedColors = selectedColors.filter((item) => item !== value);
-          }
-
-          applyFilters();
-        });
-      });
-
-      sizeButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const value = normalizeText(button.dataset.size);
-          button.classList.toggle("active");
-
-          if (button.classList.contains("active")) {
-            if (!selectedSizes.includes(value)) selectedSizes.push(value);
-          } else {
-            selectedSizes = selectedSizes.filter((item) => item !== value);
-          }
-
-          applyFilters();
-        });
-      });
-
-      typeButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          const value = normalizeText(button.dataset.type);
-          button.classList.toggle("active");
-
-          if (button.classList.contains("active")) {
-            if (!selectedTypes.includes(value)) selectedTypes.push(value);
-          } else {
-            selectedTypes = selectedTypes.filter((item) => item !== value);
-          }
-
-          applyFilters();
-        });
-      });
-
-      if (clearAllFilters) {
-        clearAllFilters.addEventListener("click", () => {
-          selectedColors = [];
-          selectedSizes = [];
-          selectedTypes = [];
-
-          colorButtons.forEach((btn) => btn.classList.remove("active"));
-          sizeButtons.forEach((btn) => btn.classList.remove("active"));
-          typeButtons.forEach((btn) => btn.classList.remove("active"));
-
-          applyFilters();
-        });
-      }
-
-      if (sortDropdownTrigger && sortDropdownMenu) {
-        sortDropdownTrigger.addEventListener("click", () => {
-          const expanded =
-            sortDropdownTrigger.getAttribute("aria-expanded") === "true";
-          sortDropdownTrigger.setAttribute("aria-expanded", String(!expanded));
-          sortDropdown.classList.toggle("is-open", !expanded);
-        });
-
-        document.addEventListener("click", (event) => {
-          if (!sortDropdown.contains(event.target)) {
-            sortDropdown.classList.remove("is-open");
-            sortDropdownTrigger.setAttribute("aria-expanded", "false");
-          }
-        });
-
-        sortDropdownMenu.querySelectorAll(".sort-dropdown__option").forEach((option) => {
-          option.addEventListener("click", () => {
-            sortDropdownMenu
-              .querySelectorAll(".sort-dropdown__option")
-              .forEach((btn) => btn.classList.remove("is-selected"));
-
-            option.classList.add("is-selected");
-
-            const text = option.textContent.trim();
-            const value = option.dataset.value;
-
-            sortDropdownLabel.textContent = text;
-            sortProductsInput.value = value;
-
-            sortDropdown.classList.remove("is-open");
-            sortDropdownTrigger.setAttribute("aria-expanded", "false");
-
-            sortCards(value);
-          });
-        });
-      }
-
-      applyFilters();
-    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/livros.js') }}"></script>
   </body>
 </html>

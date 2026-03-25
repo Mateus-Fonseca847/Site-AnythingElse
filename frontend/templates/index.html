@@ -523,7 +523,10 @@
               <div class="news-carousel__track">
                 {% for product in products[:6] %}
                 <article class="product-card" data-sku="{{ product.codigo }}">
-                  <a href="#" class="product-card__image-link">
+                  <a
+                    href="{{ url_for('product_page', codigo=product.codigo) }}"
+                    class="product-card__image-link"
+                  >
                     <div class="product-card__image-box">
                       <img
                         class="product-card__image product-card__image--main"
@@ -560,7 +563,11 @@
                       com PIX (-5%)
                     </div>
 
-                    <a href="#" class="product-card__button">Comprar</a>
+                    <a
+                      href="{{ url_for('product_page', codigo=product.codigo) }}"
+                      class="product-card__button"
+                      >Comprar</a
+                    >
                   </div>
                 </article>
                 {% endfor %}
