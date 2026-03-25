@@ -58,6 +58,53 @@ def novidades():
         product_types=product_types,
     )
 
+@app.route("/produto/<string:codigo>")
+def product_page(codigo):
+    products = list_products()
+
+    product = next((item for item in products if item["codigo"] == codigo), None)
+
+    if not product:
+        return "Produto não encontrado", 404
+
+    recommended = [
+        item for item in products
+        if item["codigo"] != codigo and item["tipo_produto"] == product["tipo_produto"]
+    ]
+
+    recommended = sorted(
+        recommended,
+        key=lambda item: (
+            item.get("vendas", 0),
+            item.get("data_lancamento", "")
+        ),
+        reverse=True
+    )[:4]
+
+    if len(recommended) < 4:
+        extras = [
+            item for item in products
+            if item["codigo"] != codigo
+            and item["codigo"] not in {r["codigo"] for r in recommended}
+        ]
+
+        extras = sorted(
+            extras,
+            key=lambda item: (
+                item.get("vendas", 0),
+                item.get("data_lancamento", "")
+            ),
+            reverse=True
+        )
+
+        recommended.extend(extras[: 4 - len(recommended)])
+
+    return render_template(
+        "produto.html",
+        product=product,
+        recommended=recommended,
+    )
+
 # =========================
 # INICIALIZAÇÃO DO SISTEMA
 # =========================

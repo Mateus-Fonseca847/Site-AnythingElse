@@ -1,10 +1,9 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Novidades | AnythingElse</title>
-
+    <title>Comprar | AnythingElse</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -35,6 +34,10 @@
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='pages/novidades.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='pages/produto.css') }}"
     />
   </head>
   <body>
@@ -147,9 +150,7 @@
         <nav class="header-nav">
           <ul class="nav-menu">
             <li>
-              <a href="{{ url_for('novidades') }}" class="is-active"
-                >NOVIDADES</a
-              >
+              <a href="{{ url_for('novidades') }}">NOVIDADES</a>
             </li>
 
             <li class="has-dropdown">
@@ -208,305 +209,218 @@
         </nav>
       </div>
     </header>
-
-    <main class="nov-page container">
-      <div class="nov-breadcrumb">
+    <main class="product-page container">
+      <div class="product-breadcrumb">
         <a href="{{ url_for('home') }}">Página inicial</a>
         <span>›</span>
-        <strong>Novidades</strong>
+        <a href="{{ url_for('novidades') }}">Novidades</a>
+        <span>›</span>
+        <strong>{{ product.nome }}</strong>
       </div>
 
-      <section class="nov-toolbar">
-        <div>
-          <span class="nov-eyebrow">AnythingElse</span>
-          <h1>Novidades</h1>
-        </div>
-
-        <div class="nov-toolbar-right">
-          <span id="productCount">{{ products|length }} produtos</span>
-          <div class="sort-dropdown" id="sortDropdown">
-            <button
-              type="button"
-              class="sort-dropdown__trigger"
-              id="sortDropdownTrigger"
-              aria-haspopup="listbox"
-              aria-expanded="false"
-            >
-              <span id="sortDropdownLabel">Ordenar por: Relevância</span>
-              <span class="sort-dropdown__arrow"></span>
+      <section class="product-hero">
+        <div class="product-gallery">
+          <div class="product-gallery__thumbs">
+            {% if product.imagem %}
+            <button type="button" class="product-thumb is-active">
+              <img
+                src="{{ url_for('static', filename=product.imagem) }}"
+                alt="{{ product.nome }}"
+              />
             </button>
+            {% endif %} {% if product.imagem_hover %}
+            <button type="button" class="product-thumb">
+              <img
+                src="{{ url_for('static', filename=product.imagem_hover) }}"
+                alt="{{ product.nome }}"
+              />
+            </button>
+            {% endif %}
+          </div>
 
-            <div
-              class="sort-dropdown__menu"
-              id="sortDropdownMenu"
-              role="listbox"
-            >
-              <button
-                type="button"
-                class="sort-dropdown__option is-selected"
-                data-value="relevancia"
-              >
-                Ordenar por: Relevância
-              </button>
-              <button
-                type="button"
-                class="sort-dropdown__option"
-                data-value="mais-vendidos"
-              >
-                Mais vendidos
-              </button>
-              <button
-                type="button"
-                class="sort-dropdown__option"
-                data-value="novidades"
-              >
-                Novidades
-              </button>
-              <button
-                type="button"
-                class="sort-dropdown__option"
-                data-value="melhor-desconto"
-              >
-                Melhor desconto
-              </button>
-              <button
-                type="button"
-                class="sort-dropdown__option"
-                data-value="maior-preco"
-              >
-                Maior preço
-              </button>
-              <button
-                type="button"
-                class="sort-dropdown__option"
-                data-value="menor-preco"
-              >
-                Menor preço
-              </button>
-              <button
-                type="button"
-                class="sort-dropdown__option"
-                data-value="nome-az"
-              >
-                Nome A a Z
-              </button>
-              <button
-                type="button"
-                class="sort-dropdown__option"
-                data-value="nome-za"
-              >
-                Nome Z a A
-              </button>
-            </div>
-
-            <input type="hidden" id="sortProducts" value="relevancia" />
+          <div class="product-gallery__main">
+            <img
+              id="mainProductImage"
+              src="{{ url_for('static', filename=product.imagem) }}"
+              alt="{{ product.nome }}"
+            />
           </div>
         </div>
-      </section>
 
-      <section class="nov-layout">
-        <aside class="nov-sidebar">
-          <div class="filter-box">
-            <h3>Cor</h3>
-            <div class="filter-divider"></div>
-
-            <div class="color-options">
-              <button
-                class="color-dot vermelho"
-                data-color="vermelho"
-                title="Vermelho"
-              ></button>
-              <button
-                class="color-dot laranja"
-                data-color="laranja"
-                title="Laranja"
-              ></button>
-              <button
-                class="color-dot amarelo"
-                data-color="amarelo"
-                title="Amarelo"
-              ></button>
-              <button
-                class="color-dot verde"
-                data-color="verde"
-                title="Verde"
-              ></button>
-              <button
-                class="color-dot azul"
-                data-color="azul"
-                title="Azul"
-              ></button>
-              <button
-                class="color-dot roxo"
-                data-color="roxo"
-                title="Roxo"
-              ></button>
-              <button
-                class="color-dot rosa"
-                data-color="rosa"
-                title="Rosa"
-              ></button>
-
-              <button
-                class="color-dot marrom"
-                data-color="marrom"
-                title="Marrom"
-              ></button>
-              <button
-                class="color-dot cinza"
-                data-color="cinza"
-                title="Cinza"
-              ></button>
-              <button
-                class="color-dot branco"
-                data-color="branco"
-                title="Branco"
-              ></button>
-              <button
-                class="color-dot preto"
-                data-color="preto"
-                title="Preto"
-              ></button>
-            </div>
+        <aside class="product-buybox">
+          <p class="product-buybox__brand">Anything <span>Else</span></p>
+          <h1 class="product-buybox__title">{{ product.nome }}</h1>
+          <div class="product-buybox__divider"></div>
+          <div class="product-buybox__price">
+            R${{ "%.2f"|format(product.preco)|replace(".", ",") }}
           </div>
 
-          <div class="filter-box">
+          <div class="product-buybox__installments">
+            2x de R${{ "%.2f"|format(product.preco / 2)|replace(".", ",") }} sem
+            juros
+          </div>
+
+          <div class="product-buybox__pix">
+            <strong>
+              R${{ "%.2f"|format(product.preco * 0.95)|replace(".", ",") }}
+            </strong>
+            no Pix
+          </div>
+
+          {% if product.tipo_produto|lower == "camiseta" %}
+          <div class="product-buybox__sizes">
             <h3>Tamanho</h3>
-            <div class="filter-divider"></div>
-
-            <div class="size-options">
-              <button type="button" class="size-chip" data-size="2P">2P</button>
-              <button type="button" class="size-chip" data-size="P">P</button>
-              <button type="button" class="size-chip" data-size="M">M</button>
-              <button type="button" class="size-chip" data-size="G">G</button>
-              <button type="button" class="size-chip" data-size="2G">2G</button>
-              <button type="button" class="size-chip" data-size="3G">3G</button>
-              <button type="button" class="size-chip" data-size="4G">4G</button>
-            </div>
-          </div>
-
-          <div class="filter-box">
-            <h3>Tipo de produto</h3>
-            <div class="filter-divider"></div>
-
-            <div class="type-options">
-              {% for product_type in product_types %}
-              <button
-                type="button"
-                class="type-chip"
-                data-type="{{ product_type }}"
-                title="{{ product_type }}"
-              >
-                {{ product_type }}
-              </button>
+            <div class="product-size-list">
+              {% for size in product.tamanhos.split(",") if product.tamanhos %}
+              <button type="button" class="product-size">{{ size }}</button>
               {% endfor %}
             </div>
           </div>
-        </aside>
+          {% endif %}
 
-        <section class="nov-products">
-          <div class="active-filters" id="activeFilters" hidden>
-            <div class="active-filters__list" id="activeFiltersList"></div>
+          <div class="product-buybox__actions">
             <button
               type="button"
-              class="active-filters__clear"
-              id="clearAllFilters"
+              class="product-buybox__button"
+              id="addToCartButton"
+              data-product-code="{{ product.codigo }}"
+              data-product-name="{{ product.nome }}"
+              data-product-price="{{ product.preco }}"
+              data-product-image="{{ url_for('static', filename=product.imagem) }}"
+              data-product-url="{{ url_for('product_page', codigo=product.codigo) }}"
             >
-              Limpar filtros
+              <svg
+                class="product-buybox__button-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M6 7H18L17 20H7L6 7Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                ></path>
+              </svg>
+              <span>Adicionar à sacola</span>
             </button>
           </div>
-          <div class="products-grid" id="productsGrid">
-            {% for product in products %}
-            <article
-              class="product-card"
-              data-sku="{{ product.codigo }}"
-              data-name="{{ product.nome|lower }}"
-              data-price="{{ product.preco }}"
-              data-type="{{ product.tipo_produto|default('', true)|lower }}"
-              data-color="{{ product.cor|default('', true)|lower }}"
-              data-sizes="{{ product.tamanhos|default('', true)|lower }}"
-              data-release-date="{{ product.data_lancamento|default('', true) }}"
-              data-sales="{{ product.vendas|default(0, true) }}"
-              data-discount="{{ product.desconto if product.desconto is not none else '' }}"
-              data-url="{{ url_for('product_page', codigo=product.codigo) }}"
-            >
-              <a
-                href="{{ url_for('product_page', codigo=product.codigo) }}"
-                class="product-card__image-link"
-              >
-                <div class="product-card__image-box">
-                  {% if product.imagem %}
-                  <img
-                    class="product-card__image product-card__image--main"
-                    src="{{ url_for('static', filename=product.imagem) }}"
-                    alt="{{ product.nome }}"
-                    loading="lazy"
-                    onerror="
-                      this.src =
-                        'https://via.placeholder.com/500x620?text=Produto'
-                    "
-                  />
-                  <img
-                    class="product-card__image product-card__image--hover"
-                    src="{{ url_for('static', filename=product.imagem_hover) }}"
-                    alt=""
-                    loading="lazy"
-                    onerror="
-                      this.src =
-                        'https://via.placeholder.com/500x620?text=Produto'
-                    "
-                  />
-                  {% else %}
-                  <img
-                    class="product-card__image product-card__image--main"
-                    src="https://via.placeholder.com/500x620?text=Produto"
-                    alt="{{ product.nome }}"
-                    loading="lazy"
-                  />
-                  <img
-                    class="product-card__image product-card__image--hover"
-                    src="https://via.placeholder.com/500x620?text=Produto"
-                    alt=""
-                    loading="lazy"
-                  />
-                  {% endif %}
-                </div>
-              </a>
 
-              <div class="product-card__content">
-                <h3 class="product-card__title">{{ product.nome }}</h3>
-
-                <div class="product-card__rating">★★★★★</div>
-
-                <div class="product-card__price">
-                  R${{ "%.2f"|format(product.preco)|replace(".", ",") }}
-                </div>
-
-                <div class="product-card__installments">
-                  2x de R${{ "%.2f"|format(product.preco / 2)|replace(".", ",")
-                  }} sem juros
-                </div>
-
-                <div class="product-card__pix">
-                  <span>
-                    R${{ "%.2f"|format(product.preco * 0.95)|replace(".", ",")
-                    }}
-                  </span>
-                  com PIX (-5%)
-                </div>
-
-                <a
-                  href="{{ url_for('product_page', codigo=product.codigo) }}"
-                  class="product-card__button"
-                  >Comprar</a
-                >
-              </div>
-            </article>
-            {% endfor %}
+          <div class="product-buybox__meta">
+            <p><strong>Tipo:</strong> {{ product.tipo_produto }}</p>
+            {% if product.cor %}
+            <p><strong>Cor:</strong> {{ product.cor|capitalize }}</p>
+            {% endif %}
+            <p><strong>Disponibilidade:</strong> {{ product.status }}</p>
           </div>
-        </section>
+        </aside>
+      </section>
+
+      <section class="product-description">
+        <div class="product-section-title">
+          <span>Detalhes do produto</span>
+          <h2>Descrição do produto</h2>
+        </div>
+
+        <div class="product-description__content">
+          {% for paragraph in product.descricao_detalhada.split('\n') if
+          paragraph.strip() %}
+          <p>{{ paragraph }}</p>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="product-recommended">
+        <div class="product-section-title product-section-title--center">
+          <span>Selecionados para você</span>
+          <h2>Você também pode gostar</h2>
+        </div>
+
+        <div class="news-carousel">
+          <div class="news-carousel__viewport">
+            <div class="news-carousel__track">
+              {% for item in recommended %}
+              <article class="product-card" data-sku="{{ item.codigo }}">
+                <a
+                  href="{{ url_for('product_page', codigo=item.codigo) }}"
+                  class="product-card__image-link"
+                >
+                  <div class="product-card__image-box">
+                    <img
+                      class="product-card__image product-card__image--main"
+                      src="{{ url_for('static', filename=item.imagem) }}"
+                      alt="{{ item.nome }}"
+                    />
+                    <img
+                      class="product-card__image product-card__image--hover"
+                      src="{{ url_for('static', filename=item.imagem) }}"
+                      alt=""
+                    />
+                  </div>
+                </a>
+
+                <div class="product-card__content">
+                  <h3 class="product-card__title">{{ item.nome }}</h3>
+
+                  <div class="product-card__rating">★★★★★</div>
+
+                  <div class="product-card__price">
+                    R${{ "%.2f"|format(item.preco)|replace(".", ",") }}
+                  </div>
+
+                  <div class="product-card__installments">
+                    2x de R${{ "%.2f"|format(item.preco / 2)|replace(".", ",")
+                    }} sem juros
+                  </div>
+
+                  <div class="product-card__pix">
+                    <span>
+                      R${{ "%.2f"|format(item.preco * 0.95)|replace(".", ",") }}
+                    </span>
+                    com PIX (-5%)
+                  </div>
+
+                  <a
+                    href="{{ url_for('product_page', codigo=item.codigo) }}"
+                    class="product-card__button"
+                  >
+                    Ver produto
+                  </a>
+                </div>
+              </article>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
       </section>
     </main>
+
+    <div class="sticky-buybar" id="stickyBuybar">
+      <div class="sticky-buybar__content container">
+        <div class="sticky-buybar__info">
+          <strong>{{ product.nome }}</strong>
+          <span>R${{ "%.2f"|format(product.preco)|replace(".", ",") }}</span>
+        </div>
+
+        <button
+          type="button"
+          class="sticky-buybar__button"
+          id="stickyAddToCartButton"
+          data-product-code="{{ product.codigo }}"
+          data-product-name="{{ product.nome }}"
+          data-product-price="{{ product.preco }}"
+          data-product-image="{{ url_for('static', filename=product.imagem) }}"
+          data-product-url="{{ url_for('product_page', codigo=product.codigo) }}"
+        >
+          Adicionar à sacola
+        </button>
+      </div>
+    </div>
     <footer class="site-footer" aria-label="Rodapé do site">
       <div class="site-footer__container">
         <div class="site-footer__top">
@@ -762,6 +676,7 @@
         </div>
       </div>
     </footer>
+
     <div class="auth-modal" aria-hidden="true">
       <div class="auth-modal__overlay"></div>
 
@@ -949,5 +864,6 @@
 
     <script src="{{ url_for('static', filename='js/novidades.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/produto.js') }}"></script>
   </body>
 </html>

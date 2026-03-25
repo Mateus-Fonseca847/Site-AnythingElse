@@ -441,7 +441,25 @@ document.addEventListener("DOMContentLoaded", () => {
       currency: "BRL",
     });
   }
+  function getCartStorageKey() {
+    if (currentUser?.email) {
+      return `anythingelse_cart_user_${currentUser.email}`;
+    }
+    return "anythingelse_cart_guest";
+  }
 
+  function saveCart() {
+    localStorage.setItem(getCartStorageKey(), JSON.stringify(cart));
+  }
+
+  function loadCart() {
+    try {
+      const savedCart = localStorage.getItem(getCartStorageKey());
+      cart = savedCart ? JSON.parse(savedCart) : [];
+    } catch (error) {
+      cart = [];
+    }
+  }
   function updateCartUI() {
     if (!cartItemsContainer || !cartEmptyState || !cartCount || !cartTotal) {
       return;
@@ -546,9 +564,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         saveCart();
-        renderCartItems();
-
-        openCart();
+        updateCartUI();
+        openCartDrawer();
       } catch (error) {
         console.error(error);
         alert("Erro ao processar compra");
@@ -587,6 +604,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   logoutButton?.addEventListener("click", async () => {
     try {
+      const loggedUser = currentUser?.email || null;
+
       const response = await fetch("/auth/logout", {
         method: "POST",
         headers: {
@@ -599,6 +618,15 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok || !data.ok) {
         return;
       }
+
+      if (loggedUser) {
+        localStorage.removeItem(`anythingelse_cart_user_${loggedUser}`);
+      }
+
+      localStorage.removeItem("anythingelse_cart_guest");
+
+      cart = [];
+      updateCartUI();
 
       clearLoggedUser();
       closeAccountMenu();
@@ -694,6 +722,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  loadCart();
   updateCartUI();
   updateAuthMode("login");
   updateHeaderUser();
