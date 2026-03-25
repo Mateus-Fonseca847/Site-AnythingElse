@@ -104,6 +104,33 @@ def product_page(codigo):
         product=product,
         recommended=recommended,
     )
+@app.route("/camisetas")
+def camisetas():
+    products = list_products()
+
+    camisetas = [
+        p for p in products
+        if p.get("tipo_produto", "").lower() in ["camiseta", "camisetas", "camisa", "camisas"]
+    ]
+
+    return render_template("camisetas.html", products=camisetas)
+
+
+@app.route("/livros")
+def livros():
+    """
+    Página de livros
+    """
+    products = list_products()
+
+    livros = [
+        p for p in products
+        if p.get("tipo_produto", "").lower() in ["livro", "livros"]
+    ]
+
+    return render_template("livros.html", products=livros)
+
+
 
 # =========================
 # INICIALIZAÇÃO DO SISTEMA
