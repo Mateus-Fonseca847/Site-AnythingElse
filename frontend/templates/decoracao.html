@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Comprar | AnythingElse</title>
+    <title>Decoração | AnythingElse</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -33,11 +34,7 @@
     />
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='pages/novidades.css') }}"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='pages/produto.css') }}"
+      href="{{ url_for('static', filename='pages/decoracao.css') }}"
     />
   </head>
   <body>
@@ -187,7 +184,7 @@
             <li class="has-dropdown">
               <a href="{{ url_for('filmes') }}">Filmes</a>
               <ul class="dropdown-menu">
-                <li><a href="#">Ação</a></li>s
+                <li><a href="#">Ação</a></li>
                 <li><a href="#">Drama</a></li>
                 <li><a href="#">Ficção</a></li>
                 <li><a href="#">Animação</a></li>
@@ -195,7 +192,7 @@
             </li>
 
             <li class="has-dropdown">
-              <a href="/decoracao">Decoração</a>
+              <a href="{{ url_for('decoracao') }}" class="is-active">Decoração</a>
               <ul class="dropdown-menu">
                 <li><a href="#">Quadros</a></li>
                 <li><a href="#">Luminárias</a></li>
@@ -209,218 +206,324 @@
         </nav>
       </div>
     </header>
-    <main class="product-page container">
-      <div class="product-breadcrumb">
+
+    <main class="cam-page container">
+      <div class="cam-breadcrumb">
         <a href="{{ url_for('home') }}">Página inicial</a>
         <span>›</span>
-        <a href="{{ url_for('novidades') }}">Novidades</a>
-        <span>›</span>
-        <strong>{{ product.nome }}</strong>
+        <strong>Decoração</strong>
       </div>
 
-      <section class="product-hero">
-        <div class="product-gallery">
-          <div class="product-gallery__thumbs">
-            {% if product.imagem %}
-            <button type="button" class="product-thumb is-active">
-              <img
-                src="{{ url_for('static', filename=product.imagem) }}"
-                alt="{{ product.nome }}"
-              />
-            </button>
-            {% endif %} {% if product.imagem_hover %}
-            <button type="button" class="product-thumb">
-              <img
-                src="{{ url_for('static', filename=product.imagem_hover) }}"
-                alt="{{ product.nome }}"
-              />
-            </button>
-            {% endif %}
-          </div>
-
-          <div class="product-gallery__main">
-            <img
-              id="mainProductImage"
-              src="{{ url_for('static', filename=product.imagem) }}"
-              alt="{{ product.nome }}"
-            />
-          </div>
+      <section class="cam-toolbar">
+        <div>
+          <span class="cam-eyebrow">AnythingElse</span>
+          <h1>Decoração</h1>
+          <p class="cam-subtitle">Confira todos os nossos itens de decoração!</p>
         </div>
 
-        <aside class="product-buybox">
-          <p class="product-buybox__brand">Anything <span>Else</span></p>
-          <h1 class="product-buybox__title">{{ product.nome }}</h1>
-          <div class="product-buybox__divider"></div>
-          <div class="product-buybox__price">
-            R${{ "%.2f"|format(product.preco)|replace(".", ",") }}
-          </div>
+        <div class="cam-toolbar-right">
+          <span id="productCount">{{ products|length }} itens de decoração</span>
 
-          <div class="product-buybox__installments">
-            2x de R${{ "%.2f"|format(product.preco / 2)|replace(".", ",") }} sem
-            juros
-          </div>
-
-          <div class="product-buybox__pix">
-            <strong>
-              R${{ "%.2f"|format(product.preco * 0.95)|replace(".", ",") }}
-            </strong>
-            no Pix
-          </div>
-
-          {% if product.tipo_produto|lower == "camiseta" %}
-          <div class="product-buybox__sizes">
-            <h3>Tamanho</h3>
-            <div class="product-size-list">
-              {% for size in product.tamanhos.split(",") if product.tamanhos %}
-              <button type="button" class="product-size">{{ size }}</button>
-              {% endfor %}
-            </div>
-          </div>
-          {% endif %}
-
-          <div class="product-buybox__actions">
+          <div class="sort-dropdown" id="sortDropdown">
             <button
               type="button"
-              class="product-buybox__button"
-              id="addToCartButton"
-              data-product-code="{{ product.codigo }}"
-              data-product-name="{{ product.nome }}"
-              data-product-price="{{ product.preco }}"
-              data-product-image="{{ url_for('static', filename=product.imagem) }}"
-              data-product-url="{{ url_for('product_page', codigo=product.codigo) }}"
+              class="sort-dropdown__trigger"
+              id="sortDropdownTrigger"
+              aria-haspopup="listbox"
+              aria-expanded="false"
             >
-              <svg
-                class="product-buybox__button-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden="true"
+              <span id="sortDropdownLabel">Ordenar por: Relevância</span>
+              <span class="sort-dropdown__arrow"></span>
+            </button>
+
+            <div
+              class="sort-dropdown__menu"
+              id="sortDropdownMenu"
+              role="listbox"
+            >
+              <button
+                type="button"
+                class="sort-dropdown__option is-selected"
+                data-value="relevancia"
               >
-                <path
-                  d="M6 7H18L17 20H7L6 7Z"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linejoin="round"
-                ></path>
-                <path
-                  d="M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
-                  stroke="currentColor"
-                  stroke-width="2"
-                ></path>
-              </svg>
-              <span>Adicionar à sacola</span>
+                Ordenar por: Relevância
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="mais-vendidos"
+              >
+                Mais vendidos
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="novidades"
+              >
+                Novidades
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="melhor-desconto"
+              >
+                Melhor desconto
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="maior-preco"
+              >
+                Maior preço
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="menor-preco"
+              >
+                Menor preço
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="nome-az"
+              >
+                Nome A a Z
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="nome-za"
+              >
+                Nome Z a A
+              </button>
+            </div>
+
+            <input type="hidden" id="sortProducts" value="relevancia" />
+          </div>
+        </div>
+      </section>
+
+      <section class="cam-layout">
+        <aside class="cam-sidebar">
+          <div class="filter-box">
+            <h3>Cor</h3>
+            <div class="filter-divider"></div>
+
+            <div class="color-options">
+              <button
+                type="button"
+                class="color-dot vermelho"
+                data-color="vermelho"
+                title="Vermelho"
+              ></button>
+              <button
+                type="button"
+                class="color-dot azul"
+                data-color="azul"
+                title="Azul"
+              ></button>
+              <button
+                type="button"
+                class="color-dot preto"
+                data-color="preto"
+                title="Preto"
+              ></button>
+              <button
+                type="button"
+                class="color-dot branco"
+                data-color="branco"
+                title="Branco"
+              ></button>
+              <button
+                type="button"
+                class="color-dot verde"
+                data-color="verde"
+                title="Verde"
+              ></button>
+              <button
+                type="button"
+                class="color-dot amarelo"
+                data-color="amarelo"
+                title="Amarelo"
+              ></button>
+              <button
+                type="button"
+                class="color-dot roxo"
+                data-color="roxo"
+                title="Roxo"
+              ></button>
+              <button
+                type="button"
+                class="color-dot marrom"
+                data-color="marrom"
+                title="Marrom"
+              ></button>
+            </div>
+          </div>
+
+          <div class="filter-box">
+            <h3>Material</h3>
+            <div class="filter-divider"></div>
+
+            <div class="size-options">
+              <button type="button" class="size-chip" data-size="plástico">
+                Plástico
+              </button>
+              <button type="button" class="size-chip" data-size="resina">
+                Resina
+              </button>
+              <button type="button" class="size-chip" data-size="latex">
+                Látex
+              </button>
+              <button type="button" class="size-chip" data-size="tecido">
+                Tecido
+              </button>
+              <button type="button" class="size-chip" data-size="vinil">
+                Vinil
+              </button>
+            </div>
+          </div>
+
+          <div class="filter-box">
+            <h3>Categoria</h3>
+            <div class="filter-divider"></div>
+
+            <div class="type-options">
+              <button type="button" class="type-chip" data-type="action figure">
+                Action Figure
+              </button>
+              <button type="button" class="type-chip" data-type="mascara">
+                Máscara
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <section class="cam-products">
+          <div class="active-filters" id="activeFilters" hidden>
+            <div class="active-filters__list" id="activeFiltersList"></div>
+            <button
+              type="button"
+              class="active-filters__clear"
+              id="clearAllFilters"
+            >
+              Limpar filtros
             </button>
           </div>
 
-          <div class="product-buybox__meta">
-            <p><strong>Tipo:</strong> {{ product.tipo_produto }}</p>
-            {% if product.cor %}
-            <p><strong>Cor:</strong> {{ product.cor|capitalize }}</p>
-            {% endif %}
-            <p><strong>Disponibilidade:</strong> {{ product.status }}</p>
-          </div>
-        </aside>
-      </section>
+          <div class="products-grid" id="productsGrid">
+            {% for product in products %}
+            <article
+              class="product-card"
+              data-sku="{{ product.codigo }}"
+              data-name="{{ product.nome|default('', true)|lower }}"
+              data-price="{{ product.preco|default(0, true) }}"
+              data-type="{{ product.tipo_produto|default('', true)|lower }}"
+              data-color="{{ product.cor|default('', true)|lower }}"
+              data-sizes="{{ product.material|default('', true)|lower }}"
+              data-release-date="{{ product.data_lancamento|default('', true) }}"
+              data-sales="{{ product.vendas|default(0, true) }}"
+              data-discount="{{ product.desconto if product.desconto is not none else '' }}"
+              data-url="{{ url_for('product_page', codigo=product.codigo) }}"
+            >
+              <a
+                href="{{ url_for('product_page', codigo=product.codigo) }}"
+                class="product-card__image-link"
+              >
+                <div class="product-card__image-box">
+                  {% if product.imagem %}
+                  <img
+                    class="product-card__image product-card__image--main"
+                    src="{{ url_for('static', filename=product.imagem) }}"
+                    alt="{{ product.nome }}"
+                    loading="lazy"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/500x620?text=Decoracao'
+                    "
+                  />
 
-      <section class="product-description">
-        <div class="product-section-title">
-          <span>Detalhes do produto</span>
-          <h2>Descrição do produto</h2>
-        </div>
-
-        <div class="product-description__content">
-          {% for paragraph in product.descricao_detalhada.split('\n') if
-          paragraph.strip() %}
-          <p>{{ paragraph }}</p>
-          {% endfor %}
-        </div>
-      </section>
-
-      <section class="product-recommended">
-        <div class="product-section-title product-section-title--center">
-          <span>Selecionados para você</span>
-          <h2>Você também pode gostar</h2>
-        </div>
-
-        <div class="news-carousel">
-          <div class="news-carousel__viewport">
-            <div class="news-carousel__track">
-              {% for item in recommended %}
-              <article class="product-card" data-sku="{{ item.codigo }}">
-                <a
-                  href="{{ url_for('product_page', codigo=item.codigo) }}"
-                  class="product-card__image-link"
-                >
-                  <div class="product-card__image-box">
-                    <img
-                      class="product-card__image product-card__image--main"
-                      src="{{ url_for('static', filename=item.imagem) }}"
-                      alt="{{ item.nome }}"
-                    />
-                    <img
-                      class="product-card__image product-card__image--hover"
-                      src="{{ url_for('static', filename=item.imagem) }}"
-                      alt=""
-                    />
-                  </div>
-                </a>
-
-                <div class="product-card__content">
-                  <h3 class="product-card__title">{{ item.nome }}</h3>
-
-                  <div class="product-card__rating">★★★★★</div>
-
-                  <div class="product-card__price">
-                    R${{ "%.2f"|format(item.preco)|replace(".", ",") }}
-                  </div>
-
-                  <div class="product-card__installments">
-                    2x de R${{ "%.2f"|format(item.preco / 2)|replace(".", ",")
-                    }} sem juros
-                  </div>
-
-                  <div class="product-card__pix">
-                    <span>
-                      R${{ "%.2f"|format(item.preco * 0.95)|replace(".", ",") }}
-                    </span>
-                    com PIX (-5%)
-                  </div>
-
-                  <a
-                    href="{{ url_for('product_page', codigo=item.codigo) }}"
-                    class="product-card__button"
-                  >
-                    Ver produto
-                  </a>
+                  {% if product.imagem_hover %}
+                  <img
+                    class="product-card__image product-card__image--hover"
+                    src="{{ url_for('static', filename=product.imagem_hover) }}"
+                    alt=""
+                    loading="lazy"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/500x620?text=Decoracao'
+                    "
+                  />
+                  {% else %}
+                  <img
+                    class="product-card__image product-card__image--hover"
+                    src="{{ url_for('static', filename=product.imagem) }}"
+                    alt=""
+                    loading="lazy"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/500x620?text=Decoracao'
+                    "
+                  />
+                  {% endif %} {% else %}
+                  <img
+                    class="product-card__image product-card__image--main"
+                    src="https://via.placeholder.com/500x620?text=Decoracao"
+                    alt="{{ product.nome }}"
+                    loading="lazy"
+                  />
+                  <img
+                    class="product-card__image product-card__image--hover"
+                    src="https://via.placeholder.com/500x620?text=Decoracao"
+                    alt=""
+                    loading="lazy"
+                  />
+                  {% endif %}
                 </div>
-              </article>
-              {% endfor %}
+              </a>
+
+              <div class="product-card__content">
+                <h3 class="product-card__title">{{ product.nome }}</h3>
+
+                <div class="product-card__rating">★★★★★</div>
+
+                <div class="product-card__price">
+                  R${{ "%.2f"|format(product.preco)|replace(".", ",") }}
+                </div>
+
+                <div class="product-card__installments">
+                  2x de R${{ "%.2f"|format(product.preco / 2)|replace(".", ",")
+                  }} sem juros
+                </div>
+
+                <div class="product-card__pix">
+                  <span>
+                    R${{ "%.2f"|format(product.preco * 0.95)|replace(".", ",")
+                    }}
+                  </span>
+                  com PIX (-5%)
+                </div>
+
+                <a
+                  href="{{ url_for('product_page', codigo=product.codigo) }}"
+                  class="product-card__button"
+                >
+                  Comprar
+                </a>
+              </div>
+            </article>
+            {% else %}
+            <div class="empty-products">
+              <h3>Nenhum item de decoração encontrado</h3>
+              <p>Cadastre itens de decoração no banco de dados para exibir aqui.</p>
             </div>
+            {% endfor %}
           </div>
-        </div>
+        </section>
       </section>
     </main>
 
-    <div class="sticky-buybar" id="stickyBuybar">
-      <div class="sticky-buybar__content container">
-        <div class="sticky-buybar__info">
-          <strong>{{ product.nome }}</strong>
-          <span>R${{ "%.2f"|format(product.preco)|replace(".", ",") }}</span>
-        </div>
-
-        <button
-          type="button"
-          class="sticky-buybar__button"
-          id="stickyAddToCartButton"
-          data-product-code="{{ product.codigo }}"
-          data-product-name="{{ product.nome }}"
-          data-product-price="{{ product.preco }}"
-          data-product-image="{{ url_for('static', filename=product.imagem) }}"
-          data-product-url="{{ url_for('product_page', codigo=product.codigo) }}"
-        >
-          Adicionar à sacola
-        </button>
-      </div>
-    </div>
     <footer class="site-footer" aria-label="Rodapé do site">
       <div class="site-footer__container">
         <div class="site-footer__top">
@@ -490,12 +593,13 @@
           <div class="site-footer__columns">
             <div class="site-footer__column">
               <h3 class="site-footer__title">Categorias</h3>
-              <a href="#" class="site-footer__link">Novidades</a>
-              <a href="#" class="site-footer__link">Camisetas</a>
-              <a href="#" class="site-footer__link">Baby Look</a>
-              <a href="#" class="site-footer__link">Moletom</a>
-              <a href="#" class="site-footer__link">Acessórios</a>
-              <a href="#" class="site-footer__link">Personalize</a>
+              <a href="{{ url_for('livros') }}" class="site-footer__link"
+                >Livros</a
+              >
+              <a href="#" class="site-footer__link">Romance</a>
+              <a href="#" class="site-footer__link">Fantasia</a>
+              <a href="#" class="site-footer__link">Terror</a>
+              <a href="#" class="site-footer__link">Quadrinhos</a>
             </div>
 
             <div class="site-footer__column">
@@ -526,151 +630,19 @@
                 href="https://wa.me/5500000000000"
                 class="site-footer__contact-row"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-                  <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                  <path
-                    fill="#e2a012"
-                    d="M476.9 161.1C435 119.1 379.2 96 319.9 96C197.5 96 97.9 195.6 97.9 318C97.9 357.1 108.1 395.3 127.5 429L96 544L213.7 513.1C246.1 530.8 282.6 540.1 319.8 540.1L319.9 540.1C442.2 540.1 544 440.5 544 318.1C544 258.8 518.8 203.1 476.9 161.1zM319.9 502.7C286.7 502.7 254.2 493.8 225.9 477L219.2 473L149.4 491.3L168 423.2L163.6 416.2C145.1 386.8 135.4 352.9 135.4 318C135.4 216.3 218.2 133.5 320 133.5C369.3 133.5 415.6 152.7 450.4 187.6C485.2 222.5 506.6 268.8 506.5 318.1C506.5 419.9 421.6 502.7 319.9 502.7zM421.1 364.5C415.6 361.7 388.3 348.3 383.2 346.5C378.1 344.6 374.4 343.7 370.7 349.3C367 354.9 356.4 367.3 353.1 371.1C349.9 374.8 346.6 375.3 341.1 372.5C308.5 356.2 287.1 343.4 265.6 306.5C259.9 296.7 271.3 297.4 281.9 276.2C283.7 272.5 282.8 269.3 281.4 266.5C280 263.7 268.9 236.4 264.3 225.3C259.8 214.5 255.2 216 251.8 215.8C248.6 215.6 244.9 215.6 241.2 215.6C237.5 215.6 231.5 217 226.4 222.5C221.3 228.1 207 241.5 207 268.8C207 296.1 226.9 322.5 229.6 326.2C232.4 329.9 268.7 385.9 324.4 410C359.6 425.2 373.4 426.5 391 423.9C401.7 422.3 423.8 410.5 428.4 397.5C433 384.5 433 373.4 431.6 371.1C430.3 368.6 426.6 367.2 421.1 364.5z"
-                  />
-                </svg>
-                <span>WhatsApp: <strong>(+55) 24 99223-9258</strong></span>
+                <span>WhatsApp</span>
               </a>
 
               <a
-                href="mailto:contato@sualoja.com.br"
+                href="mailto:contato@anythingelse.com"
                 class="site-footer__contact-row"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-                  <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                  <path
-                    fill="rgb(226, 160, 18)"
-                    d="M112 128C85.5 128 64 149.5 64 176C64 191.1 71.1 205.3 83.2 214.4L291.2 370.4C308.3 383.2 331.7 383.2 348.8 370.4L556.8 214.4C568.9 205.3 576 191.1 576 176C576 149.5 554.5 128 528 128L112 128zM64 260L64 448C64 483.3 92.7 512 128 512L512 512C547.3 512 576 483.3 576 448L576 260L377.6 408.8C343.5 434.4 296.5 434.4 262.4 408.8L64 260z"
-                  />
-                </svg>
-                <span>E-mail: <strong>AnythingElse@gmail.com</strong></span>
+                <span>contato@anythingelse.com</span>
               </a>
 
-              <div class="site-footer__hours">
-                <div
-                  class="site-footer__contact-row site-footer__contact-row--static"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
-                    <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
-                    <path
-                      fill="rgb(226, 160, 18)"
-                      d="M320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64zM296 184L296 320C296 328 300 335.5 306.7 340L402.7 404C413.7 411.4 428.6 408.4 436 397.3C443.4 386.2 440.4 371.4 429.3 364L344 307.2L344 184C344 170.7 333.3 160 320 160C306.7 160 296 170.7 296 184z"
-                    />
-                  </svg>
-                  <span>Horário de atendimento:</span>
-                </div>
-                <p class="site-footer__hours-text">
-                  Segunda a Sexta, das 9:00h às 17:30h.
-                </p>
+              <div class="site-footer__contact-row">
+                <span>Seg a Sex, 9h às 18h</span>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="site-footer__divider"></div>
-
-        <div class="site-footer__bottom">
-          <div class="site-footer__payments">
-            <h3 class="site-footer__title">Formas de Pagamento</h3>
-            <div class="site-footer__image-grid">
-              <a href="#" class="site-footer__badge-link">
-                <img
-                  src="https://cdn.sistemawbuy.com.br/img/bt-pgto-mercadopago.png"
-                  alt="Mercado Pago"
-                  class="site-footer__badge"
-                />
-              </a>
-              <a href="#" class="site-footer__badge-link">
-                <img
-                  src="https://cdn.sistemawbuy.com.br/img/bt-pgto-paghiper.png"
-                  alt="PagHiper"
-                  class="site-footer__badge"
-                />
-              </a>
-              <a href="#" class="site-footer__badge-link">
-                <img
-                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/visa.png"
-                  alt="Visa"
-                  class="site-footer__badge"
-                />
-              </a>
-              <a href="#" class="site-footer__badge-link">
-                <img
-                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/mastercard.png"
-                  alt="Mastercard"
-                  class="site-footer__badge"
-                />
-              </a>
-              <a href="#" class="site-footer__badge-link">
-                <img
-                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/hipercard.png"
-                  alt="Hipercard"
-                  class="site-footer__badge"
-                />
-              </a>
-              <a href="#" class="site-footer__badge-link">
-                <img
-                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/amex.png"
-                  alt="American Express"
-                  class="site-footer__badge"
-                />
-              </a>
-              <a href="#" class="site-footer__badge-link">
-                <img
-                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/diners.png"
-                  alt="Diners Club"
-                  class="site-footer__badge"
-                />
-              </a>
-              <a href="#" class="site-footer__badge-link">
-                <img
-                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/elo.png"
-                  alt="Elo"
-                  class="site-footer__badge"
-                />
-              </a>
-              <a href="#" class="site-footer__badge-link">
-                <img
-                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/pix.png"
-                  alt="Pix"
-                  class="site-footer__badge"
-                />
-              </a>
-            </div>
-          </div>
-
-          <div class="site-footer__security">
-            <h3 class="site-footer__title">Avaliação e Segurança</h3>
-            <div
-              class="site-footer__image-grid site-footer__image-grid--security"
-            >
-              <a href="#" class="site-footer__seal-rating">
-                <div class="footer-rating">
-                  <div class="footer-rating__top">
-                    <span class="footer-rating__star">★</span>
-                    <span class="footer-rating__value">5.0</span>
-                  </div>
-                  <span class="footer-rating__count">66 avaliações</span>
-                </div>
-              </a>
-              <a href="#" class="site-footer__seal-link">
-                <img
-                  src="https://cdn.confi.com.vc/reputation/2000824.png"
-                  alt="Loja confiável"
-                  class="site-footer__seal"
-                />
-              </a>
-              <a href="#" class="site-footer__seal-link">
-                <img
-                  src="https://cdn.sistemawbuy.com.br/img/selos/google.png"
-                  alt="Google Safe Browsing"
-                  class="site-footer__seal"
-                />
-              </a>
             </div>
           </div>
         </div>
@@ -862,8 +834,7 @@
       </aside>
     </div>
 
-    <script src="{{ url_for('static', filename='js/novidades.js') }}"></script>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/produto.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/decoracao.js') }}"></script>
   </body>
 </html>

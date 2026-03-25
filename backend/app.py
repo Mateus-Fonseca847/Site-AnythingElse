@@ -130,6 +130,37 @@ def livros():
 
     return render_template("livros.html", products=livros)
 
+@app.route("/filmes")
+def filmes():
+    products = list_products()
+    filmes = [
+        p for p in products
+        if p.get("tipo_produto", "").lower() in ["filme", "filmes"]
+    ]
+
+    return render_template("filmes.html", products=filmes)
+
+@app.route("/acessorios")
+def acessorios():
+    products = list_products()
+
+    acessorios = [
+        p for p in products
+        if p.get("tipo_produto", "").lower() in ["ecobag", "mochila", "garrafa"]
+    ]
+
+    return render_template("acessorios.html", products=acessorios)
+
+@app.route("/decoracao")
+def decoracao():
+    products = list_products()
+
+    decoracao = [
+        p for p in products
+        if p.get("tipo_produto", "").lower() in ["action figure", "mascara"]
+    ]
+
+    return render_template("decoracao.html", products=decoracao)
 
 
 # =========================
