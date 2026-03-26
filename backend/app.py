@@ -162,7 +162,9 @@ def decoracao():
 
     return render_template("decoracao.html", products=decoracao)
 
-
+@app.route("/checkout")
+def checkout():
+    return render_template("checkout.html")
 # =========================
 # INICIALIZAÇÃO DO SISTEMA
 # =========================

@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartEmptyState = document.querySelector(".cart-drawer__empty");
   const cartCount = document.querySelector(".cart-count");
   const cartTotal = document.querySelector(".header-cart-total");
-
+  const cartDrawerTotal = document.querySelector(".cart-drawer-total");
   const authForm = document.getElementById("authForm");
   const authTabs = Array.from(document.querySelectorAll(".auth-modal__tab"));
   const authTitle = document.getElementById("auth-modal-title");
@@ -434,24 +434,41 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function updateCartUI() {
-    if (!cartItemsContainer || !cartEmptyState || !cartTotal) return;
+    if (!cartItemsContainer || !cartEmptyState) return;
+
+    const totalItems = cart.reduce(
+      (sum, item) => sum + Number(item.quantity || 1),
+      0,
+    );
 
     if (cartCount) {
-      cartCount.textContent = String(
-        cart.reduce((sum, item) => sum + Number(item.quantity || 1), 0),
-      );
+      cartCount.textContent = String(totalItems);
     }
 
     cartItemsContainer.innerHTML = "";
 
-    if (!cart.length) {
+    if (cart.length === 0) {
+      cartEmptyState.style.display = "block";
       cartEmptyState.hidden = false;
+
+      cartItemsContainer.style.display = "none";
       cartItemsContainer.hidden = true;
-      cartTotal.textContent = "R$0,00";
+
+      if (cartTotal) {
+        cartTotal.textContent = "R$0,00";
+      }
+
+      if (cartDrawerTotal) {
+        cartDrawerTotal.textContent = "R$0,00";
+      }
+
       return;
     }
 
+    cartEmptyState.style.display = "none";
     cartEmptyState.hidden = true;
+
+    cartItemsContainer.style.display = "flex";
     cartItemsContainer.hidden = false;
 
     let total = 0;
@@ -460,26 +477,44 @@ document.addEventListener("DOMContentLoaded", () => {
       const quantity = Number(item.quantity || 1);
       const price = Number(item.price || 0);
       const subtotal = quantity * price;
+
       total += subtotal;
 
       const itemElement = document.createElement("div");
       itemElement.className = "cart-item";
 
       itemElement.innerHTML = `
-        <img class="cart-item__image" src="${item.image || ""}" alt="${item.title || "Produto"}">
-        <div>
-          <p class="cart-item__title">${item.title || "Produto"}</p>
-          ${item.size ? `<p class="cart-item__meta">Tamanho: ${item.size}</p>` : ""}
-          <p class="cart-item__meta">Qtd.: ${quantity}</p>
-          <p class="cart-item__price">${formatPrice(subtotal)}</p>
-        </div>
-        <button type="button" class="cart-item__remove" data-index="${index}" aria-label="Remover item">×</button>
-      `;
+      <div class="cart-item__image">
+        <img src="${item.image || ""}" alt="${item.title || "Produto"}">
+      </div>
+
+      <div class="cart-item__content">
+        <h3 class="cart-item__title">${item.title || "Produto"}</h3>
+        ${item.size ? `<p class="cart-item__meta">Tamanho: ${item.size}</p>` : ""}
+        <p class="cart-item__meta">Qtd.: ${quantity}</p>
+        <strong class="cart-item__price">${formatPrice(subtotal)}</strong>
+      </div>
+
+      <button
+        class="cart-item__remove"
+        type="button"
+        data-index="${index}"
+        aria-label="Remover item"
+      >
+        ×
+      </button>
+    `;
 
       cartItemsContainer.appendChild(itemElement);
     });
 
-    cartTotal.textContent = formatPrice(total);
+    if (cartTotal) {
+      cartTotal.textContent = formatPrice(total);
+    }
+
+    if (cartDrawerTotal) {
+      cartDrawerTotal.textContent = formatPrice(total);
+    }
 
     cartItemsContainer
       .querySelectorAll(".cart-item__remove")
@@ -492,7 +527,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       });
   }
-
   window.addProductToCartGlobal = function (product) {
     if (!product) return false;
 

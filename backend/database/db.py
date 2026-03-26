@@ -562,7 +562,7 @@ INFORMAÇÕES DO PRODUTO:
         "validade": "Não se aplica",
         "lote": "L-MAS-2026-01",
         "status": "Disponível",
-        "tipo_produto": "Máscara",
+        "tipo_produto": "mascara",
         "imagem": "img/darth-a.png",
         "imagem_hover": "img/darth-b.png",
         "cor": "",
