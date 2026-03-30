@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Novidades | AnythingElse</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='base.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='layout.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='components.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='pages/home.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='footer.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='pages/novidades.css') }}"
+    />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-container">
+        <div class="header-top">
+          <a href="{{ url_for('home') }}" class="brand">
+            <div class="brand-logo">
+              <img
+                src="https://down-tx-br.img.susercontent.com/br-11134216-81z1k-mfbl6utpk551f2_tn.webp"
+                alt="Logo da marca"
+              />
+            </div>
+          </a>
+
+          <div class="search-wrapper">
+            <form class="search-bar">
+              <input type="text" placeholder="Olá, o que você procura?" />
+              <button type="submit" aria-label="Pesquisar">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="7"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  ></circle>
+                  <path
+                    d="M20 20L16.65 16.65"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  ></path>
+                </svg>
+              </button>
+            </form>
+          </div>
+
+          <div class="header-tools">
+            <a href="#" class="tool-item">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="2"
+                ></circle>
+                <path
+                  d="M9.09 9A3 3 0 0 1 15 10c0 2-3 2-3 4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                ></path>
+                <circle cx="12" cy="17" r="1" fill="currentColor"></circle>
+              </svg>
+              <div class="tool-text">
+                <span>Central de</span>
+                <strong>Atendimento</strong>
+              </div>
+            </a>
+
+            <button type="button" class="tool-item header-login-trigger">
+              <svg viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="12"
+                  cy="8"
+                  r="4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                ></circle>
+                <path
+                  d="M4 20C4 16.6863 7.58172 14 12 14C16.4183 14 20 16.6863 20 20"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                ></path>
+              </svg>
+              <div class="tool-text">
+                <span>Entre ou</span>
+                <strong>Cadastre-se</strong>
+              </div>
+            </button>
+
+            <button
+              type="button"
+              class="tool-item cart-tool header-cart-trigger"
+            >
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M6 7H18L17 20H7L6 7Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linejoin="round"
+                ></path>
+                <path
+                  d="M9 7V5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                ></path>
+              </svg>
+              <div class="tool-text">
+                <span>Minha Sacola</span>
+                <strong class="header-cart-total">R$0,00</strong>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <nav class="header-nav">
+          <ul class="nav-menu">
+            <li>
+              <a href="{{ url_for('novidades') }}" class="is-active"
+                >NOVIDADES</a
+              >
+            </li>
+
+            <li class="has-dropdown">
+              <a href="{{ url_for('camisetas') }}">Vestuário</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Camisetas</a></li>
+                <li><a href="#">Calças</a></li>
+                <li><a href="#">Jaquetas</a></li>
+                <li><a href="#">Moletons</a></li>
+                <li><a href="#">Baby Look</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="{{ url_for('acessorios') }}">Acessórios</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Bonés</a></li>
+                <li><a href="#">Bolsas</a></li>
+                <li><a href="#">Canecas</a></li>
+                <li><a href="#">Chaveiros</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="{{ url_for('livros') }}">Livros</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Romance</a></li>
+                <li><a href="#">Fantasia</a></li>
+                <li><a href="#">Terror</a></li>
+                <li><a href="#">Quadrinhos</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="#">Filmes</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Ação</a></li>
+                <li><a href="#">Drama</a></li>
+                <li><a href="#">Ficção</a></li>
+                <li><a href="#">Animação</a></li>
+              </ul>
+            </li>
+
+            <li class="has-dropdown">
+              <a href="/decoracao">Decoração</a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Quadros</a></li>
+                <li><a href="#">Luminárias</a></li>
+                <li><a href="#">Almofadas</a></li>
+                <li><a href="#">Tapetes</a></li>
+              </ul>
+            </li>
+
+            <li><a href="#">Personalize</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="nov-page container">
+      <div class="nov-breadcrumb">
+        <a href="{{ url_for('home') }}">Página inicial</a>
+        <span>›</span>
+        <strong>Novidades</strong>
+      </div>
+
+      <section class="nov-toolbar">
+        <div>
+          <span class="nov-eyebrow">AnythingElse</span>
+          <h1>Novidades</h1>
+        </div>
+
+        <div class="nov-toolbar-right">
+          <span id="productCount">{{ products|length }} produtos</span>
+          <div class="sort-dropdown" id="sortDropdown">
+            <button
+              type="button"
+              class="sort-dropdown__trigger"
+              id="sortDropdownTrigger"
+              aria-haspopup="listbox"
+              aria-expanded="false"
+            >
+              <span id="sortDropdownLabel">Ordenar por: Relevância</span>
+              <span class="sort-dropdown__arrow"></span>
+            </button>
+
+            <div
+              class="sort-dropdown__menu"
+              id="sortDropdownMenu"
+              role="listbox"
+            >
+              <button
+                type="button"
+                class="sort-dropdown__option is-selected"
+                data-value="relevancia"
+              >
+                Ordenar por: Relevância
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="mais-vendidos"
+              >
+                Mais vendidos
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="novidades"
+              >
+                Novidades
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="melhor-desconto"
+              >
+                Melhor desconto
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="maior-preco"
+              >
+                Maior preço
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="menor-preco"
+              >
+                Menor preço
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="nome-az"
+              >
+                Nome A a Z
+              </button>
+              <button
+                type="button"
+                class="sort-dropdown__option"
+                data-value="nome-za"
+              >
+                Nome Z a A
+              </button>
+            </div>
+
+            <input type="hidden" id="sortProducts" value="relevancia" />
+          </div>
+        </div>
+      </section>
+
+      <section class="nov-layout">
+        <aside class="nov-sidebar">
+          <div class="filter-box">
+            <h3>Cor</h3>
+            <div class="filter-divider"></div>
+
+            <div class="color-options">
+              <button
+                class="color-dot vermelho"
+                data-color="vermelho"
+                title="Vermelho"
+              ></button>
+              <button
+                class="color-dot laranja"
+                data-color="laranja"
+                title="Laranja"
+              ></button>
+              <button
+                class="color-dot amarelo"
+                data-color="amarelo"
+                title="Amarelo"
+              ></button>
+              <button
+                class="color-dot verde"
+                data-color="verde"
+                title="Verde"
+              ></button>
+              <button
+                class="color-dot azul"
+                data-color="azul"
+                title="Azul"
+              ></button>
+              <button
+                class="color-dot roxo"
+                data-color="roxo"
+                title="Roxo"
+              ></button>
+              <button
+                class="color-dot rosa"
+                data-color="rosa"
+                title="Rosa"
+              ></button>
+
+              <button
+                class="color-dot marrom"
+                data-color="marrom"
+                title="Marrom"
+              ></button>
+              <button
+                class="color-dot cinza"
+                data-color="cinza"
+                title="Cinza"
+              ></button>
+              <button
+                class="color-dot branco"
+                data-color="branco"
+                title="Branco"
+              ></button>
+              <button
+                class="color-dot preto"
+                data-color="preto"
+                title="Preto"
+              ></button>
+            </div>
+          </div>
+
+          <div class="filter-box">
+            <h3>Tamanho</h3>
+            <div class="filter-divider"></div>
+
+            <div class="size-options">
+              <button type="button" class="size-chip" data-size="2P">2P</button>
+              <button type="button" class="size-chip" data-size="P">P</button>
+              <button type="button" class="size-chip" data-size="M">M</button>
+              <button type="button" class="size-chip" data-size="G">G</button>
+              <button type="button" class="size-chip" data-size="2G">2G</button>
+              <button type="button" class="size-chip" data-size="3G">3G</button>
+              <button type="button" class="size-chip" data-size="4G">4G</button>
+            </div>
+          </div>
+
+          <div class="filter-box">
+            <h3>Tipo de produto</h3>
+            <div class="filter-divider"></div>
+
+            <div class="type-options">
+              {% for product_type in product_types %}
+              <button
+                type="button"
+                class="type-chip"
+                data-type="{{ product_type }}"
+                title="{{ product_type }}"
+              >
+                {{ product_type }}
+              </button>
+              {% endfor %}
+            </div>
+          </div>
+        </aside>
+
+        <section class="nov-products">
+          <div class="active-filters" id="activeFilters" hidden>
+            <div class="active-filters__list" id="activeFiltersList"></div>
+            <button
+              type="button"
+              class="active-filters__clear"
+              id="clearAllFilters"
+            >
+              Limpar filtros
+            </button>
+          </div>
+          <div class="products-grid" id="productsGrid">
+            {% for product in products %}
+            <article
+              class="product-card"
+              data-sku="{{ product.codigo }}"
+              data-name="{{ product.nome|lower }}"
+              data-price="{{ product.preco }}"
+              data-type="{{ product.tipo_produto|default('', true)|lower }}"
+              data-color="{{ product.cor|default('', true)|lower }}"
+              data-sizes="{{ product.tamanhos|default('', true)|lower }}"
+              data-release-date="{{ product.data_lancamento|default('', true) }}"
+              data-sales="{{ product.vendas|default(0, true) }}"
+              data-discount="{{ product.desconto if product.desconto is not none else '' }}"
+              data-url="{{ url_for('product_page', codigo=product.codigo) }}"
+            >
+              <a
+                href="{{ url_for('product_page', codigo=product.codigo) }}"
+                class="product-card__image-link"
+              >
+                <div class="product-card__image-box">
+                  {% if product.imagem %}
+                  <img
+                    class="product-card__image product-card__image--main"
+                    src="{{ url_for('static', filename=product.imagem) }}"
+                    alt="{{ product.nome }}"
+                    loading="lazy"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/500x620?text=Produto'
+                    "
+                  />
+                  <img
+                    class="product-card__image product-card__image--hover"
+                    src="{{ url_for('static', filename=product.imagem_hover) }}"
+                    alt=""
+                    loading="lazy"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/500x620?text=Produto'
+                    "
+                  />
+                  {% else %}
+                  <img
+                    class="product-card__image product-card__image--main"
+                    src="https://via.placeholder.com/500x620?text=Produto"
+                    alt="{{ product.nome }}"
+                    loading="lazy"
+                  />
+                  <img
+                    class="product-card__image product-card__image--hover"
+                    src="https://via.placeholder.com/500x620?text=Produto"
+                    alt=""
+                    loading="lazy"
+                  />
+                  {% endif %}
+                </div>
+              </a>
+
+              <div class="product-card__content">
+                <h3 class="product-card__title">{{ product.nome }}</h3>
+
+                <div class="product-card__rating">★★★★★</div>
+
+                <div class="product-card__price">
+                  R${{ "%.2f"|format(product.preco)|replace(".", ",") }}
+                </div>
+
+                <div class="product-card__installments">
+                  2x de R${{ "%.2f"|format(product.preco / 2)|replace(".", ",")
+                  }} sem juros
+                </div>
+
+                <div class="product-card__pix">
+                  <span>
+                    R${{ "%.2f"|format(product.preco * 0.95)|replace(".", ",")
+                    }}
+                  </span>
+                  com PIX (-5%)
+                </div>
+
+                <a
+                  href="{{ url_for('product_page', codigo=product.codigo) }}"
+                  class="product-card__button"
+                  >Comprar</a
+                >
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </section>
+      </section>
+    </main>
+    <footer class="site-footer" aria-label="Rodapé do site">
+      <div class="site-footer__container">
+        <div class="site-footer__top">
+          <div class="site-footer__brand">
+            <a
+              href="#"
+              class="site-footer__brand-logo-link"
+              aria-label="Página inicial"
+            >
+              <img
+                src="https://down-tx-br.img.susercontent.com/br-11134216-81z1k-mfbl6utpk551f2_tn.webp"
+                alt="Logo da marca"
+                class="site-footer__brand-logo"
+              />
+            </a>
+
+            <div class="site-footer__socials" aria-label="Redes sociais">
+              <a
+                href="#"
+                class="site-footer__social-link"
+                aria-label="WhatsApp"
+              >
+                <img
+                  src="{{ url_for('static', filename='icon/whatsapp.svg') }}"
+                  alt=""
+                />
+              </a>
+              <a
+                href="#"
+                class="site-footer__social-link"
+                aria-label="Instagram"
+              >
+                <img
+                  src="{{ url_for('static', filename='icon/instagram.svg') }}"
+                  alt=""
+                />
+              </a>
+              <a
+                href="#"
+                class="site-footer__social-link"
+                aria-label="Facebook"
+              >
+                <img
+                  src="{{ url_for('static', filename='icon/facebook.svg') }}"
+                  alt=""
+                />
+              </a>
+              <a
+                href="#"
+                class="site-footer__social-link"
+                aria-label="Pinterest"
+              >
+                <img
+                  src="{{ url_for('static', filename='icon/pinterest.svg') }}"
+                  alt=""
+                />
+              </a>
+              <a href="#" class="site-footer__social-link" aria-label="TikTok">
+                <img
+                  src="{{ url_for('static', filename='icon/tiktok.svg') }}"
+                  alt=""
+                />
+              </a>
+            </div>
+          </div>
+
+          <div class="site-footer__columns">
+            <div class="site-footer__column">
+              <h3 class="site-footer__title">Categorias</h3>
+              <a href="#" class="site-footer__link">Novidades</a>
+              <a href="#" class="site-footer__link">Camisetas</a>
+              <a href="#" class="site-footer__link">Baby Look</a>
+              <a href="#" class="site-footer__link">Moletom</a>
+              <a href="#" class="site-footer__link">Acessórios</a>
+              <a href="#" class="site-footer__link">Personalize</a>
+            </div>
+
+            <div class="site-footer__column">
+              <h3 class="site-footer__title">Institucional</h3>
+              <a href="#" class="site-footer__link">Nosso blog</a>
+              <a href="#" class="site-footer__link">Sobre a marca</a>
+              <a href="#" class="site-footer__link">Parcerias</a>
+            </div>
+
+            <div class="site-footer__column">
+              <h3 class="site-footer__title">Ajuda e Suporte</h3>
+              <a href="#" class="site-footer__link">Fale Conosco</a>
+              <a href="#" class="site-footer__link">Política de privacidade</a>
+              <a href="#" class="site-footer__link">Dúvidas frequentes</a>
+              <a href="#" class="site-footer__link">Sobre nós</a>
+              <a href="#" class="site-footer__link">Cashback</a>
+              <a href="#" class="site-footer__link">Frete e entrega</a>
+              <a href="#" class="site-footer__link">Nossos produtos</a>
+              <a href="#" class="site-footer__link">Seja um afiliado</a>
+              <a href="#" class="site-footer__link">Trocas e devoluções</a>
+              <a href="#" class="site-footer__link">Meus pedidos</a>
+            </div>
+
+            <div class="site-footer__column">
+              <h3 class="site-footer__title">Atendimento</h3>
+
+              <a
+                href="https://wa.me/5500000000000"
+                class="site-footer__contact-row"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                  <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                  <path
+                    fill="#e2a012"
+                    d="M476.9 161.1C435 119.1 379.2 96 319.9 96C197.5 96 97.9 195.6 97.9 318C97.9 357.1 108.1 395.3 127.5 429L96 544L213.7 513.1C246.1 530.8 282.6 540.1 319.8 540.1L319.9 540.1C442.2 540.1 544 440.5 544 318.1C544 258.8 518.8 203.1 476.9 161.1zM319.9 502.7C286.7 502.7 254.2 493.8 225.9 477L219.2 473L149.4 491.3L168 423.2L163.6 416.2C145.1 386.8 135.4 352.9 135.4 318C135.4 216.3 218.2 133.5 320 133.5C369.3 133.5 415.6 152.7 450.4 187.6C485.2 222.5 506.6 268.8 506.5 318.1C506.5 419.9 421.6 502.7 319.9 502.7zM421.1 364.5C415.6 361.7 388.3 348.3 383.2 346.5C378.1 344.6 374.4 343.7 370.7 349.3C367 354.9 356.4 367.3 353.1 371.1C349.9 374.8 346.6 375.3 341.1 372.5C308.5 356.2 287.1 343.4 265.6 306.5C259.9 296.7 271.3 297.4 281.9 276.2C283.7 272.5 282.8 269.3 281.4 266.5C280 263.7 268.9 236.4 264.3 225.3C259.8 214.5 255.2 216 251.8 215.8C248.6 215.6 244.9 215.6 241.2 215.6C237.5 215.6 231.5 217 226.4 222.5C221.3 228.1 207 241.5 207 268.8C207 296.1 226.9 322.5 229.6 326.2C232.4 329.9 268.7 385.9 324.4 410C359.6 425.2 373.4 426.5 391 423.9C401.7 422.3 423.8 410.5 428.4 397.5C433 384.5 433 373.4 431.6 371.1C430.3 368.6 426.6 367.2 421.1 364.5z"
+                  />
+                </svg>
+                <span>WhatsApp: <strong>(+55) 24 99223-9258</strong></span>
+              </a>
+
+              <a
+                href="mailto:contato@sualoja.com.br"
+                class="site-footer__contact-row"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                  <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                  <path
+                    fill="rgb(226, 160, 18)"
+                    d="M112 128C85.5 128 64 149.5 64 176C64 191.1 71.1 205.3 83.2 214.4L291.2 370.4C308.3 383.2 331.7 383.2 348.8 370.4L556.8 214.4C568.9 205.3 576 191.1 576 176C576 149.5 554.5 128 528 128L112 128zM64 260L64 448C64 483.3 92.7 512 128 512L512 512C547.3 512 576 483.3 576 448L576 260L377.6 408.8C343.5 434.4 296.5 434.4 262.4 408.8L64 260z"
+                  />
+                </svg>
+                <span>E-mail: <strong>AnythingElse@gmail.com</strong></span>
+              </a>
+
+              <div class="site-footer__hours">
+                <div
+                  class="site-footer__contact-row site-footer__contact-row--static"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                    <!--!Font Awesome Free v7.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2026 Fonticons, Inc.-->
+                    <path
+                      fill="rgb(226, 160, 18)"
+                      d="M320 64C461.4 64 576 178.6 576 320C576 461.4 461.4 576 320 576C178.6 576 64 461.4 64 320C64 178.6 178.6 64 320 64zM296 184L296 320C296 328 300 335.5 306.7 340L402.7 404C413.7 411.4 428.6 408.4 436 397.3C443.4 386.2 440.4 371.4 429.3 364L344 307.2L344 184C344 170.7 333.3 160 320 160C306.7 160 296 170.7 296 184z"
+                    />
+                  </svg>
+                  <span>Horário de atendimento:</span>
+                </div>
+                <p class="site-footer__hours-text">
+                  Segunda a Sexta, das 9:00h às 17:30h.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="site-footer__divider"></div>
+
+        <div class="site-footer__bottom">
+          <div class="site-footer__payments">
+            <h3 class="site-footer__title">Formas de Pagamento</h3>
+            <div class="site-footer__image-grid">
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="https://cdn.sistemawbuy.com.br/img/bt-pgto-mercadopago.png"
+                  alt="Mercado Pago"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="https://cdn.sistemawbuy.com.br/img/bt-pgto-paghiper.png"
+                  alt="PagHiper"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/visa.png"
+                  alt="Visa"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/mastercard.png"
+                  alt="Mastercard"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/hipercard.png"
+                  alt="Hipercard"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/amex.png"
+                  alt="American Express"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/diners.png"
+                  alt="Diners Club"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/elo.png"
+                  alt="Elo"
+                  class="site-footer__badge"
+                />
+              </a>
+              <a href="#" class="site-footer__badge-link">
+                <img
+                  src="https://cdn.sistemawbuy.com.br/img/bandeiras/pix.png"
+                  alt="Pix"
+                  class="site-footer__badge"
+                />
+              </a>
+            </div>
+          </div>
+
+          <div class="site-footer__security">
+            <h3 class="site-footer__title">Avaliação e Segurança</h3>
+            <div
+              class="site-footer__image-grid site-footer__image-grid--security"
+            >
+              <a href="#" class="site-footer__seal-rating">
+                <div class="footer-rating">
+                  <div class="footer-rating__top">
+                    <span class="footer-rating__star">★</span>
+                    <span class="footer-rating__value">5.0</span>
+                  </div>
+                  <span class="footer-rating__count">66 avaliações</span>
+                </div>
+              </a>
+              <a href="#" class="site-footer__seal-link">
+                <img
+                  src="https://cdn.confi.com.vc/reputation/2000824.png"
+                  alt="Loja confiável"
+                  class="site-footer__seal"
+                />
+              </a>
+              <a href="#" class="site-footer__seal-link">
+                <img
+                  src="https://cdn.sistemawbuy.com.br/img/selos/google.png"
+                  alt="Google Safe Browsing"
+                  class="site-footer__seal"
+                />
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <div class="auth-modal" aria-hidden="true">
+      <div class="auth-modal__overlay"></div>
+
+      <div
+        class="auth-modal__dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="auth-modal-title"
+      >
+        <button type="button" class="auth-modal__close" aria-label="Fechar">
+          ×
+        </button>
+
+        <div class="auth-modal__tabs">
+          <button
+            type="button"
+            class="auth-modal__tab is-active"
+            data-auth-mode="login"
+          >
+            Entrar
+          </button>
+          <button
+            type="button"
+            class="auth-modal__tab"
+            data-auth-mode="register"
+          >
+            Cadastrar
+          </button>
+        </div>
+
+        <p class="auth-modal__subtitle" id="auth-modal-title">
+          Entre com email e senha
+        </p>
+
+        <form class="auth-modal__form" id="authForm">
+          <div class="auth-modal__field auth-modal__field--name" hidden>
+            <input
+              type="text"
+              class="auth-modal__input"
+              id="authName"
+              placeholder="Digite seu nome"
+            />
+          </div>
+
+          <div class="auth-modal__field">
+            <input
+              type="email"
+              class="auth-modal__input"
+              id="authEmail"
+              placeholder="Ex.: exemplo@mail.com"
+            />
+          </div>
+
+          <div class="auth-modal__password-wrap">
+            <input
+              type="password"
+              class="auth-modal__input"
+              id="authPassword"
+              placeholder="Adicione sua senha"
+            />
+            <button
+              type="button"
+              class="auth-modal__eye"
+              aria-label="Mostrar senha"
+            >
+              <svg viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M2 12C4.4 7.8 8 5.7 12 5.7C16 5.7 19.6 7.8 22 12C19.6 16.2 16 18.3 12 18.3C8 18.3 4.4 16.2 2 12Z"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                />
+                <circle cx="12" cy="12" r="3" fill="currentColor" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="auth-modal__field auth-modal__field--confirm" hidden>
+            <input
+              type="password"
+              class="auth-modal__input"
+              id="authConfirmPassword"
+              placeholder="Confirme sua senha"
+            />
+          </div>
+
+          <a href="#" class="auth-modal__forgot auth-modal__forgot-link">
+            Esqueci minha senha
+          </a>
+
+          <p class="auth-modal__message" id="authMessage"></p>
+
+          <div class="auth-modal__actions">
+            <button type="button" class="auth-modal__back">← Voltar</button>
+            <button
+              type="submit"
+              class="auth-modal__submit"
+              id="authSubmitButton"
+            >
+              Entrar
+            </button>
+          </div>
+
+          <p class="auth-modal__register">
+            Não tem uma conta?
+            <a href="#" class="auth-modal__switch-mode">Cadastre-se</a>
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <div class="account-menu" aria-hidden="true">
+      <div class="account-menu__overlay"></div>
+
+      <div class="account-menu__dialog">
+        <button type="button" class="account-menu__close" aria-label="Fechar">
+          ×
+        </button>
+
+        <p class="account-menu__title">Minha conta</p>
+        <p class="account-menu__user" id="accountMenuUser">Usuário logado</p>
+
+        <div class="account-menu__actions">
+          <button
+            type="button"
+            class="account-menu__button"
+            id="switchUserButton"
+          >
+            Trocar usuário
+          </button>
+
+          <button
+            type="button"
+            class="account-menu__button account-menu__button--danger"
+            id="logoutButton"
+          >
+            Sair
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-drawer" aria-hidden="true">
+      <div class="cart-drawer__overlay"></div>
+
+      <aside
+        class="cart-drawer__panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="cart-drawer-title"
+      >
+        <div class="cart-drawer__header">
+          <button
+            type="button"
+            class="cart-drawer__close"
+            aria-label="Fechar sacola"
+          >
+            ×
+          </button>
+          <h2 class="cart-drawer__title" id="cart-drawer-title">Sua sacola</h2>
+        </div>
+
+        <div class="cart-drawer__body">
+          <div class="cart-drawer__empty">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M6 7H18L17 20H7L6 7Z"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M9 7V5C9 3.9 9.9 3 11 3H13C14.1 3 15 3.9 15 5V7"
+                stroke="currentColor"
+                stroke-width="1.8"
+              />
+            </svg>
+            <p class="cart-drawer__empty-text">Sua sacola ainda está vazia</p>
+            <a href="#" class="cart-drawer__empty-button">Escolher produtos</a>
+          </div>
+
+          <div class="cart-drawer__items" hidden></div>
+        </div>
+      </aside>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/novidades.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>

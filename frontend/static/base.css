@@ -1,0 +1,97 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&family=Yeseva+One&display=swap");
+
+:root {
+  --font-display: "Yeseva One", serif;
+  --font-body: "Josefin Sans", sans-serif;
+  --color-cream: #fff9f1;
+  --color-surface: #fffdf8;
+  --color-surface-strong: #fff4df;
+  --color-ink: #20130b;
+  --color-muted: #6d5648;
+  --color-line: rgba(232, 108, 22, 0.16);
+  --color-gold: #efc901;
+  --color-sun: #f3b529;
+  --color-mango: #efa12c;
+  --color-orange: #f58a21;
+  --color-burnt: #e86c16;
+  --shadow-soft: 0 18px 42px rgba(123, 60, 10, 0.1);
+  --shadow-strong: 0 24px 54px rgba(123, 60, 10, 0.16);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-body);
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(239, 201, 1, 0.16),
+      transparent 24%
+    ),
+    radial-gradient(
+      circle at top right,
+      rgba(243, 181, 41, 0.14),
+      transparent 26%
+    ),
+    linear-gradient(180deg, #fffdf8 0%, #fff7ea 48%, #fffdf8 100%);
+  color: var(--color-ink);
+  letter-spacing: 0.01em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--color-ink);
+}
+
+p,
+a,
+button,
+input,
+textarea,
+select,
+span,
+li {
+  font-family: var(--font-body);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+button,
+input {
+  border: none;
+  outline: none;
+  background: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+::selection {
+  background: rgba(232, 108, 22, 0.18);
+  color: var(--color-ink);
+}
