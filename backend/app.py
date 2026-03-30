@@ -7,6 +7,7 @@ from flask import Flask, render_template
 from backend.database.db import init_db, seed_products
 from backend.routes.auth import auth_bp
 from backend.routes.products import products_bp
+from backend.routes.shipping import shipping_bp
 from backend.services.product_service import list_products
 
 
@@ -27,6 +28,7 @@ app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-key")
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(products_bp)
+app.register_blueprint(shipping_bp)
 
 
 @app.route("/")
@@ -141,6 +143,16 @@ def decoracao():
 @app.route("/checkout")
 def checkout():
     return render_template("checkout.html")
+
+
+@app.route("/identificacao")
+def identificacao():
+    return render_template("identificacao.html")
+
+
+@app.route("/pagamento")
+def pagamento():
+    return render_template("pagamento.html")
 
 
 def bootstrap() -> None:

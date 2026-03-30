@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pagamento | Anything Else</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='base.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='layout.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='components.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='pages/pagamento.css') }}"
+    />
+  </head>
+  <body>
+    {% include 'partials/site_header.html' %}
+
+    <main class="payment-page">
+      <section class="payment-hero">
+        <div>
+          <span class="payment-eyebrow">Etapa 3 do checkout</span>
+          <h1>Pagamento</h1>
+          <p>Confirme seus dados, entrega e forma de pagamento.</p>
+        </div>
+
+        <div class="payment-steps">
+          <div class="payment-step is-complete">Sacola</div>
+          <div class="payment-step is-complete">Identificacao</div>
+          <div class="payment-step is-active">Pagamento</div>
+          <div class="payment-step">Confirmacao</div>
+        </div>
+      </section>
+
+      <section class="payment-layout">
+        <div class="payment-main">
+          <article class="payment-card">
+            <div class="payment-card__head">
+              <h2>Dados pessoais</h2>
+              <p>Solicitamos apenas as informacoes essenciais da compra.</p>
+            </div>
+
+            <div class="payment-grid payment-grid--two">
+              <label class="field">
+                <span>Email</span>
+                <input type="email" data-user-email readonly />
+              </label>
+              <label class="field">
+                <span>Nome na conta</span>
+                <input type="text" data-user-name readonly />
+              </label>
+              <label class="field">
+                <span>Primeiro nome</span>
+                <input type="text" placeholder="Seu primeiro nome" />
+              </label>
+              <label class="field">
+                <span>Ultimo nome</span>
+                <input type="text" placeholder="Seu ultimo nome" />
+              </label>
+              <label class="field">
+                <span>CPF</span>
+                <input type="text" placeholder="000.000.000-00" />
+              </label>
+              <label class="field">
+                <span>Telefone</span>
+                <input type="text" placeholder="(24) 99999-9999" />
+              </label>
+            </div>
+          </article>
+
+          <article class="payment-card">
+            <div class="payment-card__head">
+              <h2>Entrega</h2>
+              <p>Revise o endereco e a opcao escolhida no checkout.</p>
+            </div>
+
+            <div class="delivery-switch">
+              <button type="button" class="delivery-switch__option is-active">
+                Receber
+              </button>
+              <button type="button" class="delivery-switch__option">
+                Retirar
+              </button>
+            </div>
+
+            <div class="payment-grid payment-grid--two">
+              <label class="field">
+                <span>CEP</span>
+                <input type="text" data-payment-cep readonly />
+              </label>
+              <label class="field">
+                <span>Destinatario</span>
+                <input type="text" data-delivery-recipient placeholder="Nome de quem recebe" />
+              </label>
+            </div>
+
+            <div class="address-preview">
+              <strong>Endereco de entrega</strong>
+              <p data-delivery-address>
+                Informe um CEP no checkout para carregar o destino aqui.
+              </p>
+            </div>
+
+            <div class="payment-grid payment-grid--two">
+              <label class="field">
+                <span>Numero</span>
+                <input type="text" placeholder="Numero" />
+              </label>
+              <label class="field field--full">
+                <span>Complemento e referencia</span>
+                <input type="text" placeholder="Opcional" />
+              </label>
+            </div>
+
+            <div class="delivery-methods" data-delivery-methods></div>
+          </article>
+
+          <article class="payment-card">
+            <div class="payment-card__head">
+              <h2>Pagamento</h2>
+              <p>Escolha como deseja concluir seu pedido.</p>
+            </div>
+
+            <div class="coupon-inline">
+              <span>Possui cupom de desconto?</span>
+              <a href="#">Adicionar cupom</a>
+            </div>
+
+            <div class="payment-methods">
+              <div class="payment-methods__menu" data-payment-method-menu>
+                <button
+                  type="button"
+                  class="payment-method is-active"
+                  data-payment-method="pix"
+                >
+                  <strong>Pix</strong>
+                  <span>QRCode e copia e cola</span>
+                </button>
+                <button
+                  type="button"
+                  class="payment-method"
+                  data-payment-method="card"
+                >
+                  <strong>Cartao de credito</strong>
+                  <span>Parcelamento sem juros</span>
+                </button>
+                <button
+                  type="button"
+                  class="payment-method"
+                  data-payment-method="ticket"
+                >
+                  <strong>Boleto</strong>
+                  <span>Pagamento em ate 2 dias uteis</span>
+                </button>
+              </div>
+
+              <div class="payment-methods__panel" data-payment-method-panel>
+                <div data-panel="pix">
+                  <div class="payment-highlight">
+                    <div class="payment-highlight__brand">PIX</div>
+                    <div class="payment-highlight__steps">
+                      <div>
+                        <strong>1</strong>
+                        <p>Finalize a compra para gerar o codigo QR.</p>
+                      </div>
+                      <div>
+                        <strong>2</strong>
+                        <p>Confirme o pagamento no app do seu banco.</p>
+                      </div>
+                    </div>
+                    <p class="payment-highlight__amount">
+                      Valor a pagar: <b data-payment-total-inline>R$ 0,00</b>
+                    </p>
+                  </div>
+                </div>
+
+                <div data-panel="card" hidden>
+                  <div class="payment-grid payment-grid--two">
+                    <label class="field field--full">
+                      <span>Numero do cartao</span>
+                      <input type="text" placeholder="0000 0000 0000 0000" />
+                    </label>
+                    <label class="field">
+                      <span>Validade</span>
+                      <input type="text" placeholder="MM/AA" />
+                    </label>
+                    <label class="field">
+                      <span>CVV</span>
+                      <input type="text" placeholder="123" />
+                    </label>
+                    <label class="field field--full">
+                      <span>Nome impresso no cartao</span>
+                      <input type="text" placeholder="Nome como esta no cartao" />
+                    </label>
+                  </div>
+                </div>
+
+                <div data-panel="ticket" hidden>
+                  <div class="ticket-panel">
+                    <strong>Boleto bancario</strong>
+                    <p>
+                      O boleto sera gerado ao finalizar a compra e pode levar
+                      ate 2 dias uteis para compensacao.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <aside class="payment-summary">
+          <div class="payment-card payment-card--summary">
+            <div class="payment-card__head">
+              <h2>Resumo do pedido</h2>
+              <p>Itens, frete e total da sua compra.</p>
+            </div>
+
+            <div class="summary-products" data-summary-products></div>
+
+            <div class="summary-breakdown">
+              <div class="summary-breakdown__row">
+                <span>Subtotal</span>
+                <strong data-summary-subtotal>R$ 0,00</strong>
+              </div>
+              <div class="summary-breakdown__row">
+                <span>Frete</span>
+                <strong data-summary-shipping>R$ 0,00</strong>
+              </div>
+              <div class="summary-breakdown__row summary-breakdown__row--total">
+                <span>Total</span>
+                <strong data-summary-total>R$ 0,00</strong>
+              </div>
+            </div>
+
+            <button type="button" class="payment-submit">
+              Finalizar compra
+            </button>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/pagamento.js') }}"></script>
+  </body>
+</html>

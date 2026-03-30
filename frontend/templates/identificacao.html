@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Identificacao | Anything Else</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='base.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='layout.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='components.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='pages/identificacao.css') }}"
+    />
+  </head>
+  <body>
+    {% include 'partials/site_header.html' %}
+
+    <main class="auth-page">
+      <section class="auth-shell">
+        <div class="auth-copy">
+          <span class="auth-eyebrow">Etapa 2 do checkout</span>
+          <h1>Identificacao</h1>
+          <p>
+            Entre ou crie sua conta para continuar para o pagamento sem perder
+            os itens da sua sacola.
+          </p>
+        </div>
+
+        <div class="auth-card">
+          <div class="auth-card__tabs">
+            <button
+              type="button"
+              class="auth-card__tab is-active"
+              data-auth-mode="login"
+            >
+              Entrar
+            </button>
+            <button
+              type="button"
+              class="auth-card__tab"
+              data-auth-mode="register"
+            >
+              Cadastrar
+            </button>
+          </div>
+
+          <p class="auth-card__subtitle" data-auth-title>
+            Entre com email e senha para seguir ao pagamento.
+          </p>
+
+          <form class="auth-card__form" id="identificationAuthForm">
+            <div class="auth-card__field" data-auth-name-field hidden>
+              <label for="identificationName">Nome completo</label>
+              <input
+                id="identificationName"
+                type="text"
+                placeholder="Digite seu nome"
+              />
+            </div>
+
+            <div class="auth-card__field">
+              <label for="identificationEmail">Email</label>
+              <input
+                id="identificationEmail"
+                type="email"
+                placeholder="voce@email.com"
+              />
+            </div>
+
+            <div class="auth-card__field">
+              <label for="identificationPassword">Senha</label>
+              <input
+                id="identificationPassword"
+                type="password"
+                placeholder="Digite sua senha"
+              />
+            </div>
+
+            <div class="auth-card__field" data-auth-confirm-field hidden>
+              <label for="identificationConfirmPassword">Confirmar senha</label>
+              <input
+                id="identificationConfirmPassword"
+                type="password"
+                placeholder="Confirme sua senha"
+              />
+            </div>
+
+            <p class="auth-card__message" data-auth-message></p>
+
+            <button type="submit" class="auth-card__submit" data-auth-submit>
+              Continuar para pagamento
+            </button>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/identificacao.js') }}"></script>
+  </body>
+</html>
