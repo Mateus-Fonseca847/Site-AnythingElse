@@ -155,6 +155,11 @@ def pagamento():
     return render_template("pagamento.html")
 
 
+@app.route("/personalizacao")
+def personalizacao():
+    return render_template("personalizacao.html")
+
+
 def bootstrap() -> None:
     init_db()
     seed_products()

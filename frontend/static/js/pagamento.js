@@ -5,6 +5,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const recipientInput = document.querySelector("[data-delivery-recipient]");
   const addressPreview = document.querySelector("[data-delivery-address]");
   const deliveryMethods = document.querySelector("[data-delivery-methods]");
+  const deliveryCard = document.querySelectorAll(".payment-card")[1];
+  const deliveryModeButtons = Array.from(
+    document.querySelectorAll("[data-delivery-mode]"),
+  );
+  const pickupBox = document.querySelector("[data-pickup-box]");
   const summaryProducts = document.querySelector("[data-summary-products]");
   const summarySubtotal = document.querySelector("[data-summary-subtotal]");
   const summaryShipping = document.querySelector("[data-summary-shipping]");
@@ -86,6 +91,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  function saveCheckoutState() {
+    localStorage.setItem(
+      getCheckoutStateKey(),
+      JSON.stringify(checkoutState || {}),
+    );
+  }
+
   function getSubtotal() {
     return cart.reduce((sum, item) => {
       return sum + Number(item.price || 0) * Number(item.quantity || 1);
@@ -93,6 +105,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function getShippingValue() {
+    if (checkoutState?.deliveryMode === "pickup") {
+      return 0;
+    }
+
     return Number(checkoutState?.selectedShipping?.price || 0);
   }
 
@@ -106,24 +122,65 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (recipientInput && !recipientInput.value) {
-      recipientInput.value = currentUser?.name || "";
+      recipientInput.value =
+        checkoutState?.recipient || currentUser?.name || "";
     }
   }
 
   function renderDelivery() {
+    const deliveryMode = checkoutState?.deliveryMode || "delivery";
     const cep = checkoutState?.cep || "";
+
+    deliveryModeButtons.forEach((button) => {
+      button.classList.toggle(
+        "is-active",
+        button.dataset.deliveryMode === deliveryMode,
+      );
+    });
+
+    if (deliveryCard) {
+      deliveryCard.classList.toggle(
+        "delivery-section--pickup",
+        deliveryMode === "pickup",
+      );
+    }
+
+    if (pickupBox) {
+      pickupBox.hidden = deliveryMode !== "pickup";
+    }
 
     if (cepInput) {
       cepInput.value = formatCep(cep);
+      cepInput.disabled = deliveryMode === "pickup";
+    }
+
+    if (recipientInput) {
+      recipientInput.disabled = deliveryMode === "pickup";
     }
 
     if (addressPreview) {
-      addressPreview.textContent = cep
-        ? `Destino informado no checkout: CEP ${formatCep(cep)}. Complete numero e complemento abaixo para concluir o pedido.`
-        : "Informe um CEP no checkout para carregar o destino aqui.";
+      addressPreview.textContent =
+        deliveryMode === "pickup"
+          ? "Seu pedido ficara disponivel para retirada na sede em Petropolis/RJ."
+          : cep
+            ? `Destino informado no checkout: CEP ${formatCep(cep)}. Complete numero e complemento abaixo para concluir o pedido.`
+            : "Informe um CEP no checkout para carregar o destino aqui.";
     }
 
     if (!deliveryMethods) return;
+
+    if (deliveryMode === "pickup") {
+      deliveryMethods.innerHTML = `
+        <div class="delivery-method is-active">
+          <div>
+            <strong>Retirada na sede</strong>
+            <p>Disponivel apos confirmacao do pagamento</p>
+          </div>
+          <strong>${formatPrice(0)}</strong>
+        </div>
+      `;
+      return;
+    }
 
     const options = Array.isArray(checkoutState?.shippingOptions)
       ? checkoutState.shippingOptions
@@ -151,6 +208,45 @@ document.addEventListener("DOMContentLoaded", async () => {
       `;
 
       deliveryMethods.appendChild(element);
+    });
+  }
+
+  function bindDeliveryFields() {
+    cepInput?.addEventListener("input", (event) => {
+      const formattedCep = formatCep(event.target.value);
+      event.target.value = formattedCep;
+
+      checkoutState = {
+        ...(checkoutState || {}),
+        cep: normalizeCep(formattedCep),
+        deliveryMode: "delivery",
+      };
+      saveCheckoutState();
+      renderDelivery();
+      renderSummary();
+    });
+
+    recipientInput?.addEventListener("input", (event) => {
+      checkoutState = {
+        ...(checkoutState || {}),
+        recipient: event.target.value,
+      };
+      saveCheckoutState();
+    });
+  }
+
+  function bindDeliveryMode() {
+    deliveryModeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        checkoutState = {
+          ...(checkoutState || {}),
+          deliveryMode: button.dataset.deliveryMode,
+        };
+
+        saveCheckoutState();
+        renderDelivery();
+        renderSummary();
+      });
     });
   }
 
@@ -225,8 +321,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   loadCart();
   loadCheckoutState();
+  checkoutState = {
+    ...(checkoutState || {}),
+    deliveryMode: checkoutState?.deliveryMode || "delivery",
+  };
   renderUser();
   renderDelivery();
   renderSummary();
+  bindDeliveryFields();
+  bindDeliveryMode();
   bindPaymentMethods();
 });

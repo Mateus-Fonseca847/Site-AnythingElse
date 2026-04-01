@@ -192,6 +192,41 @@ body {
   line-height: 1.6;
 }
 
+.pickup-box {
+  margin-top: 18px;
+  padding: 18px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #ecfdf5, #f0fdfa);
+  border: 1px solid rgba(16, 185, 129, 0.22);
+}
+
+.pickup-box strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.pickup-box p {
+  color: var(--pay-muted);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.pickup-box__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.94rem;
+  color: #0f766e;
+  font-weight: 700;
+}
+
+.delivery-section--pickup .address-preview,
+.delivery-section--pickup [data-delivery-fields],
+.delivery-section--pickup [data-delivery-address-fields],
+.delivery-section--pickup .delivery-methods {
+  display: none;
+}
+
 .delivery-methods {
   display: flex;
   flex-direction: column;

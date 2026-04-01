@@ -83,18 +83,26 @@
             </div>
 
             <div class="delivery-switch">
-              <button type="button" class="delivery-switch__option is-active">
+              <button
+                type="button"
+                class="delivery-switch__option is-active"
+                data-delivery-mode="delivery"
+              >
                 Receber
               </button>
-              <button type="button" class="delivery-switch__option">
+              <button
+                type="button"
+                class="delivery-switch__option"
+                data-delivery-mode="pickup"
+              >
                 Retirar
               </button>
             </div>
 
-            <div class="payment-grid payment-grid--two">
+            <div class="payment-grid payment-grid--two" data-delivery-fields>
               <label class="field">
                 <span>CEP</span>
-                <input type="text" data-payment-cep readonly />
+                <input type="text" data-payment-cep placeholder="00000-000" />
               </label>
               <label class="field">
                 <span>Destinatario</span>
@@ -109,7 +117,7 @@
               </p>
             </div>
 
-            <div class="payment-grid payment-grid--two">
+            <div class="payment-grid payment-grid--two" data-delivery-address-fields>
               <label class="field">
                 <span>Numero</span>
                 <input type="text" placeholder="Numero" />
@@ -118,6 +126,18 @@
                 <span>Complemento e referencia</span>
                 <input type="text" placeholder="Opcional" />
               </label>
+            </div>
+
+            <div class="pickup-box" data-pickup-box hidden>
+              <strong>Retirada na sede</strong>
+              <p>
+                Retire seu pedido em nossa sede em Petropolis/RJ assim que o
+                pagamento for aprovado.
+              </p>
+              <div class="pickup-box__meta">
+                <span>Endereco: Rua Deputado Euvaldo Lodi, Morin, Petropolis - RJ</span>
+                <span>Horario: segunda a sexta, das 9h as 18h</span>
+              </div>
             </div>
 
             <div class="delivery-methods" data-delivery-methods></div>
