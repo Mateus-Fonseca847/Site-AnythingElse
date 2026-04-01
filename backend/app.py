@@ -6,6 +6,8 @@ from flask import Flask, render_template
 
 from backend.database.db import init_db, seed_products
 from backend.routes.auth import auth_bp
+from backend.routes.orders import orders_bp
+from backend.routes.payments import payments_bp
 from backend.routes.products import products_bp
 from backend.routes.shipping import shipping_bp
 from backend.services.product_service import list_products
@@ -27,6 +29,8 @@ app = Flask(
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-key")
 
 app.register_blueprint(auth_bp)
+app.register_blueprint(orders_bp)
+app.register_blueprint(payments_bp)
 app.register_blueprint(products_bp)
 app.register_blueprint(shipping_bp)
 
@@ -157,7 +161,85 @@ def pagamento():
 
 @app.route("/personalizacao")
 def personalizacao():
-    return render_template("personalizacao.html")
+    customizable_products = [
+        {
+            "slug": "camiseta",
+            "name": "Camisa personalizada",
+            "category": "Vestuario",
+            "description": "Frente central para artes amplas e estampas marcantes.",
+            "price": 89.90,
+            "image": "img/camisas personalizaçao.webp",
+        },
+        {
+            "slug": "caneca",
+            "name": "Caneca personalizada",
+            "category": "Acessorio",
+            "description": "Faixa lateral ideal para ilustracoes e logos.",
+            "price": 54.90,
+            "image": "img/caneca.webp",
+        },
+        {
+            "slug": "ecobag",
+            "name": "Ecobag personalizada",
+            "category": "Acessorio",
+            "description": "Area frontal generosa para compor artes verticais.",
+            "price": 64.90,
+            "image": "img/ecobag.webp",
+        },
+        {
+            "slug": "moletom",
+            "name": "Moletom personalizado",
+            "category": "Vestuario",
+            "description": "Centro do peito com destaque para sua identidade visual.",
+            "price": 149.90,
+            "image": "img/moletom personalizaçao.webp",
+        },
+    ]
+    return render_template(
+        "personalizacao.html",
+        customizable_products=customizable_products,
+    )
+
+
+@app.route("/personalizacao/<string:product_slug>")
+def personalizacao_produto(product_slug):
+    products = {
+        "camiseta": {
+            "slug": "camiseta",
+            "name": "Camisa personalizada",
+            "editor_title": "Camisa personalizada",
+            "editor_description": "Envie seu PNG, ajuste a escala e arraste a arte para a posicao ideal da estampa.",
+        },
+        "caneca": {
+            "slug": "caneca",
+            "name": "Caneca personalizada",
+            "editor_title": "Caneca personalizada",
+            "editor_description": "Aplique sua arte na faixa lateral da caneca e monte um preview fiel do produto.",
+        },
+        "ecobag": {
+            "slug": "ecobag",
+            "name": "Ecobag personalizada",
+            "editor_title": "Ecobag personalizada",
+            "editor_description": "Posicione a arte livremente na frente da ecobag e teste diferentes composicoes.",
+        },
+        "moletom": {
+            "slug": "moletom",
+            "name": "Moletom personalizado",
+            "editor_title": "Moletom personalizado",
+            "editor_description": "Veja sua arte aplicada no peito do moletom com visualizacao ao vivo.",
+        },
+    }
+
+    product = products.get(product_slug)
+    if not product:
+        return "Produto personalizavel nao encontrado", 404
+
+    return render_template("personalizacao_editor.html", product=product)
+
+
+@app.route("/vendedor/pedidos")
+def vendedor_pedidos():
+    return render_template("vendedor_pedidos.html")
 
 
 def bootstrap() -> None:

@@ -320,6 +320,12 @@
     filter 0.25s ease;
 }
 
+.recommended-card--decoracao {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
 .recommended-card::before {
   content: "";
   position: absolute;
@@ -2113,14 +2119,20 @@
 }
 
 .product-card__image-box {
-  height: 330px;
+  aspect-ratio: 1 / 1.18;
   border-radius: 24px;
   border: 1px solid rgba(232, 108, 22, 0.12);
+  padding: 14px;
   background: #ffffff;
 }
 
 .product-card__image {
+  inset: 14px;
+  width: calc(100% - 28px);
+  height: calc(100% - 28px);
   object-fit: cover;
+  object-position: center top;
+  border-radius: 18px;
 }
 
 .product-card__content {
@@ -2194,7 +2206,14 @@
 
 @media (max-width: 768px) {
   .product-card__image-box {
-    height: 280px;
+    padding: 12px;
+  }
+
+  .product-card__image {
+    inset: 12px;
+    width: calc(100% - 24px);
+    height: calc(100% - 24px);
+    border-radius: 14px;
   }
 
   .product-card__title {

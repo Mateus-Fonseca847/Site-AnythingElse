@@ -91,6 +91,75 @@ def init_db() -> None:
         """
     )
 
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_number TEXT NOT NULL UNIQUE,
+            user_id INTEGER,
+            user_email TEXT NOT NULL,
+            customer_name TEXT DEFAULT '',
+            subtotal REAL NOT NULL DEFAULT 0,
+            shipping REAL NOT NULL DEFAULT 0,
+            total REAL NOT NULL DEFAULT 0,
+            delivery_mode TEXT NOT NULL DEFAULT 'delivery',
+            shipping_label TEXT DEFAULT '',
+            shipping_business_days INTEGER DEFAULT 0,
+            cep TEXT DEFAULT '',
+            recipient TEXT DEFAULT '',
+            address_number TEXT DEFAULT '',
+            address_complement TEXT DEFAULT '',
+            payment_method TEXT DEFAULT '',
+            payment_status TEXT NOT NULL DEFAULT 'Pendente',
+            payment_reference TEXT DEFAULT '',
+            payment_payload_json TEXT DEFAULT '',
+            paid_at TIMESTAMP DEFAULT NULL,
+            status TEXT NOT NULL DEFAULT 'Recebido',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """
+    )
+
+    ensure_column(cursor, "orders", "payment_status", "TEXT NOT NULL DEFAULT 'Pendente'")
+    ensure_column(cursor, "orders", "payment_reference", "TEXT DEFAULT ''")
+    ensure_column(cursor, "orders", "payment_payload_json", "TEXT DEFAULT ''")
+    ensure_column(cursor, "orders", "paid_at", "TIMESTAMP DEFAULT NULL")
+
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS order_items (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_id INTEGER NOT NULL,
+            sku TEXT DEFAULT '',
+            title TEXT NOT NULL,
+            quantity INTEGER NOT NULL DEFAULT 1,
+            unit_price REAL NOT NULL DEFAULT 0,
+            subtotal REAL NOT NULL DEFAULT 0,
+            image TEXT DEFAULT '',
+            size TEXT DEFAULT '',
+            customization_json TEXT DEFAULT '',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(order_id) REFERENCES orders(id)
+        )
+        """
+    )
+
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS payments (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            order_id INTEGER NOT NULL,
+            transaction_id TEXT NOT NULL UNIQUE,
+            payment_method TEXT NOT NULL,
+            amount REAL NOT NULL DEFAULT 0,
+            status TEXT NOT NULL DEFAULT 'Pendente',
+            payload_json TEXT DEFAULT '',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(order_id) REFERENCES orders(id)
+        )
+        """
+    )
+
     conn.commit()
     conn.close()
 

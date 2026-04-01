@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ product.editor_title }} | Anything Else</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='base.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='layout.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='components.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='pages/personalizacao.css') }}"
+    />
+  </head>
+  <body>
+    {% include 'partials/site_header.html' %}
+
+    <main class="editor-page">
+      <section class="editor-layout">
+        <aside class="editor-rail">
+          <a href="{{ url_for('personalizacao') }}" class="editor-toolbar__back">
+            &larr;
+          </a>
+
+          <div class="editor-tools-rail">
+            <button type="button" class="editor-tool is-active">
+              <strong>+</strong>
+              <span>Imagem</span>
+            </button>
+          </div>
+        </aside>
+
+        <aside class="editor-side editor-side--left">
+          <article class="editor-card editor-card--upload">
+            <div class="editor-card__head">
+              <h1>Estampe uma imagem</h1>
+              <p>
+                Desperte sua inspiracao e monte sua arte. Use um PNG com fundo
+                transparente para visualizar melhor o resultado.
+              </p>
+            </div>
+
+            <label class="upload-dropzone" for="artUpload">
+              <input id="artUpload" type="file" accept="image/png" hidden />
+              <div class="upload-dropzone__icon">+</div>
+              <strong>Arraste e solte os arquivos aqui</strong>
+              <span>ou</span>
+              <span class="upload-dropzone__button">Escolher imagem</span>
+              <small data-upload-name>Nenhum arquivo escolhido</small>
+            </label>
+
+            <div class="editor-scale">
+              <div class="editor-scale__label">
+                <span>Escala da arte</span>
+                <strong data-scale-value>100%</strong>
+              </div>
+              <input
+                type="range"
+                min="40"
+                max="180"
+                value="100"
+                data-scale-range
+              />
+            </div>
+
+            <div class="editor-left-actions">
+              <button type="button" class="ghost-btn" data-clear-art>
+                Limpar arte
+              </button>
+            </div>
+
+            <p class="editor-helper" data-custom-message>
+              Envie um PNG e arraste a arte pelo produto para posicionar onde quiser.
+            </p>
+          </article>
+        </aside>
+
+        <section class="editor-preview">
+          <div class="editor-preview__top">
+            <div class="editor-preview__actions">
+              <button type="button" class="preview-action">&olarr;</button>
+              <button type="button" class="preview-action">&orarr;</button>
+            </div>
+            <div class="editor-preview__actions">
+              <button type="button" class="preview-action">+</button>
+              <button type="button" class="preview-action">-</button>
+            </div>
+          </div>
+
+          <div class="editor-stage">
+            <div
+              class="mockup"
+              data-mockup
+              data-product="{{ product.slug }}"
+              data-initial-product="{{ product.slug }}"
+            >
+              <div class="mockup__body">
+                <img
+                  class="mockup__product-image"
+                  data-product-image
+                  alt="Mockup do produto"
+                />
+              </div>
+              <div class="mockup__print-area" data-print-area>
+                <div class="mockup__placeholder" data-placeholder>
+                  Area de impressao
+                </div>
+                <img
+                  class="mockup__art"
+                  data-art-image
+                  alt="Arte personalizada"
+                  hidden
+                />
+              </div>
+            </div>
+
+            <a href="{{ url_for('personalizacao') }}" class="editor-change-product">
+              Mudar peca
+            </a>
+          </div>
+        </section>
+
+        <aside class="editor-side editor-side--right">
+          <article class="editor-card editor-card--summary">
+            <div class="editor-card__head editor-card__head--compact">
+              <div>
+                <h2 data-preview-title>{{ product.editor_title }}</h2>
+                <p data-preview-description>
+                  Monte sua arte com liberdade, depois finalize para enviar ao carrinho.
+                </p>
+              </div>
+              <strong class="editor-price" data-selected-price>R$ 0,00</strong>
+            </div>
+
+            <div class="editor-summary-text">
+              <p>
+                Evite palavras ofensivas, conteudos com direitos autorais de terceiros
+                e imagens sem autorizacao de uso.
+              </p>
+            </div>
+
+            <div class="editor-option-group" data-size-group>
+              <span class="editor-option-group__title">Tamanho</span>
+              <div class="editor-size-options">
+                <button type="button" class="editor-size-chip" data-size-option="P">P</button>
+                <button type="button" class="editor-size-chip" data-size-option="M">M</button>
+                <button type="button" class="editor-size-chip is-active" data-size-option="G">G</button>
+                <button type="button" class="editor-size-chip" data-size-option="GG">GG</button>
+                <button type="button" class="editor-size-chip" data-size-option="3G">3G</button>
+              </div>
+            </div>
+
+            <div class="editor-option-group" data-color-group>
+              <span class="editor-option-group__title">Cor da peca</span>
+              <div class="editor-color-options">
+                <button type="button" class="editor-color-dot color-black" data-color-option="Preto" aria-label="Preto"></button>
+                <button type="button" class="editor-color-dot color-white is-active" data-color-option="Branco" aria-label="Branco"></button>
+              </div>
+            </div>
+
+            <div class="preview-meta preview-meta--editor">
+              <div class="preview-meta__card">
+                <span>Produto</span>
+                <strong data-selected-product>{{ product.name }}</strong>
+              </div>
+              <div class="preview-meta__card">
+                <span>Arquivo</span>
+                <strong data-selected-file>Aguardando PNG</strong>
+              </div>
+            </div>
+
+            <div class="preview-actions">
+              <button type="button" class="custom-submit" data-add-custom-product>
+                Finalizar personalizacao
+              </button>
+            </div>
+          </article>
+        </aside>
+      </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/personalizacao.js') }}"></script>
+  </body>
+</html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Personalizacao | Anything Else</title>
+    <title>Personalize | Anything Else</title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='base.css') }}"
@@ -18,167 +18,97 @@
     />
     <link
       rel="stylesheet"
-      href="{{ url_for('static', filename='pages/personalizacao.css') }}"
+      href="{{ url_for('static', filename='pages/personalizacao-vitrine.css') }}"
     />
   </head>
   <body>
     {% include 'partials/site_header.html' %}
 
-    <main class="custom-page">
-      <section class="custom-hero">
-        <div class="custom-hero__copy">
-          <span class="custom-eyebrow">Studio Anything Else</span>
-          <h1>Monte sua arte no produto que quiser</h1>
+    <main class="custom-shop">
+      <section class="custom-shop__hero">
+        <div>
+          <nav class="custom-breadcrumb">
+            <a href="{{ url_for('home') }}">Pagina inicial</a>
+            <span>›</span>
+            <span>Personalize</span>
+          </nav>
+          <span class="custom-shop__eyebrow">Anything Else Studio</span>
+          <h1>Produtos personalizaveis</h1>
           <p>
-            Envie um PNG com fundo transparente, escolha o produto e arraste a
-            arte para o ponto exato em que deseja imprimir.
+            Escolha a base que deseja personalizar e abra o editor para subir a
+            sua imagem, posicionar a arte e levar o produto pronto para a
+            sacola.
           </p>
         </div>
 
-        <div class="custom-hero__badge">
-          <strong>Produtos</strong>
-          <span>Camisas</span>
-          <span>Ecobags</span>
-          <span>Canecas</span>
-          <span>Moletons</span>
+        <div class="custom-shop__meta">
+          <strong>{{ customizable_products|length }} produtos</strong>
+          <span>Camisas, canecas, ecobags e moletons</span>
         </div>
       </section>
 
-      <section class="custom-layout">
-        <aside class="custom-panel">
-          <div class="custom-card">
-            <div class="custom-card__head">
-              <h2>1. Escolha o produto</h2>
-              <p>Troque entre os mockups e teste sua arte em cada base.</p>
+      <section class="custom-shop__layout">
+        <aside class="custom-filters">
+          <article class="custom-filter-card">
+            <h2>Categorias</h2>
+            <div class="filter-tags">
+              <span class="filter-tag is-active">Todos</span>
+              <span class="filter-tag">Vestuario</span>
+              <span class="filter-tag">Acessorios</span>
+              <span class="filter-tag">Personalizaveis</span>
             </div>
+          </article>
 
-            <div class="product-grid">
-              <button
-                type="button"
-                class="product-chip is-active"
-                data-product-select="camiseta"
-              >
-                <strong>Camiseta</strong>
-                <span>Frente central</span>
-              </button>
-              <button
-                type="button"
-                class="product-chip"
-                data-product-select="ecobag"
-              >
-                <strong>Ecobag</strong>
-                <span>Area frontal ampla</span>
-              </button>
-              <button
-                type="button"
-                class="product-chip"
-                data-product-select="caneca"
-              >
-                <strong>Caneca</strong>
-                <span>Faixa lateral</span>
-              </button>
-              <button
-                type="button"
-                class="product-chip"
-                data-product-select="moletom"
-              >
-                <strong>Moletom</strong>
-                <span>Centro do peito</span>
-              </button>
-            </div>
-          </div>
-
-          <div class="custom-card">
-            <div class="custom-card__head">
-              <h2>2. Envie seu PNG</h2>
-              <p>
-                Use um arquivo PNG para preservar transparencias e visualizar
-                melhor o resultado final.
-              </p>
-            </div>
-
-            <label class="upload-box" for="artUpload">
-              <input id="artUpload" type="file" accept="image/png" hidden />
-              <strong>Selecionar arquivo PNG</strong>
-              <span data-upload-name>Nenhum arquivo escolhido</span>
-            </label>
-
-            <div class="custom-actions">
-              <label class="scale-control">
-                <span>Escala da arte</span>
-                <input
-                  type="range"
-                  min="40"
-                  max="180"
-                  value="100"
-                  data-scale-range
-                />
-              </label>
-
-              <button type="button" class="ghost-btn" data-clear-art>
-                Limpar arte
-              </button>
-            </div>
-
-            <p class="helper-text" data-custom-message>
-              Envie um PNG e arraste a arte dentro da area destacada do produto.
-            </p>
-          </div>
+          <article class="custom-filter-card">
+            <h2>Como funciona</h2>
+            <ol class="filter-steps">
+              <li>Escolha o produto</li>
+              <li>Abra o editor</li>
+              <li>Envie seu PNG</li>
+              <li>Arraste a arte e adicione ao carrinho</li>
+            </ol>
+          </article>
         </aside>
 
-        <section class="preview-area">
-          <div class="custom-card custom-card--preview">
-            <div class="custom-card__head">
-              <div>
-                <h2 data-preview-title>Camiseta personalizada</h2>
-                <p data-preview-description>
-                  Arraste sua arte para posicionar a estampa na frente do
-                  produto.
-                </p>
-              </div>
-              <span class="preview-hint">Clique e arraste a arte</span>
-            </div>
+        <section class="custom-grid-section">
+          <div class="custom-grid-head">
+            <div class="custom-grid-head__pill">Linha sob medida</div>
+            <button type="button" class="custom-grid-head__clear">
+              Personalizacao livre
+            </button>
+          </div>
 
-            <div class="mockup-stage">
-              <div
-                class="mockup mockup--camiseta"
-                data-mockup
-                data-product="camiseta"
+          <div class="custom-grid">
+            {% for product in customizable_products %}
+            <article class="custom-product-card">
+              <a
+                href="{{ url_for('personalizacao_produto', product_slug=product.slug) }}"
+                class="custom-product-card__media"
               >
-                <div class="mockup__body"></div>
-                <div class="mockup__print-area" data-print-area>
-                  <div class="mockup__placeholder" data-placeholder>
-                    Sua arte aparece aqui
-                  </div>
-                  <img
-                    class="mockup__art"
-                    data-art-image
-                    alt="Arte personalizada"
-                    hidden
-                  />
-                </div>
-              </div>
-            </div>
+                <img
+                  src="{{ url_for('static', filename=product.image) }}"
+                  alt="{{ product.name }}"
+                />
+              </a>
 
-            <div class="preview-meta">
-              <div class="preview-meta__card">
-                <span>Produto selecionado</span>
-                <strong data-selected-product>Camiseta</strong>
+              <div class="custom-product-card__content">
+                <span class="custom-product-card__category">{{ product.category }}</span>
+                <h2>{{ product.name }}</h2>
+                <p>{{ product.description }}</p>
+                <strong>R$ {{ '%.2f'|format(product.price)|replace('.', ',') }}</strong>
               </div>
-              <div class="preview-meta__card">
-                <span>Arquivo</span>
-                <strong data-selected-file>Aguardando PNG</strong>
-              </div>
-              <div class="preview-meta__card">
-                <span>Modo</span>
-                <strong>Visualizacao ao vivo</strong>
-              </div>
-            </div>
+
+              <a
+                href="{{ url_for('personalizacao_produto', product_slug=product.slug) }}"
+                class="custom-product-card__cta"
+              >
+                Personalizar
+              </a>
+            </article>
+            {% endfor %}
           </div>
         </section>
       </section>
     </main>
-
-    <script src="{{ url_for('static', filename='js/personalizacao.js') }}"></script>
   </body>
 </html>

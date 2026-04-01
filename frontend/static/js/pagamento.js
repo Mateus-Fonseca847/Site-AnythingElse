@@ -1,8 +1,14 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const emailInput = document.querySelector("[data-user-email]");
   const nameInput = document.querySelector("[data-user-name]");
+  const firstNameInput = document.querySelector("[data-first-name]");
+  const lastNameInput = document.querySelector("[data-last-name]");
+  const cpfInput = document.querySelector("[data-cpf]");
+  const phoneInput = document.querySelector("[data-phone]");
   const cepInput = document.querySelector("[data-payment-cep]");
   const recipientInput = document.querySelector("[data-delivery-recipient]");
+  const addressNumberInput = document.querySelector("[data-address-number]");
+  const addressComplementInput = document.querySelector("[data-address-complement]");
   const addressPreview = document.querySelector("[data-delivery-address]");
   const deliveryMethods = document.querySelector("[data-delivery-methods]");
   const deliveryCard = document.querySelectorAll(".payment-card")[1];
@@ -16,6 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const summaryTotal = document.querySelector("[data-summary-total]");
   const paymentTotalInline = document.querySelector("[data-payment-total-inline]");
   const paymentMethodMenu = document.querySelector("[data-payment-method-menu]");
+  const submitOrderButton = document.querySelector("[data-submit-order]");
 
   let currentUser = null;
   let cart = [];
@@ -98,6 +105,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     );
   }
 
+  function clearPurchaseState() {
+    localStorage.removeItem(getCartStorageKey());
+    localStorage.removeItem(getCheckoutStateKey());
+  }
+
   function getSubtotal() {
     return cart.reduce((sum, item) => {
       return sum + Number(item.price || 0) * Number(item.quantity || 1);
@@ -112,6 +124,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     return Number(checkoutState?.selectedShipping?.price || 0);
   }
 
+  function getSelectedPaymentMethod() {
+    return (
+      paymentMethodMenu
+        ?.querySelector(".payment-method.is-active")
+        ?.dataset.paymentMethod || "pix"
+    );
+  }
+
   function renderUser() {
     if (emailInput) {
       emailInput.value = currentUser?.email || "";
@@ -119,6 +139,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (nameInput) {
       nameInput.value = currentUser?.name || "";
+    }
+
+    if (firstNameInput && !firstNameInput.value) {
+      firstNameInput.value = (currentUser?.name || "").split(" ")[0] || "";
+    }
+
+    if (lastNameInput && !lastNameInput.value) {
+      lastNameInput.value = (currentUser?.name || "").split(" ").slice(1).join(" ");
     }
 
     if (recipientInput && !recipientInput.value) {
@@ -259,13 +287,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       const quantity = Number(item.quantity || 1);
       const total = Number(item.price || 0) * quantity;
       const element = document.createElement("article");
+      const isCustomized = Boolean(item.isCustomized);
 
       element.className = "summary-product";
       element.innerHTML = `
         <img src="${item.image || ""}" alt="${item.title || "Produto"}" />
         <div>
           <strong>${item.title || "Produto"}</strong>
-          <p>Qtd. ${quantity}${item.size ? ` • Tam. ${item.size}` : ""}</p>
+          <p>Qtd. ${quantity}${item.size ? ` | Tam. ${item.size}` : ""}${isCustomized ? " | Personalizado" : ""}</p>
         </div>
         <strong>${formatPrice(total)}</strong>
       `;
@@ -311,6 +340,100 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     });
   }
+
+  function buildOrderPayload() {
+    const subtotal = getSubtotal();
+    const shipping = getShippingValue();
+    const total = subtotal + shipping;
+    const customerName = [firstNameInput?.value, lastNameInput?.value]
+      .filter(Boolean)
+      .join(" ")
+      .trim() || currentUser?.name || "";
+
+    return {
+      customer_name: customerName,
+      cpf: cpfInput?.value || "",
+      phone: phoneInput?.value || "",
+      cep: normalizeCep(cepInput?.value || checkoutState?.cep || ""),
+      recipient: recipientInput?.value || currentUser?.name || "",
+      address_number: addressNumberInput?.value || "",
+      address_complement: addressComplementInput?.value || "",
+      delivery_mode: checkoutState?.deliveryMode || "delivery",
+      selected_shipping: checkoutState?.selectedShipping || null,
+      payment_method: getSelectedPaymentMethod(),
+      subtotal,
+      shipping,
+      total,
+      items: cart,
+    };
+  }
+
+  async function submitOrder() {
+    if (!cart.length) {
+      window.alert("Sua sacola esta vazia.");
+      return;
+    }
+
+    const payload = buildOrderPayload();
+
+    if (payload.delivery_mode === "delivery" && !payload.cep) {
+      window.alert("Informe um CEP para concluir a entrega.");
+      return;
+    }
+
+    const originalText = submitOrderButton?.textContent || "Finalizar compra";
+
+    if (submitOrderButton) {
+      submitOrderButton.disabled = true;
+      submitOrderButton.textContent = "Finalizando...";
+    }
+
+    try {
+      const response = await fetch("/api/payments/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.ok) {
+        window.alert(data.message || "Nao foi possivel finalizar a compra.");
+        return;
+      }
+
+      clearPurchaseState();
+      const orderNumber = data.order?.order_number || "";
+      const paymentStatus = data.payment?.status || "";
+      const transactionId = data.payment?.transaction_id || "";
+      const paymentMethod = data.payment?.method || "";
+
+      let successMessage = `Pedido ${orderNumber} finalizado com sucesso.`;
+
+      if (paymentMethod === "pix") {
+        successMessage = `Pedido ${orderNumber} confirmado via Pix. Transacao ${transactionId}.`;
+      } else if (paymentMethod === "ticket") {
+        successMessage = `Pedido ${orderNumber} criado. Boleto gerado com status: ${paymentStatus}.`;
+      } else if (paymentMethod === "card") {
+        successMessage = `Pedido ${orderNumber} aprovado no cartao. Transacao ${transactionId}.`;
+      }
+
+      window.alert(successMessage);
+      window.location.href = "/";
+    } catch (error) {
+      console.error(error);
+      window.alert("Ocorreu um erro ao finalizar a compra.");
+    } finally {
+      if (submitOrderButton) {
+        submitOrderButton.disabled = false;
+        submitOrderButton.textContent = originalText;
+      }
+    }
+  }
+
+  submitOrderButton?.addEventListener("click", submitOrder);
 
   const isAuthenticated = await loadCurrentUser();
 

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pedidos do vendedor | Anything Else</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='base.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='layout.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='components.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='pages/vendedor-pedidos.css') }}"
+    />
+  </head>
+  <body>
+    {% include 'partials/site_header.html' %}
+
+    <main class="seller-page">
+      <section class="seller-hero">
+        <span class="seller-eyebrow">Painel do vendedor</span>
+        <h1>Pedidos recebidos</h1>
+        <p>
+          Aqui aparecem os pedidos finalizados, inclusive os produtos
+          personalizados exatamente como o cliente montou.
+        </p>
+      </section>
+
+      <section class="seller-orders" data-seller-orders></section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/vendedor_pedidos.js') }}"></script>
+  </body>
+</html>
