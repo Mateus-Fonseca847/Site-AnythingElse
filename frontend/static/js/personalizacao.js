@@ -212,9 +212,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return product.imageWhite || product.image;
   }
 
+  function productUsesFixedVariant() {
+    return state.product === "ecobag" || state.product === "caneca";
+  }
+
   function renderProduct() {
     const product = products[state.product];
-    const hideVariants = state.product === "ecobag" || state.product === "caneca";
+    const hideVariants = productUsesFixedVariant();
 
     mockup.dataset.product = state.product;
     mockup.className = `mockup ${product.className}`;
@@ -353,6 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       await resolveCurrentUser();
       const product = products[state.product];
+      const hideVariants = productUsesFixedVariant();
       const previewImage = await buildPreviewImage();
       const cart = loadCart();
       const customSku = `CUSTOM-${state.product.toUpperCase()}-${Date.now()}`;
