@@ -110,5 +110,9 @@
         </section>
       </section>
     </main>
+
+    {% include 'partials/site_overlays.html' %}
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   </body>
 </html>

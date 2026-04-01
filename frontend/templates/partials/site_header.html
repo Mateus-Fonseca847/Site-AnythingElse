@@ -57,7 +57,7 @@
           </div>
         </a>
 
-        <a href="{{ url_for('identificacao') }}" class="tool-item">
+        <button type="button" class="tool-item header-login-trigger">
           <svg viewBox="0 0 24 24" fill="none">
             <circle
               cx="12"
@@ -77,9 +77,12 @@
             <span>Entre ou</span>
             <strong>Cadastre-se</strong>
           </div>
-        </a>
+        </button>
 
-        <a href="{{ url_for('checkout') }}" class="tool-item cart-tool">
+        <button
+          type="button"
+          class="tool-item cart-tool header-cart-trigger"
+        >
           <svg viewBox="0 0 24 24" fill="none">
             <path
               d="M6 7H18L17 20H7L6 7Z"
@@ -95,9 +98,9 @@
           </svg>
           <div class="tool-text">
             <span>Minha Sacola</span>
-            <strong>Checkout</strong>
+            <strong class="header-cart-total">R$0,00</strong>
           </div>
-        </a>
+        </button>
       </div>
     </div>
 
