@@ -18,257 +18,353 @@
     />
     <link
       rel="stylesheet"
+      href="{{ url_for('static', filename='pages/checkout-flow.css') }}"
+    />
+    <link
+      rel="stylesheet"
       href="{{ url_for('static', filename='pages/pagamento.css') }}"
     />
   </head>
-  <body>
+  <body class="checkout-flow-body">
     {% include 'partials/site_header.html' %}
 
-    <main class="payment-page">
-      <section class="payment-hero">
-        <div>
-          <span class="payment-eyebrow">Etapa 3 do checkout</span>
-          <h1>Pagamento</h1>
-          <p>Confirme seus dados, entrega e forma de pagamento.</p>
+    <main class="checkout-flow-shell">
+      <section class="checkout-stage-hero">
+        <div class="checkout-stage-hero__copy">
+          <span class="checkout-stage-hero__eyebrow">Etapa 3 do checkout</span>
+          <h1 class="checkout-stage-hero__title">Pagamento</h1>
+          <p class="checkout-stage-hero__subtitle">
+            Confira seus dados, confirme a entrega e escolha a forma de
+            pagamento para concluir o pedido.
+          </p>
         </div>
 
-        <div class="payment-steps">
-          <div class="payment-step is-complete">Sacola</div>
-          <div class="payment-step is-complete">Identificacao</div>
-          <div class="payment-step is-active">Pagamento</div>
-          <div class="payment-step">Confirmacao</div>
-        </div>
+        <a href="{{ url_for('identificacao') }}" class="checkout-stage-hero__back">
+          ← Voltar para identificacao
+        </a>
       </section>
 
-      <section class="payment-layout">
-        <div class="payment-main">
-          <article class="payment-card">
-            <div class="payment-card__head">
-              <h2>Dados pessoais</h2>
-              <p>Solicitamos apenas as informacoes essenciais da compra.</p>
-            </div>
+      {% include 'partials/checkout_progress.html' %}
 
-            <div class="payment-grid payment-grid--two">
-              <label class="field">
-                <span>Email</span>
-                <input type="email" data-user-email readonly />
-              </label>
-              <label class="field">
-                <span>Nome na conta</span>
-                <input type="text" data-user-name readonly />
-              </label>
-              <label class="field">
-                <span>Primeiro nome</span>
-                <input type="text" placeholder="Seu primeiro nome" data-first-name />
-              </label>
-              <label class="field">
-                <span>Ultimo nome</span>
-                <input type="text" placeholder="Seu ultimo nome" data-last-name />
-              </label>
-              <label class="field">
-                <span>CPF</span>
-                <input type="text" placeholder="000.000.000-00" data-cpf />
-              </label>
-              <label class="field">
-                <span>Telefone</span>
-                <input type="text" placeholder="(24) 99999-9999" data-phone />
-              </label>
-            </div>
-          </article>
-
-          <article class="payment-card">
-            <div class="payment-card__head">
-              <h2>Entrega</h2>
-              <p>Revise o endereco e a opcao escolhida no checkout.</p>
-            </div>
-
-            <div class="delivery-switch">
-              <button
-                type="button"
-                class="delivery-switch__option is-active"
-                data-delivery-mode="delivery"
-              >
-                Receber
-              </button>
-              <button
-                type="button"
-                class="delivery-switch__option"
-                data-delivery-mode="pickup"
-              >
-                Retirar
-              </button>
-            </div>
-
-            <div class="payment-grid payment-grid--two" data-delivery-fields>
-              <label class="field">
-                <span>CEP</span>
-                <input type="text" data-payment-cep placeholder="00000-000" />
-              </label>
-              <label class="field">
-                <span>Destinatario</span>
-                <input type="text" data-delivery-recipient placeholder="Nome de quem recebe" />
-              </label>
-            </div>
-
-            <div class="address-preview">
-              <strong>Endereco de entrega</strong>
-              <p data-delivery-address>
-                Informe um CEP no checkout para carregar o destino aqui.
-              </p>
-            </div>
-
-            <div class="payment-grid payment-grid--two" data-delivery-address-fields>
-              <label class="field">
-                <span>Numero</span>
-                <input type="text" placeholder="Numero" data-address-number />
-              </label>
-              <label class="field field--full">
-                <span>Complemento e referencia</span>
-                <input type="text" placeholder="Opcional" data-address-complement />
-              </label>
-            </div>
-
-            <div class="pickup-box" data-pickup-box hidden>
-              <strong>Retirada na sede</strong>
-              <p>
-                Retire seu pedido em nossa sede em Petropolis/RJ assim que o
-                pagamento for aprovado.
-              </p>
-              <div class="pickup-box__meta">
-                <span>Endereco: Rua Deputado Euvaldo Lodi, Morin, Petropolis - RJ</span>
-                <span>Horario: segunda a sexta, das 9h as 18h</span>
+      <section class="payment-page">
+        <section class="payment-layout">
+          <div class="payment-main">
+            <article class="payment-card checkout-stage-panel">
+              <div class="payment-card__head">
+                <h2>Dados pessoais</h2>
+                <p>Solicitamos apenas as informacoes essenciais da compra.</p>
               </div>
-            </div>
 
-            <div class="delivery-methods" data-delivery-methods></div>
-          </article>
+              <div class="payment-grid payment-grid--two">
+                <label class="field">
+                  <span>Email</span>
+                  <input type="email" data-user-email readonly />
+                </label>
+                <label class="field">
+                  <span>Nome na conta</span>
+                  <input type="text" data-user-name readonly />
+                </label>
+                <label class="field">
+                  <span>Primeiro nome</span>
+                  <input
+                    type="text"
+                    placeholder="Seu primeiro nome"
+                    data-first-name
+                  />
+                </label>
+                <label class="field">
+                  <span>Ultimo nome</span>
+                  <input
+                    type="text"
+                    placeholder="Seu ultimo nome"
+                    data-last-name
+                  />
+                </label>
+                <label class="field">
+                  <span>CPF</span>
+                  <input type="text" placeholder="000.000.000-00" data-cpf />
+                </label>
+                <label class="field">
+                  <span>Telefone</span>
+                  <input
+                    type="text"
+                    placeholder="(24) 99999-9999"
+                    data-phone
+                  />
+                </label>
+              </div>
+            </article>
 
-          <article class="payment-card">
-            <div class="payment-card__head">
-              <h2>Pagamento</h2>
-              <p>Escolha como deseja concluir seu pedido.</p>
-            </div>
+            <article class="payment-card checkout-stage-panel">
+              <div class="payment-card__head">
+                <h2>Entrega</h2>
+                <p>Revise o endereco e a opcao escolhida no checkout.</p>
+              </div>
 
-            <div class="coupon-inline">
-              <span>Possui cupom de desconto?</span>
-              <a href="#">Adicionar cupom</a>
-            </div>
-
-            <div class="payment-methods">
-              <div class="payment-methods__menu" data-payment-method-menu>
+              <div class="delivery-switch">
                 <button
                   type="button"
-                  class="payment-method is-active"
-                  data-payment-method="pix"
+                  class="delivery-switch__option is-active"
+                  data-delivery-mode="delivery"
                 >
-                  <strong>Pix</strong>
-                  <span>QRCode e copia e cola</span>
+                  Receber
                 </button>
                 <button
                   type="button"
-                  class="payment-method"
-                  data-payment-method="card"
+                  class="delivery-switch__option"
+                  data-delivery-mode="pickup"
                 >
-                  <strong>Cartao de credito</strong>
-                  <span>Parcelamento sem juros</span>
-                </button>
-                <button
-                  type="button"
-                  class="payment-method"
-                  data-payment-method="ticket"
-                >
-                  <strong>Boleto</strong>
-                  <span>Pagamento em ate 2 dias uteis</span>
+                  Retirar
                 </button>
               </div>
 
-              <div class="payment-methods__panel" data-payment-method-panel>
-                <div data-panel="pix">
-                  <div class="payment-highlight">
-                    <div class="payment-highlight__brand">PIX</div>
-                    <div class="payment-highlight__steps">
-                      <div>
-                        <strong>1</strong>
-                        <p>Finalize a compra para gerar o codigo QR.</p>
+              <div class="payment-grid payment-grid--two" data-delivery-fields>
+                <label class="field">
+                  <span>CEP</span>
+                  <input type="text" data-payment-cep placeholder="00000-000" />
+                </label>
+                <label class="field">
+                  <span>Destinatario</span>
+                  <input
+                    type="text"
+                    data-delivery-recipient
+                    placeholder="Nome de quem recebe"
+                  />
+                </label>
+              </div>
+
+              <div class="address-preview">
+                <strong>Endereco de entrega</strong>
+                <p data-delivery-address>
+                  Informe um CEP no checkout para carregar o destino aqui.
+                </p>
+              </div>
+
+              <div
+                class="payment-grid payment-grid--two"
+                data-delivery-address-fields
+              >
+                <label class="field">
+                  <span>Numero</span>
+                  <input type="text" placeholder="Numero" data-address-number />
+                </label>
+                <label class="field field--full">
+                  <span>Complemento e referencia</span>
+                  <input
+                    type="text"
+                    placeholder="Opcional"
+                    data-address-complement
+                  />
+                </label>
+              </div>
+
+              <div class="pickup-box" data-pickup-box hidden>
+                <strong>Retirada na sede</strong>
+                <p>
+                  Retire seu pedido em nossa sede em Petropolis/RJ assim que o
+                  pagamento for aprovado.
+                </p>
+                <div class="pickup-box__meta">
+                  <span>Endereco: Rua Deputado Euvaldo Lodi, Morin, Petropolis - RJ</span>
+                  <span>Horario: segunda a sexta, das 9h as 18h</span>
+                </div>
+              </div>
+
+              <div class="delivery-methods" data-delivery-methods></div>
+            </article>
+
+            <article class="payment-card checkout-stage-panel">
+              <div class="payment-card__head">
+                <h2>Pagamento</h2>
+                <p>Escolha como deseja concluir seu pedido.</p>
+              </div>
+
+              <div class="coupon-inline">
+                <span>Possui cupom de desconto?</span>
+                <a href="#">Adicionar cupom</a>
+              </div>
+
+              <div class="payment-methods">
+                <div class="payment-methods__menu" data-payment-method-menu>
+                  <button
+                    type="button"
+                    class="payment-method is-active"
+                    data-payment-method="pix"
+                  >
+                    <span class="payment-method__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M8.6 4.5L12 7.9L15.4 4.5H17.8L13.2 9.1C12.5 9.8 11.5 9.8 10.8 9.1L6.2 4.5H8.6ZM6.2 14.9L10.8 19.5C11.5 20.2 12.5 20.2 13.2 19.5L17.8 14.9H15.4L12 18.3L8.6 14.9H6.2ZM4.5 8.6L7.9 12L4.5 15.4V17.8L9.1 13.2C9.8 12.5 9.8 11.5 9.1 10.8L4.5 6.2V8.6ZM19.5 6.2L14.9 10.8C14.2 11.5 14.2 12.5 14.9 13.2L19.5 17.8V15.4L16.1 12L19.5 8.6V6.2Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </span>
+                    <span class="payment-method__content">
+                      <strong>Pix</strong>
+                      <span>QRCode e copia e cola</span>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    class="payment-method"
+                    data-payment-method="card"
+                  >
+                    <span class="payment-method__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <rect
+                          x="3"
+                          y="5"
+                          width="18"
+                          height="14"
+                          rx="3"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                        />
+                        <path
+                          d="M3 10H21"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                        />
+                      </svg>
+                    </span>
+                    <span class="payment-method__content">
+                      <strong>Cartao de credito</strong>
+                      <span>Parcelamento sem juros</span>
+                    </span>
+                  </button>
+                  <button
+                    type="button"
+                    class="payment-method"
+                    data-payment-method="ticket"
+                  >
+                    <span class="payment-method__icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <rect
+                          x="4"
+                          y="3"
+                          width="16"
+                          height="18"
+                          rx="2"
+                          stroke="currentColor"
+                          stroke-width="1.8"
+                        />
+                        <path
+                          d="M8 7V17M11 7V17M15 7V17M17 7V17"
+                          stroke="currentColor"
+                          stroke-width="1.4"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                    <span class="payment-method__content">
+                      <strong>Boleto</strong>
+                      <span>Pagamento em ate 2 dias uteis</span>
+                    </span>
+                  </button>
+                </div>
+
+                <div class="payment-methods__panel" data-payment-method-panel>
+                  <div data-panel="pix">
+                    <div class="payment-highlight">
+                      <div class="payment-highlight__steps">
+                        <div>
+                          <strong>1</strong>
+                          <p>Finalize a compra para gerar o QRCode e o copia e cola.</p>
+                        </div>
+                        <div>
+                          <strong>2</strong>
+                          <p>Confirme o pagamento no app do seu banco.</p>
+                        </div>
                       </div>
-                      <div>
-                        <strong>2</strong>
-                        <p>Confirme o pagamento no app do seu banco.</p>
-                      </div>
+                      <p class="payment-highlight__amount">
+                        Valor a pagar: <b data-payment-total-inline>R$ 0,00</b>
+                      </p>
                     </div>
-                    <p class="payment-highlight__amount">
-                      Valor a pagar: <b data-payment-total-inline>R$ 0,00</b>
-                    </p>
+                  </div>
+
+                  <div data-panel="card" hidden>
+                    <div class="payment-grid payment-grid--two">
+                      <label class="field field--full">
+                        <span>Numero do cartao</span>
+                        <input
+                          type="text"
+                          placeholder="0000 0000 0000 0000"
+                          data-card-number
+                        />
+                      </label>
+                      <label class="field">
+                        <span>Validade</span>
+                        <input type="text" placeholder="MM/AA" data-card-expiry />
+                      </label>
+                      <label class="field">
+                        <span>CVV</span>
+                        <input type="text" placeholder="123" data-card-cvv />
+                      </label>
+                      <label class="field field--full">
+                        <span>Nome impresso no cartao</span>
+                        <input
+                          type="text"
+                          placeholder="Nome como esta no cartao"
+                          data-card-name
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  <div data-panel="ticket" hidden>
+                    <div class="ticket-panel">
+                      <strong>Boleto bancario</strong>
+                      <p>
+                        O boleto sera gerado ao finalizar a compra e pode levar
+                        ate 2 dias uteis para compensacao.
+                      </p>
+                    </div>
                   </div>
                 </div>
-
-                <div data-panel="card" hidden>
-                  <div class="payment-grid payment-grid--two">
-                    <label class="field field--full">
-                      <span>Numero do cartao</span>
-                      <input type="text" placeholder="0000 0000 0000 0000" />
-                    </label>
-                    <label class="field">
-                      <span>Validade</span>
-                      <input type="text" placeholder="MM/AA" />
-                    </label>
-                    <label class="field">
-                      <span>CVV</span>
-                      <input type="text" placeholder="123" />
-                    </label>
-                    <label class="field field--full">
-                      <span>Nome impresso no cartao</span>
-                      <input type="text" placeholder="Nome como esta no cartao" />
-                    </label>
-                  </div>
-                </div>
-
-                <div data-panel="ticket" hidden>
-                  <div class="ticket-panel">
-                    <strong>Boleto bancario</strong>
-                    <p>
-                      O boleto sera gerado ao finalizar a compra e pode levar
-                      ate 2 dias uteis para compensacao.
-                    </p>
-                  </div>
-                </div>
               </div>
-            </div>
-          </article>
-        </div>
-
-        <aside class="payment-summary">
-          <div class="payment-card payment-card--summary">
-            <div class="payment-card__head">
-              <h2>Resumo do pedido</h2>
-              <p>Itens, frete e total da sua compra.</p>
-            </div>
-
-            <div class="summary-products" data-summary-products></div>
-
-            <div class="summary-breakdown">
-              <div class="summary-breakdown__row">
-                <span>Subtotal</span>
-                <strong data-summary-subtotal>R$ 0,00</strong>
-              </div>
-              <div class="summary-breakdown__row">
-                <span>Frete</span>
-                <strong data-summary-shipping>R$ 0,00</strong>
-              </div>
-              <div class="summary-breakdown__row summary-breakdown__row--total">
-                <span>Total</span>
-                <strong data-summary-total>R$ 0,00</strong>
-              </div>
-            </div>
-
-            <button type="button" class="payment-submit" data-submit-order>
-              Finalizar compra
-            </button>
+            </article>
           </div>
-        </aside>
+
+          <aside class="payment-summary">
+            <div class="payment-card payment-card--summary checkout-stage-panel">
+              <div class="payment-card__head">
+                <h2>Resumo do pedido</h2>
+                <p>Itens, frete e total da sua compra.</p>
+              </div>
+
+              <div class="summary-products" data-summary-products></div>
+
+              <div class="summary-breakdown">
+                <div class="summary-breakdown__row">
+                  <span>Subtotal</span>
+                  <strong data-summary-subtotal>R$ 0,00</strong>
+                </div>
+                <div class="summary-breakdown__row">
+                  <span>Frete</span>
+                  <strong data-summary-shipping>R$ 0,00</strong>
+                </div>
+                <div class="summary-breakdown__row summary-breakdown__row--total">
+                  <span>Total</span>
+                  <strong data-summary-total>R$ 0,00</strong>
+                </div>
+              </div>
+
+              <button type="button" class="payment-submit" data-submit-order>
+                Finalizar compra
+              </button>
+
+              <p class="payment-submit__feedback" data-payment-feedback>
+                Complete seus dados para liberar a finalizacao do pedido.
+              </p>
+            </div>
+          </aside>
+        </section>
       </section>
     </main>
 
+    {% include 'partials/site_overlays.html' %}
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     <script src="{{ url_for('static', filename='js/pagamento.js') }}"></script>
   </body>
 </html>

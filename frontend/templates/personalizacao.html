@@ -18,6 +18,10 @@
     />
     <link
       rel="stylesheet"
+      href="{{ url_for('static', filename='pages/home.css') }}"
+    />
+    <link
+      rel="stylesheet"
       href="{{ url_for('static', filename='pages/personalizacao-vitrine.css') }}"
     />
   </head>
@@ -26,24 +30,24 @@
 
     <main class="custom-shop">
       <section class="custom-shop__hero">
-        <div>
+        <div class="custom-shop__hero-copy">
           <nav class="custom-breadcrumb">
             <a href="{{ url_for('home') }}">Pagina inicial</a>
             <span>›</span>
             <span>Personalize</span>
           </nav>
           <span class="custom-shop__eyebrow">Anything Else Studio</span>
-          <h1>Produtos personalizaveis</h1>
+          <h1>Crie produtos com a sua identidade</h1>
           <p>
-            Escolha a base que deseja personalizar e abra o editor para subir a
-            sua imagem, posicionar a arte e levar o produto pronto para a
-            sacola.
+            Escolha a base ideal para a sua arte, abra o editor e visualize o
+            resultado antes de enviar para a sacola. A experiência foi pensada
+            para ficar mais rápida, elegante e intuitiva.
           </p>
         </div>
 
         <div class="custom-shop__meta">
           <strong>{{ customizable_products|length }} produtos</strong>
-          <span>Camisas, canecas, ecobags e moletons</span>
+          <span>Camisas, canecas, ecobags e moletons prontos para personalizar</span>
         </div>
       </section>
 
@@ -51,36 +55,57 @@
         <aside class="custom-filters">
           <article class="custom-filter-card">
             <h2>Categorias</h2>
-            <div class="filter-tags">
-              <span class="filter-tag is-active">Todos</span>
-              <span class="filter-tag">Vestuario</span>
-              <span class="filter-tag">Acessorios</span>
-              <span class="filter-tag">Personalizaveis</span>
+            <p class="custom-filter-card__text">
+              Filtre por tipo de produto para encontrar a base perfeita para a
+              sua próxima criação.
+            </p>
+            <div class="filter-tags" role="tablist" aria-label="Categorias">
+              <button
+                type="button"
+                class="filter-tag is-active"
+                data-filter-category="todos"
+                aria-pressed="true"
+              >
+                Todos
+              </button>
+              <button
+                type="button"
+                class="filter-tag"
+                data-filter-category="vestuario"
+                aria-pressed="false"
+              >
+                Vestuário
+              </button>
+              <button
+                type="button"
+                class="filter-tag"
+                data-filter-category="acessorios"
+                aria-pressed="false"
+              >
+                Acessórios
+              </button>
             </div>
           </article>
 
-          <article class="custom-filter-card">
+          <article class="custom-filter-card custom-filter-card--guide">
             <h2>Como funciona</h2>
             <ol class="filter-steps">
-              <li>Escolha o produto</li>
-              <li>Abra o editor</li>
-              <li>Envie seu PNG</li>
-              <li>Arraste a arte e adicione ao carrinho</li>
+              <li>Escolha o produto base</li>
+              <li>Abra o editor de personalização</li>
+              <li>Envie seu PNG e ajuste a composição</li>
+              <li>Finalize e envie para a sacola</li>
             </ol>
           </article>
         </aside>
 
         <section class="custom-grid-section">
-          <div class="custom-grid-head">
-            <div class="custom-grid-head__pill">Linha sob medida</div>
-            <button type="button" class="custom-grid-head__clear">
-              Personalizacao livre
-            </button>
-          </div>
-
-          <div class="custom-grid">
+          <div class="custom-grid" data-custom-grid>
             {% for product in customizable_products %}
-            <article class="custom-product-card">
+            <article
+              class="custom-product-card"
+              data-custom-card
+              data-category="{{ product.category|lower }}"
+            >
               <a
                 href="{{ url_for('personalizacao_produto', product_slug=product.slug) }}"
                 class="custom-product-card__media"
@@ -92,10 +117,15 @@
               </a>
 
               <div class="custom-product-card__content">
-                <span class="custom-product-card__category">{{ product.category }}</span>
+                <span class="custom-product-card__category"
+                  >{{ product.category }}</span
+                >
                 <h2>{{ product.name }}</h2>
                 <p>{{ product.description }}</p>
-                <strong>R$ {{ '%.2f'|format(product.price)|replace('.', ',') }}</strong>
+                <strong
+                  >R$ {{ '%.2f'|format(product.price)|replace('.', ',')
+                  }}</strong
+                >
               </div>
 
               <a
@@ -107,6 +137,21 @@
             </article>
             {% endfor %}
           </div>
+
+          <div class="custom-grid-empty" data-custom-empty hidden>
+            <h2>Nenhum produto disponível</h2>
+            <p>
+              Essa categoria está sem itens no momento. Volte para todos os
+              produtos para continuar explorando as opções de personalização.
+            </p>
+            <button
+              type="button"
+              class="custom-grid-empty__button"
+              data-reset-filter
+            >
+              Ver todos os produtos
+            </button>
+          </div>
         </section>
       </section>
     </main>
@@ -114,5 +159,6 @@
     {% include 'partials/site_overlays.html' %}
 
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/personalizacao-vitrine.js') }}"></script>
   </body>
 </html>

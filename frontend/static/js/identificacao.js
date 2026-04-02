@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const nextUrl =
     new URLSearchParams(window.location.search).get("next") || "/pagamento";
+  const guestCartKey = "anythingelse_cart_guest";
+  const guestCheckoutStateKey = "anythingelse_checkout_state_guest";
 
   let mode = "login";
 
@@ -22,6 +24,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!message) return;
     message.textContent = text;
     message.classList.toggle("is-success", isSuccess);
+  }
+
+  function migrateGuestPurchaseState(user) {
+    const email = user?.email;
+
+    if (!email) return;
+
+    const userCartKey = `anythingelse_cart_user_${email}`;
+    const userCheckoutStateKey = `anythingelse_checkout_state_${email}`;
+
+    try {
+      const guestCart = localStorage.getItem(guestCartKey);
+      const userCart = localStorage.getItem(userCartKey);
+
+      if (guestCart && !userCart) {
+        localStorage.setItem(userCartKey, guestCart);
+      }
+
+      const guestCheckoutState = localStorage.getItem(guestCheckoutStateKey);
+      const userCheckoutState = localStorage.getItem(userCheckoutStateKey);
+
+      if (guestCheckoutState && !userCheckoutState) {
+        localStorage.setItem(userCheckoutStateKey, guestCheckoutState);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function updateMode(nextMode) {
@@ -115,6 +144,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         setMessage(data.message || "Nao foi possivel continuar.");
         return;
       }
+
+      migrateGuestPurchaseState(data.user);
 
       setMessage(
         data.message || "Autenticacao realizada com sucesso.",

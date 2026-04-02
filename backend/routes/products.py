@@ -5,6 +5,7 @@ from backend.services.product_service import (
     get_product_by_codigo,
     list_products,
     list_stock_movements,
+    search_products,
     update_product,
     update_product_stock,
 )
@@ -20,6 +21,26 @@ def api_health():
 @products_bp.get("/api/products")
 def api_list_products():
     return jsonify({"ok": True, "products": list_products()})
+
+
+@products_bp.get("/api/products/search")
+def api_search_products():
+    query = (request.args.get("q") or "").strip()
+
+    try:
+        limit = int(request.args.get("limit") or 8)
+    except (TypeError, ValueError):
+        limit = 8
+
+    limit = max(1, min(limit, 20))
+
+    return jsonify(
+        {
+            "ok": True,
+            "query": query,
+            "products": search_products(query, limit=limit),
+        }
+    )
 
 
 @products_bp.get("/api/products/<string:codigo>")

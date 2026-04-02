@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pagar com Pix | Anything Else</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='base.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='layout.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='components.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='pages/checkout-flow.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='pages/payment-result.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='footer.css') }}"
+    />
+  </head>
+  <body class="checkout-flow-body" data-payment-page="pix">
+    {% include 'partials/site_header.html' %}
+
+    <main class="checkout-flow-shell payment-result-page">
+      <section class="checkout-stage-hero">
+        <div class="checkout-stage-hero__copy">
+          <span class="checkout-stage-hero__eyebrow">Etapa 4 do checkout</span>
+          <h1 class="checkout-stage-hero__title">Pague com Pix</h1>
+          <p class="checkout-stage-hero__subtitle">
+            Escaneie o QRCode ou use o codigo copia e cola abaixo para concluir
+            o pagamento.
+          </p>
+        </div>
+        <a href="{{ url_for('pagamento') }}" class="checkout-stage-hero__back"
+          >← Voltar para pagamento</a
+        >
+      </section>
+
+      {% include 'partials/checkout_progress.html' %}
+
+      <section class="payment-result-layout">
+        <article class="payment-result-card checkout-stage-panel">
+          <div class="payment-result-hero">
+            <span class="payment-result-status" data-tone="warning"
+              >Aguardando Pix</span
+            >
+            <h2>Finalize seu pagamento</h2>
+            <p>
+              Pedido <strong data-order-number>-</strong> gerado com sucesso. O
+              QRCode abaixo esta pronto para pagamento.
+            </p>
+          </div>
+
+          <div class="payment-result-meta">
+            <div class="payment-result-meta__item">
+              <span>Forma de pagamento</span>
+              <strong data-payment-method-label>Pix</strong>
+            </div>
+            <div class="payment-result-meta__item">
+              <span>Status</span>
+              <strong data-payment-status>Aguardando Pix</strong>
+            </div>
+            <div class="payment-result-meta__item">
+              <span>Valor total</span>
+              <strong data-order-amount>R$ 0,00</strong>
+            </div>
+            <div class="payment-result-meta__item">
+              <span>Recebedor</span>
+              <strong data-pix-receiver>Anything Else</strong>
+            </div>
+            <div class="payment-result-meta__item">
+              <span>Chave Pix</span>
+              <strong data-pix-key>18453526702</strong>
+            </div>
+            <div class="payment-result-meta__item">
+              <span>Cidade</span>
+              <strong data-pix-city>Petropolis</strong>
+            </div>
+          </div>
+
+          <div class="payment-result-qr">
+            <img
+              class="payment-result-qr__image"
+              data-qr-image
+              alt="QRCode Pix"
+              hidden
+            />
+            <div class="payment-result-qr__grid" data-qr-grid hidden></div>
+          </div>
+
+          <div class="payment-result-copy">
+            <label for="pixCode">Codigo copia e cola</label>
+            <div class="payment-result-copy__row">
+              <textarea id="pixCode" readonly data-copy-value></textarea>
+              <button type="button" data-copy-button>Copiar codigo</button>
+            </div>
+            <p class="payment-result-copy__feedback" data-copy-feedback></p>
+          </div>
+
+          <div class="payment-result-note">
+            Depois de pagar, a compensacao pode levar alguns instantes. Seu
+            pedido sera confirmado automaticamente.
+          </div>
+
+          <div class="payment-result-actions">
+            <a href="{{ url_for('home') }}">Voltar para a loja</a>
+          </div>
+        </article>
+
+        <aside
+          class="payment-result-card payment-result-summary checkout-stage-panel"
+        >
+          <h2>Resumo do pedido</h2>
+          <p>Itens, frete e total da sua compra.</p>
+
+          <div class="payment-result-products" data-result-products></div>
+
+          <div class="payment-result-breakdown">
+            <div class="payment-result-breakdown__row">
+              <span>Subtotal</span>
+              <strong data-result-subtotal>R$ 0,00</strong>
+            </div>
+            <div class="payment-result-breakdown__row">
+              <span>Frete</span>
+              <strong data-result-shipping>R$ 0,00</strong>
+            </div>
+            <div
+              class="payment-result-breakdown__row payment-result-breakdown__row--total"
+            >
+              <span>Total</span>
+              <strong data-result-total>R$ 0,00</strong>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    {% include 'partials/site_footer.html' %} {% include
+    'partials/site_overlays.html' %}
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/payment-result.js') }}"></script>
+  </body>
+</html>

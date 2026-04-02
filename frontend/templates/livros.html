@@ -769,10 +769,21 @@
               />
             </svg>
             <p class="cart-drawer__empty-text">Sua sacola ainda está vazia</p>
-            <a href="#" class="cart-drawer__empty-button">Escolher produtos</a>
+            <a href="{{ url_for('novidades') }}" class="cart-drawer__empty-button">Escolher produtos</a>
           </div>
 
           <div class="cart-drawer__items" hidden></div>
+        </div>
+
+        <div class="cart-drawer__footer" hidden>
+          <div class="cart-drawer__summary">
+            <span>Total</span>
+            <strong class="cart-drawer-total">R$0,00</strong>
+          </div>
+
+          <a href="{{ url_for('checkout') }}" class="cart-drawer__checkout">
+            Finalizar compra
+          </a>
         </div>
       </aside>
     </div>

@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 from backend.database.db import init_db, seed_products
 from backend.routes.auth import auth_bp
@@ -10,7 +10,7 @@ from backend.routes.orders import orders_bp
 from backend.routes.payments import payments_bp
 from backend.routes.products import products_bp
 from backend.routes.shipping import shipping_bp
-from backend.services.product_service import list_products
+from backend.services.product_service import list_products, search_products
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -146,17 +146,57 @@ def decoracao():
 
 @app.route("/checkout")
 def checkout():
-    return render_template("checkout.html")
+    return render_template("checkout.html", current_checkout_step="checkout")
+
+
+@app.route("/busca")
+def busca():
+    query = (request.args.get("q") or "").strip()
+    products = search_products(query) if query else []
+
+    return render_template(
+        "busca.html",
+        query=query,
+        products=products,
+        total_results=len(products),
+    )
 
 
 @app.route("/identificacao")
 def identificacao():
-    return render_template("identificacao.html")
+    return render_template(
+        "identificacao.html",
+        current_checkout_step="identificacao",
+    )
 
 
 @app.route("/pagamento")
 def pagamento():
-    return render_template("pagamento.html")
+    return render_template("pagamento.html", current_checkout_step="pagamento")
+
+
+@app.route("/pagamento/pix")
+def pagamento_pix():
+    return render_template(
+        "pagamento_pix.html",
+        current_checkout_step="confirmacao",
+    )
+
+
+@app.route("/pagamento/boleto")
+def pagamento_boleto():
+    return render_template(
+        "pagamento_boleto.html",
+        current_checkout_step="confirmacao",
+    )
+
+
+@app.route("/compra-finalizada")
+def compra_finalizada():
+    return render_template(
+        "compra_finalizada.html",
+        current_checkout_step="confirmacao",
+    )
 
 
 @app.route("/personalizacao")
@@ -168,7 +208,7 @@ def personalizacao():
             "category": "Vestuario",
             "description": "Frente central para artes amplas e estampas marcantes.",
             "price": 89.90,
-            "image": "img/camisas personalizaçao.webp",
+            "image": "img/camisa-frente-base.png",
         },
         {
             "slug": "caneca",
@@ -176,7 +216,7 @@ def personalizacao():
             "category": "Acessorio",
             "description": "Faixa lateral ideal para ilustracoes e logos.",
             "price": 54.90,
-            "image": "img/caneca.webp",
+            "image": "img/caneca-branca.png",
         },
         {
             "slug": "ecobag",
@@ -184,7 +224,7 @@ def personalizacao():
             "category": "Acessorio",
             "description": "Area frontal generosa para compor artes verticais.",
             "price": 64.90,
-            "image": "img/ecobag.webp",
+            "image": "img/ecobag-branca-frente.png",
         },
         {
             "slug": "moletom",
@@ -192,7 +232,7 @@ def personalizacao():
             "category": "Vestuario",
             "description": "Centro do peito com destaque para sua identidade visual.",
             "price": 149.90,
-            "image": "img/moletom personalizaçao.webp",
+            "image": "img/moletom-branco-frente.png",
         },
     ]
     return render_template(

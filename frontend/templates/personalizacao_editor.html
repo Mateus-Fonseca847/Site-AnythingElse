@@ -18,6 +18,10 @@
     />
     <link
       rel="stylesheet"
+      href="{{ url_for('static', filename='pages/home.css') }}"
+    />
+    <link
+      rel="stylesheet"
       href="{{ url_for('static', filename='pages/personalizacao.css') }}"
     />
   </head>
@@ -27,16 +31,12 @@
     <main class="editor-page">
       <section class="editor-layout">
         <aside class="editor-rail">
-          <a href="{{ url_for('personalizacao') }}" class="editor-toolbar__back">
+          <a
+            href="{{ url_for('personalizacao') }}"
+            class="editor-toolbar__back"
+          >
             &larr;
           </a>
-
-          <div class="editor-tools-rail">
-            <button type="button" class="editor-tool is-active">
-              <strong>+</strong>
-              <span>Imagem</span>
-            </button>
-          </div>
         </aside>
 
         <aside class="editor-side editor-side--left">
@@ -50,13 +50,27 @@
             </div>
 
             <label class="upload-dropzone" for="artUpload">
-              <input id="artUpload" type="file" accept="image/png" hidden />
+              <input
+                id="artUpload"
+                type="file"
+                accept="image/png"
+                multiple
+                hidden
+              />
               <div class="upload-dropzone__icon">+</div>
               <strong>Arraste e solte os arquivos aqui</strong>
               <span>ou</span>
               <span class="upload-dropzone__button">Escolher imagem</span>
               <small data-upload-name>Nenhum arquivo escolhido</small>
             </label>
+
+            <div class="editor-layer-stack" data-layer-stack hidden>
+              <div class="editor-layer-stack__head">
+                <strong>Artes adicionadas</strong>
+                <span data-layer-count>0 arquivos</span>
+              </div>
+              <div class="editor-layer-list" data-layer-list></div>
+            </div>
 
             <div class="editor-scale">
               <div class="editor-scale__label">
@@ -65,7 +79,7 @@
               </div>
               <input
                 type="range"
-                min="40"
+                min="15"
                 max="180"
                 value="100"
                 data-scale-range
@@ -79,20 +93,29 @@
             </div>
 
             <p class="editor-helper" data-custom-message>
-              Envie um PNG e arraste a arte pelo produto para posicionar onde quiser.
+              Envie um PNG e arraste a arte pelo produto para posicionar onde
+              quiser.
             </p>
           </article>
         </aside>
 
         <section class="editor-preview">
           <div class="editor-preview__top">
-            <div class="editor-preview__actions">
-              <button type="button" class="preview-action">&olarr;</button>
-              <button type="button" class="preview-action">&orarr;</button>
-            </div>
-            <div class="editor-preview__actions">
-              <button type="button" class="preview-action">+</button>
-              <button type="button" class="preview-action">-</button>
+            <div class="editor-preview__actions" data-view-actions>
+              <button
+                type="button"
+                class="preview-action is-active"
+                data-view-option="front"
+              >
+                Frente
+              </button>
+              <button
+                type="button"
+                class="preview-action"
+                data-view-option="back"
+              >
+                Costas
+              </button>
             </div>
           </div>
 
@@ -111,21 +134,9 @@
                 />
               </div>
               <div class="mockup__print-area" data-print-area>
-                <div class="mockup__placeholder" data-placeholder>
-                  Area de impressao
-                </div>
-                <img
-                  class="mockup__art"
-                  data-art-image
-                  alt="Arte personalizada"
-                  hidden
-                />
+                <div class="mockup__placeholder" data-placeholder></div>
               </div>
             </div>
-
-            <a href="{{ url_for('personalizacao') }}" class="editor-change-product">
-              Mudar peca
-            </a>
           </div>
         </section>
 
@@ -135,7 +146,8 @@
               <div>
                 <h2 data-preview-title>{{ product.editor_title }}</h2>
                 <p data-preview-description>
-                  Monte sua arte com liberdade, depois finalize para enviar ao carrinho.
+                  Monte sua arte com liberdade, depois finalize para enviar ao
+                  carrinho.
                 </p>
               </div>
               <strong class="editor-price" data-selected-price>R$ 0,00</strong>
@@ -143,28 +155,125 @@
 
             <div class="editor-summary-text">
               <p>
-                Evite palavras ofensivas, conteudos com direitos autorais de terceiros
-                e imagens sem autorizacao de uso.
+                Evite palavras ofensivas, conteudos com direitos autorais de
+                terceiros e imagens sem autorizacao de uso.
               </p>
             </div>
 
             <div class="editor-option-group" data-size-group>
               <span class="editor-option-group__title">Tamanho</span>
               <div class="editor-size-options">
-                <button type="button" class="editor-size-chip" data-size-option="P">P</button>
-                <button type="button" class="editor-size-chip" data-size-option="M">M</button>
-                <button type="button" class="editor-size-chip is-active" data-size-option="G">G</button>
-                <button type="button" class="editor-size-chip" data-size-option="GG">GG</button>
-                <button type="button" class="editor-size-chip" data-size-option="3G">3G</button>
+                <button
+                  type="button"
+                  class="editor-size-chip"
+                  data-size-option="P"
+                >
+                  P
+                </button>
+                <button
+                  type="button"
+                  class="editor-size-chip"
+                  data-size-option="M"
+                >
+                  M
+                </button>
+                <button
+                  type="button"
+                  class="editor-size-chip is-active"
+                  data-size-option="G"
+                >
+                  G
+                </button>
+                <button
+                  type="button"
+                  class="editor-size-chip"
+                  data-size-option="GG"
+                >
+                  GG
+                </button>
+                <button
+                  type="button"
+                  class="editor-size-chip"
+                  data-size-option="3G"
+                >
+                  3G
+                </button>
               </div>
             </div>
 
             <div class="editor-option-group" data-color-group>
               <span class="editor-option-group__title">Cor da peca</span>
               <div class="editor-color-options">
-                <button type="button" class="editor-color-dot color-black" data-color-option="Preto" aria-label="Preto"></button>
-                <button type="button" class="editor-color-dot color-white is-active" data-color-option="Branco" aria-label="Branco"></button>
+                <button
+                  type="button"
+                  class="editor-color-dot color-black"
+                  data-color-option="Preto"
+                  aria-label="Preto"
+                ></button>
+                <button
+                  type="button"
+                  class="editor-color-dot color-white is-active"
+                  data-color-option="Branco"
+                  aria-label="Branco"
+                ></button>
+                <button
+                  type="button"
+                  class="editor-color-dot color-blue"
+                  data-color-option="Azul"
+                  aria-label="Azul"
+                ></button>
+                <button
+                  type="button"
+                  class="editor-color-dot color-beige"
+                  data-color-option="Bege"
+                  aria-label="Bege"
+                ></button>
+                <button
+                  type="button"
+                  class="editor-color-dot color-gray"
+                  data-color-option="Cinza"
+                  aria-label="Cinza"
+                ></button>
+                <button
+                  type="button"
+                  class="editor-color-dot color-green"
+                  data-color-option="Verde"
+                  aria-label="Verde"
+                ></button>
+                <button
+                  type="button"
+                  class="editor-color-dot color-red"
+                  data-color-option="Vermelho"
+                  aria-label="Vermelho"
+                ></button>
               </div>
+            </div>
+
+            <div class="editor-option-group editor-field-group">
+              <label class="editor-field" for="contactPhone">
+                <span class="editor-option-group__title"
+                  >Numero para contato</span
+                >
+                <input
+                  id="contactPhone"
+                  type="tel"
+                  inputmode="tel"
+                  placeholder="(24) 99999-9999"
+                  data-contact-phone
+                />
+              </label>
+            </div>
+
+            <div class="editor-option-group editor-field-group">
+              <label class="editor-field" for="customComment">
+                <span class="editor-option-group__title">Comentario</span>
+                <textarea
+                  id="customComment"
+                  rows="4"
+                  placeholder="Escreva observacoes sobre a estampa, posicionamento ou acabamento."
+                  data-custom-comment
+                ></textarea>
+              </label>
             </div>
 
             <div class="preview-meta preview-meta--editor">
@@ -179,8 +288,12 @@
             </div>
 
             <div class="preview-actions">
-              <button type="button" class="custom-submit" data-add-custom-product>
-                Finalizar personalizacao
+              <button
+                type="button"
+                class="custom-submit"
+                data-add-custom-product
+              >
+                Adicionar à sacola
               </button>
             </div>
           </article>

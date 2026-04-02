@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const cartCountLabel = document.querySelector("[data-cart-count-label]");
-  const emptyState = document.querySelector("[data-checkout-empty]");
   const productList = document.querySelector("[data-checkout-product-list]");
   const shippingCepInput = document.querySelector("[data-shipping-cep]");
   const shippingCalculateButton = document.querySelector(
@@ -15,6 +14,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     "[data-summary-installments]",
   );
   const continueButton = document.querySelector(".primary-checkout-btn");
+  const checkoutErrorMessage = document.querySelector("[data-checkout-error]");
 
   let currentUser = null;
   let cart = [];
@@ -54,6 +54,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     return "anythingelse_checkout_state_guest";
+  }
+
+  function syncGuestStateToUserIfNeeded() {
+    if (!currentUser?.email) return;
+
+    const guestCartKey = "anythingelse_cart_guest";
+    const guestCheckoutStateKey = "anythingelse_checkout_state_guest";
+    const userCartKey = getCartStorageKey();
+    const userCheckoutStateKey = getCheckoutStateKey();
+
+    try {
+      const guestCart = localStorage.getItem(guestCartKey);
+      const userCart = localStorage.getItem(userCartKey);
+
+      if (guestCart && !userCart) {
+        localStorage.setItem(userCartKey, guestCart);
+      }
+
+      const guestCheckoutState = localStorage.getItem(guestCheckoutStateKey);
+      const userCheckoutState = localStorage.getItem(userCheckoutStateKey);
+
+      if (guestCheckoutState && !userCheckoutState) {
+        localStorage.setItem(userCheckoutStateKey, guestCheckoutState);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function saveCart() {
@@ -182,10 +209,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   function updateEmptyState() {
     const isEmpty = cart.length === 0;
 
-    if (emptyState) {
-      emptyState.hidden = !isEmpty;
-    }
-
     if (productList) {
       productList.hidden = isEmpty;
     }
@@ -196,6 +219,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (shippingCepInput) {
       shippingCepInput.disabled = isEmpty;
+    }
+
+    if (checkoutErrorMessage && !isEmpty) {
+      checkoutErrorMessage.hidden = true;
     }
 
     if (isEmpty) {
@@ -376,7 +403,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       continueButton.textContent = currentUser
         ? "Ir para pagamento"
         : "Continuar para identificacao";
-      continueButton.disabled = cart.length === 0;
     }
   }
 
@@ -409,6 +435,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   shippingCalculateButton?.addEventListener("click", calculateShipping);
   continueButton?.addEventListener("click", () => {
+    if (cart.length === 0) {
+      if (checkoutErrorMessage) {
+        checkoutErrorMessage.hidden = false;
+      }
+      return;
+    }
+
     saveCheckoutState();
     window.location.href = currentUser
       ? "/pagamento"
@@ -416,6 +449,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   await loadCurrentUser();
+  syncGuestStateToUserIfNeeded();
   loadCart();
   renderAll();
 });

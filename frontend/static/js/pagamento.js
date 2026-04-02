@@ -23,6 +23,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const paymentTotalInline = document.querySelector("[data-payment-total-inline]");
   const paymentMethodMenu = document.querySelector("[data-payment-method-menu]");
   const submitOrderButton = document.querySelector("[data-submit-order]");
+  const paymentFeedback = document.querySelector("[data-payment-feedback]");
+  const cardNumberInput = document.querySelector("[data-card-number]");
+  const cardExpiryInput = document.querySelector("[data-card-expiry]");
+  const cardCvvInput = document.querySelector("[data-card-cvv]");
+  const cardNameInput = document.querySelector("[data-card-name]");
 
   let currentUser = null;
   let cart = [];
@@ -45,6 +50,171 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (cep.length <= 5) return cep;
 
     return `${cep.slice(0, 5)}-${cep.slice(5)}`;
+  }
+
+  function onlyDigits(value) {
+    return String(value || "").replace(/\D/g, "");
+  }
+
+  function formatCpf(value) {
+    const digits = onlyDigits(value).slice(0, 11);
+
+    return digits
+      .replace(/^(\d{3})(\d)/, "$1.$2")
+      .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/\.(\d{3})(\d)/, ".$1-$2");
+  }
+
+  function formatPhone(value) {
+    const digits = onlyDigits(value).slice(0, 11);
+
+    if (digits.length <= 10) {
+      return digits
+        .replace(/^(\d{2})(\d)/, "($1) $2")
+        .replace(/(\d{4})(\d)/, "$1-$2");
+    }
+
+    return digits
+      .replace(/^(\d{2})(\d)/, "($1) $2")
+      .replace(/(\d{5})(\d)/, "$1-$2");
+  }
+
+  function formatCardNumber(value) {
+    const digits = onlyDigits(value).slice(0, 16);
+    return digits.replace(/(\d{4})(?=\d)/g, "$1 ").trim();
+  }
+
+  function formatCardExpiry(value) {
+    const digits = onlyDigits(value).slice(0, 4);
+
+    if (digits.length < 3) return digits;
+
+    return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+  }
+
+  function setPaymentFeedback(message, type = "info") {
+    if (!paymentFeedback) return;
+    paymentFeedback.textContent = message;
+    paymentFeedback.dataset.state = type;
+  }
+
+  function isCustomerDataComplete() {
+    const firstName = firstNameInput?.value.trim() || "";
+    const lastName = lastNameInput?.value.trim() || "";
+    const cpf = onlyDigits(cpfInput?.value || "");
+    const phone = onlyDigits(phoneInput?.value || "");
+
+    return (
+      firstName.length >= 2 &&
+      lastName.length >= 2 &&
+      cpf.length === 11 &&
+      phone.length >= 10
+    );
+  }
+
+  function isDeliveryDataComplete() {
+    const deliveryMode = checkoutState?.deliveryMode || "delivery";
+
+    if (deliveryMode === "pickup") {
+      return true;
+    }
+
+    const cep = normalizeCep(cepInput?.value || checkoutState?.cep || "");
+    const recipient = recipientInput?.value.trim() || "";
+    const addressNumber = addressNumberInput?.value.trim() || "";
+    const selectedShipping = checkoutState?.selectedShipping;
+
+    return Boolean(
+      cep.length === 8 &&
+        recipient.length >= 3 &&
+        addressNumber.length >= 1 &&
+        selectedShipping?.id,
+    );
+  }
+
+  function isPaymentDataComplete() {
+    const method = getSelectedPaymentMethod();
+
+    if (method === "pix" || method === "ticket") {
+      return true;
+    }
+
+    const cardNumber = onlyDigits(cardNumberInput?.value || "");
+    const cardExpiry = onlyDigits(cardExpiryInput?.value || "");
+    const cardCvv = onlyDigits(cardCvvInput?.value || "");
+    const cardName = cardNameInput?.value.trim() || "";
+
+    return (
+      cardNumber.length === 16 &&
+      cardExpiry.length === 4 &&
+      cardCvv.length >= 3 &&
+      cardName.length >= 4
+    );
+  }
+
+  function getPaymentReadiness() {
+    if (!cart.length) {
+      return {
+        ready: false,
+        message: "Sua sacola esta vazia, adicione produtos primeiro.",
+        type: "error",
+      };
+    }
+
+    if (!isCustomerDataComplete()) {
+      return {
+        ready: false,
+        message: "Preencha seus dados pessoais para continuar.",
+        type: "warning",
+      };
+    }
+
+    if (!isDeliveryDataComplete()) {
+      return {
+        ready: false,
+        message: "Revise entrega, CEP e frete antes de finalizar.",
+        type: "warning",
+      };
+    }
+
+    if (!isPaymentDataComplete()) {
+      return {
+        ready: false,
+        message: "Complete os dados da forma de pagamento selecionada.",
+        type: "warning",
+      };
+    }
+
+    const method = getSelectedPaymentMethod();
+    const messageByMethod = {
+      pix: "Tudo pronto. Gere o pagamento por Pix com seguranca.",
+      card: "Tudo pronto. Finalize o pagamento no cartao com seguranca.",
+      ticket: "Tudo pronto. Gere seu boleto para concluir o pedido.",
+    };
+
+    return {
+      ready: true,
+      message: messageByMethod[method] || "Tudo pronto para finalizar a compra.",
+      type: "success",
+    };
+  }
+
+  function updateSubmitState() {
+    if (!submitOrderButton) return;
+
+    const readiness = getPaymentReadiness();
+    const method = getSelectedPaymentMethod();
+    const labelByMethod = {
+      pix: "Gerar pagamento Pix",
+      card: "Pagar com cartao",
+      ticket: "Gerar boleto",
+    };
+
+    submitOrderButton.disabled = !readiness.ready;
+    submitOrderButton.textContent =
+      labelByMethod[method] || "Finalizar compra";
+
+    setPaymentFeedback(readiness.message, readiness.type);
   }
 
   async function loadCurrentUser() {
@@ -80,6 +250,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     return "anythingelse_checkout_state_guest";
   }
 
+  function syncGuestStateToUserIfNeeded() {
+    if (!currentUser?.email) return;
+
+    const guestCartKey = "anythingelse_cart_guest";
+    const guestCheckoutStateKey = "anythingelse_checkout_state_guest";
+    const userCartKey = getCartStorageKey();
+    const userCheckoutStateKey = getCheckoutStateKey();
+
+    try {
+      const guestCart = localStorage.getItem(guestCartKey);
+      const userCart = localStorage.getItem(userCartKey);
+
+      if (guestCart && !userCart) {
+        localStorage.setItem(userCartKey, guestCart);
+      }
+
+      const guestCheckoutState = localStorage.getItem(guestCheckoutStateKey);
+      const userCheckoutState = localStorage.getItem(userCheckoutStateKey);
+
+      if (guestCheckoutState && !userCheckoutState) {
+        localStorage.setItem(userCheckoutStateKey, guestCheckoutState);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   function loadCart() {
     try {
       const raw = localStorage.getItem(getCartStorageKey());
@@ -103,6 +300,24 @@ document.addEventListener("DOMContentLoaded", async () => {
       getCheckoutStateKey(),
       JSON.stringify(checkoutState || {}),
     );
+  }
+
+  function saveLastPaymentResult(data) {
+    try {
+      localStorage.setItem(
+        "anythingelse_last_payment_result",
+        JSON.stringify({
+          order: data.order || {},
+          payment: data.payment || {},
+          items: cart,
+          subtotal: getSubtotal(),
+          shipping: getShippingValue(),
+          total: getSubtotal() + getShippingValue(),
+        }),
+      );
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function clearPurchaseState() {
@@ -153,6 +368,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       recipientInput.value =
         checkoutState?.recipient || currentUser?.name || "";
     }
+
+    cpfInput.value = formatCpf(cpfInput?.value || "");
+    phoneInput.value = formatPhone(phoneInput?.value || "");
   }
 
   function renderDelivery() {
@@ -207,36 +425,31 @@ document.addEventListener("DOMContentLoaded", async () => {
           <strong>${formatPrice(0)}</strong>
         </div>
       `;
+      updateSubmitState();
       return;
     }
 
-    const options = Array.isArray(checkoutState?.shippingOptions)
-      ? checkoutState.shippingOptions
-      : [];
-    const selectedId = checkoutState?.selectedShipping?.id;
+    const selectedShipping = checkoutState?.selectedShipping;
 
     deliveryMethods.innerHTML = "";
 
-    options.forEach((option) => {
+    if (selectedShipping?.id) {
       const element = document.createElement("div");
-      element.className = "delivery-method";
-
-      if (option.id === selectedId) {
-        element.classList.add("is-active");
-      }
-
+      element.className = "delivery-method is-active";
       element.innerHTML = `
         <div>
-          <strong>${option.label}</strong>
-          <p>Em ate ${option.business_days} dia${
-            option.business_days > 1 ? "s" : ""
+          <strong>${selectedShipping.label}</strong>
+          <p>Em ate ${selectedShipping.business_days} dia${
+            selectedShipping.business_days > 1 ? "s" : ""
           } uteis</p>
         </div>
-        <strong>${formatPrice(option.price)}</strong>
+        <strong>${formatPrice(selectedShipping.price)}</strong>
       `;
 
       deliveryMethods.appendChild(element);
-    });
+    }
+
+    updateSubmitState();
   }
 
   function bindDeliveryFields() {
@@ -252,6 +465,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       saveCheckoutState();
       renderDelivery();
       renderSummary();
+      updateSubmitState();
     });
 
     recipientInput?.addEventListener("input", (event) => {
@@ -260,6 +474,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         recipient: event.target.value,
       };
       saveCheckoutState();
+      updateSubmitState();
+    });
+
+    addressNumberInput?.addEventListener("input", updateSubmitState);
+    addressComplementInput?.addEventListener("input", updateSubmitState);
+    firstNameInput?.addEventListener("input", updateSubmitState);
+    lastNameInput?.addEventListener("input", updateSubmitState);
+
+    cpfInput?.addEventListener("input", (event) => {
+      event.target.value = formatCpf(event.target.value);
+      updateSubmitState();
+    });
+
+    phoneInput?.addEventListener("input", (event) => {
+      event.target.value = formatPhone(event.target.value);
+      updateSubmitState();
     });
   }
 
@@ -274,6 +504,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         saveCheckoutState();
         renderDelivery();
         renderSummary();
+        updateSubmitState();
       });
     });
   }
@@ -321,6 +552,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (paymentTotalInline) {
       paymentTotalInline.textContent = formatPrice(total);
     }
+
+    updateSubmitState();
   }
 
   function bindPaymentMethods() {
@@ -337,8 +570,27 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.querySelectorAll("[data-panel]").forEach((panel) => {
           panel.hidden = panel.dataset.panel !== method;
         });
+
+        updateSubmitState();
       });
     });
+
+    cardNumberInput?.addEventListener("input", (event) => {
+      event.target.value = formatCardNumber(event.target.value);
+      updateSubmitState();
+    });
+
+    cardExpiryInput?.addEventListener("input", (event) => {
+      event.target.value = formatCardExpiry(event.target.value);
+      updateSubmitState();
+    });
+
+    cardCvvInput?.addEventListener("input", (event) => {
+      event.target.value = onlyDigits(event.target.value).slice(0, 4);
+      updateSubmitState();
+    });
+
+    cardNameInput?.addEventListener("input", updateSubmitState);
   }
 
   function buildOrderPayload() {
@@ -370,14 +622,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   async function submitOrder() {
     if (!cart.length) {
-      window.alert("Sua sacola esta vazia.");
+      setPaymentFeedback(
+        "Sua sacola esta vazia, adicione produtos primeiro.",
+        "error",
+      );
       return;
     }
 
     const payload = buildOrderPayload();
+    const readiness = getPaymentReadiness();
+
+    if (!readiness.ready) {
+      setPaymentFeedback(readiness.message, readiness.type);
+      return;
+    }
 
     if (payload.delivery_mode === "delivery" && !payload.cep) {
-      window.alert("Informe um CEP para concluir a entrega.");
+      setPaymentFeedback("Informe um CEP para concluir a entrega.", "error");
       return;
     }
 
@@ -400,36 +661,36 @@ document.addEventListener("DOMContentLoaded", async () => {
       const data = await response.json();
 
       if (!response.ok || !data.ok) {
-        window.alert(data.message || "Nao foi possivel finalizar a compra.");
+        setPaymentFeedback(
+          data.message || "Nao foi possivel finalizar a compra.",
+          "error",
+        );
         return;
       }
 
+      saveLastPaymentResult(data);
       clearPurchaseState();
-      const orderNumber = data.order?.order_number || "";
-      const paymentStatus = data.payment?.status || "";
-      const transactionId = data.payment?.transaction_id || "";
       const paymentMethod = data.payment?.method || "";
 
-      let successMessage = `Pedido ${orderNumber} finalizado com sucesso.`;
-
       if (paymentMethod === "pix") {
-        successMessage = `Pedido ${orderNumber} confirmado via Pix. Transacao ${transactionId}.`;
-      } else if (paymentMethod === "ticket") {
-        successMessage = `Pedido ${orderNumber} criado. Boleto gerado com status: ${paymentStatus}.`;
-      } else if (paymentMethod === "card") {
-        successMessage = `Pedido ${orderNumber} aprovado no cartao. Transacao ${transactionId}.`;
+        window.location.href = "/pagamento/pix";
+        return;
       }
 
-      window.alert(successMessage);
-      window.location.href = "/";
+      if (paymentMethod === "ticket") {
+        window.location.href = "/pagamento/boleto";
+        return;
+      }
+
+      window.location.href = "/compra-finalizada";
     } catch (error) {
       console.error(error);
-      window.alert("Ocorreu um erro ao finalizar a compra.");
+      setPaymentFeedback("Ocorreu um erro ao finalizar a compra.", "error");
     } finally {
       if (submitOrderButton) {
-        submitOrderButton.disabled = false;
         submitOrderButton.textContent = originalText;
       }
+      updateSubmitState();
     }
   }
 
@@ -444,6 +705,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   loadCart();
   loadCheckoutState();
+  syncGuestStateToUserIfNeeded();
+  loadCart();
+  loadCheckoutState();
   checkoutState = {
     ...(checkoutState || {}),
     deliveryMode: checkoutState?.deliveryMode || "delivery",
@@ -454,4 +718,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   bindDeliveryFields();
   bindDeliveryMode();
   bindPaymentMethods();
+  updateSubmitState();
 });

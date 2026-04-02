@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compra finalizada | Anything Else</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='layout.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='components.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='pages/checkout-flow.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='pages/payment-result.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='footer.css') }}" />
+  </head>
+  <body class="checkout-flow-body" data-payment-page="final">
+    {% include 'partials/site_header.html' %}
+
+    <main class="checkout-flow-shell payment-result-page">
+      <section class="checkout-stage-hero">
+        <div class="checkout-stage-hero__copy">
+          <span class="checkout-stage-hero__eyebrow">Etapa 4 do checkout</span>
+          <h1 class="checkout-stage-hero__title">Compra finalizada</h1>
+          <p class="checkout-stage-hero__subtitle">
+            Seu pedido foi concluido com sucesso e ja esta sendo preparado.
+          </p>
+        </div>
+        <a href="{{ url_for('home') }}" class="checkout-stage-hero__back">← Voltar para a loja</a>
+      </section>
+
+      {% include 'partials/checkout_progress.html' %}
+
+      <section class="payment-result-layout">
+        <article class="payment-result-card checkout-stage-panel">
+          <div class="payment-result-hero">
+            <span class="payment-result-status" data-tone="success">Pedido confirmado</span>
+            <h2>Obrigado pela sua compra</h2>
+            <p data-confirmation-text>
+              Compra finalizada com sucesso.
+            </p>
+          </div>
+
+          <div class="payment-result-meta">
+            <div class="payment-result-meta__item">
+              <span>Pedido</span>
+              <strong data-order-number>-</strong>
+            </div>
+            <div class="payment-result-meta__item">
+              <span>Pagamento</span>
+              <strong data-payment-method-label>-</strong>
+            </div>
+            <div class="payment-result-meta__item">
+              <span>Total</span>
+              <strong data-order-amount>R$ 0,00</strong>
+            </div>
+          </div>
+
+          <div class="payment-result-note">
+            Enviaremos as proximas atualizacoes do pedido para o e-mail cadastrado.
+          </div>
+
+          <div class="payment-result-actions">
+            <a href="{{ url_for('home') }}">Continuar comprando</a>
+          </div>
+        </article>
+
+        <aside class="payment-result-card payment-result-summary checkout-stage-panel">
+          <h2>Resumo do pedido</h2>
+          <p>Itens, frete e total da sua compra.</p>
+
+          <div class="payment-result-products" data-result-products></div>
+
+          <div class="payment-result-breakdown">
+            <div class="payment-result-breakdown__row">
+              <span>Subtotal</span>
+              <strong data-result-subtotal>R$ 0,00</strong>
+            </div>
+            <div class="payment-result-breakdown__row">
+              <span>Frete</span>
+              <strong data-result-shipping>R$ 0,00</strong>
+            </div>
+            <div class="payment-result-breakdown__row payment-result-breakdown__row--total">
+              <span>Total</span>
+              <strong data-result-total>R$ 0,00</strong>
+            </div>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    {% include 'partials/site_footer.html' %}
+    {% include 'partials/site_overlays.html' %}
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/payment-result.js') }}"></script>
+  </body>
+</html>

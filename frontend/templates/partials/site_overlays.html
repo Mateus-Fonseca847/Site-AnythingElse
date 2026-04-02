@@ -175,7 +175,11 @@
           />
         </svg>
         <p class="cart-drawer__empty-text">Sua sacola ainda está vazia</p>
-        <a href="#" class="cart-drawer__empty-button">Escolher produtos</a>
+          <a
+            href="{{ url_for('novidades') }}"
+            class="cart-drawer__empty-button"
+            >Escolher produtos</a
+          >
       </div>
 
       <div class="cart-drawer__items" hidden></div>

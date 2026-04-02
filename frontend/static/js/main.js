@@ -1,4 +1,31 @@
 document.addEventListener("DOMContentLoaded", () => {
+  requestAnimationFrame(() => {
+    document.body.classList.add("is-loaded");
+  });
+
+  function debounce(callback, wait = 180) {
+    let timeoutId;
+
+    return (...args) => {
+      window.clearTimeout(timeoutId);
+      timeoutId = window.setTimeout(() => callback(...args), wait);
+    };
+  }
+
+  function escapeHtml(value) {
+    return String(value || "").replace(/[&<>"']/g, (char) => {
+      const entities = {
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      };
+
+      return entities[char] || char;
+    });
+  }
+
   const carousel = document.querySelector(".promo-carousel");
 
   if (carousel) {
@@ -215,6 +242,203 @@ document.addEventListener("DOMContentLoaded", () => {
       chip.classList.add("is-active");
     });
   });
+
+  function setupSearchForms() {
+    const searchForms = Array.from(document.querySelectorAll(".search-bar"));
+    const currentSearchValue =
+      new URLSearchParams(window.location.search).get("q") || "";
+
+    searchForms.forEach((form) => {
+      const wrapper = form.closest(".search-wrapper");
+      const input = form.querySelector("input[type='text'], input[type='search']");
+
+      if (!wrapper || !input) return;
+
+      form.setAttribute("action", "/busca");
+      form.setAttribute("method", "get");
+      input.setAttribute("name", "q");
+      input.setAttribute("autocomplete", "off");
+
+      if (!input.value && currentSearchValue) {
+        input.value = currentSearchValue;
+      }
+
+      const suggestions = document.createElement("div");
+      suggestions.className = "search-suggestions";
+      suggestions.innerHTML = `
+        <div class="search-suggestions__list"></div>
+        <div class="search-suggestions__footer" hidden>
+          <a href="#">Ver todos os resultados</a>
+        </div>
+      `;
+      wrapper.appendChild(suggestions);
+
+      const list = suggestions.querySelector(".search-suggestions__list");
+      const footer = suggestions.querySelector(".search-suggestions__footer");
+      const footerLink = footer?.querySelector("a");
+      let activeIndex = -1;
+      function closeSuggestions() {
+        suggestions.classList.remove("is-open");
+        activeIndex = -1;
+      }
+
+      function openSuggestions() {
+        if (!list.childElementCount) return;
+        suggestions.classList.add("is-open");
+      }
+
+      function updateActiveItem(nextIndex) {
+        const links = Array.from(
+          list.querySelectorAll(".search-suggestions__item"),
+        );
+
+        links.forEach((link, index) => {
+          link.classList.toggle("is-active", index === nextIndex);
+        });
+
+        activeIndex = nextIndex;
+      }
+
+      function renderSuggestions(products, query) {
+        list.innerHTML = "";
+        activeIndex = -1;
+
+        if (!query) {
+          closeSuggestions();
+          return;
+        }
+
+        if (!products.length) {
+          list.innerHTML = `
+            <div class="search-suggestions__empty">
+              Nenhum produto encontrado para "${escapeHtml(query)}".
+            </div>
+          `;
+          if (footer) footer.hidden = true;
+          suggestions.classList.add("is-open");
+          return;
+        }
+
+        products.forEach((product) => {
+          const item = document.createElement("a");
+          item.className = "search-suggestions__item";
+          item.href = `/produto/${encodeURIComponent(product.codigo)}`;
+
+          const imageSrc = product.imagem
+            ? `/static/${product.imagem}`
+            : "https://via.placeholder.com/120x120?text=Produto";
+
+          item.innerHTML = `
+            <div class="search-suggestions__thumb">
+              <img src="${imageSrc}" alt="${escapeHtml(product.nome)}" />
+            </div>
+            <div class="search-suggestions__meta">
+              <strong>${escapeHtml(product.nome)}</strong>
+              <span>${escapeHtml(product.tipo_produto || "Produto")} • ${Number(product.preco || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</span>
+            </div>
+          `;
+
+          list.appendChild(item);
+        });
+
+        if (footer && footerLink) {
+          footer.hidden = false;
+          footerLink.href = `/busca?q=${encodeURIComponent(query)}`;
+        }
+
+        openSuggestions();
+      }
+
+      const fetchSuggestions = debounce(async () => {
+        const query = input.value.trim();
+
+        if (query.length < 2) {
+          closeSuggestions();
+          return;
+        }
+
+        try {
+          const response = await fetch(
+            `/api/products/search?q=${encodeURIComponent(query)}&limit=6`,
+          );
+          const data = await response.json();
+
+          if (!response.ok || !data.ok) {
+            closeSuggestions();
+            return;
+          }
+
+          renderSuggestions(Array.isArray(data.products) ? data.products : [], query);
+        } catch (error) {
+          console.error(error);
+          closeSuggestions();
+        }
+      }, 200);
+
+      input.addEventListener("input", fetchSuggestions);
+      input.addEventListener("focus", () => {
+        if (list.childElementCount) {
+          suggestions.classList.add("is-open");
+        }
+      });
+
+      input.addEventListener("keydown", (event) => {
+        const links = Array.from(
+          list.querySelectorAll(".search-suggestions__item"),
+        );
+
+        if (!suggestions.classList.contains("is-open") || !links.length) {
+          if (event.key === "Enter" && !input.value.trim()) {
+            event.preventDefault();
+          }
+          return;
+        }
+
+        if (event.key === "ArrowDown") {
+          event.preventDefault();
+          const nextIndex = activeIndex >= links.length - 1 ? 0 : activeIndex + 1;
+          updateActiveItem(nextIndex);
+          links[nextIndex]?.scrollIntoView({ block: "nearest" });
+        }
+
+        if (event.key === "ArrowUp") {
+          event.preventDefault();
+          const nextIndex = activeIndex <= 0 ? links.length - 1 : activeIndex - 1;
+          updateActiveItem(nextIndex);
+          links[nextIndex]?.scrollIntoView({ block: "nearest" });
+        }
+
+        if (event.key === "Enter" && activeIndex >= 0) {
+          event.preventDefault();
+          window.location.href = links[activeIndex].href;
+        }
+
+        if (event.key === "Escape") {
+          closeSuggestions();
+        }
+      });
+
+      form.addEventListener("submit", (event) => {
+        const query = input.value.trim();
+
+        if (!query) {
+          event.preventDefault();
+          closeSuggestions();
+          return;
+        }
+
+        closeSuggestions();
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!wrapper.contains(event.target)) {
+          closeSuggestions();
+        }
+      });
+    });
+  }
+
+  setupSearchForms();
 
   const loginTrigger = document.querySelector(".header-login-trigger");
   const authModal = document.querySelector(".auth-modal");

@@ -1,0 +1,71 @@
+{% set active_positions = {
+  'checkout': 1,
+  'identificacao': 2,
+  'pagamento': 3,
+  'confirmacao': 4
+} %}
+{% set active_position = active_positions.get(current_checkout_step, 1) %}
+{% set checkout_steps = [
+  {'key': 'checkout', 'label': 'Sacola', 'url': url_for('checkout')},
+  {'key': 'identificacao', 'label': 'Identificacao', 'url': url_for('identificacao')},
+  {'key': 'pagamento', 'label': 'Pagamento', 'url': url_for('pagamento')},
+  {'key': 'confirmacao', 'label': 'Confirmacao', 'url': None}
+] %}
+
+<nav class="checkout-progress" aria-label="Etapas do checkout">
+  {% for step in checkout_steps %}
+    {% set state = 'active' if loop.index == active_position else 'completed' if loop.index < active_position else 'upcoming' %}
+    {% set href = step.url if step.url and loop.index <= active_position else None %}
+    {% if href %}
+      <a
+        href="{{ href }}"
+        class="checkout-progress__step is-{{ state }}"
+        aria-current="{{ 'step' if state == 'active' else 'false' }}"
+      >
+    {% else %}
+      <span
+        class="checkout-progress__step is-{{ state }}"
+        {% if state == 'active' %}aria-current="step"{% endif %}
+      >
+    {% endif %}
+        <span class="checkout-progress__icon" aria-hidden="true">
+          {% if state == 'completed' %}
+            <svg viewBox="0 0 24 24" fill="none">
+              <path
+                d="M6 12.5L10 16.5L18 8.5"
+                stroke="currentColor"
+                stroke-width="2.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          {% else %}
+            <span>{{ loop.index }}</span>
+          {% endif %}
+        </span>
+        <span class="checkout-progress__meta">
+          <strong>{{ step.label }}</strong>
+          <small>
+            {% if state == 'active' %}
+              Etapa atual
+            {% elif state == 'completed' %}
+              Etapa concluida
+            {% else %}
+              Proxima etapa
+            {% endif %}
+          </small>
+        </span>
+    {% if href %}
+      </a>
+    {% else %}
+      </span>
+    {% endif %}
+
+    {% if not loop.last %}
+      <span
+        class="checkout-progress__line {% if loop.index < active_position %}is-completed{% endif %}"
+        aria-hidden="true"
+      ></span>
+    {% endif %}
+  {% endfor %}
+</nav>

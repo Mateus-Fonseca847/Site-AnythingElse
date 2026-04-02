@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+import unicodedata
 from typing import Any
 
 from backend.database.db import get_connection
@@ -65,6 +67,96 @@ def list_products() -> list[dict[str, Any]]:
     ).fetchall()
     conn.close()
     return [dict(row) for row in rows]
+
+
+def normalize_search_text(value: Any) -> str:
+    text = str(value or "").strip().lower()
+    normalized = unicodedata.normalize("NFKD", text)
+    normalized = "".join(char for char in normalized if not unicodedata.combining(char))
+    return re.sub(r"\s+", " ", normalized)
+
+
+def search_products(query: str, limit: int | None = None) -> list[dict[str, Any]]:
+    normalized_query = normalize_search_text(query)
+    if not normalized_query:
+        return []
+
+    terms = [term for term in normalized_query.split(" ") if term]
+    scored_products: list[tuple[int, dict[str, Any]]] = []
+
+    for product in list_products():
+        codigo = normalize_search_text(product.get("codigo"))
+        nome = normalize_search_text(product.get("nome"))
+        tipo = normalize_search_text(product.get("tipo_produto"))
+        descricao = normalize_search_text(product.get("descricao"))
+        descricao_detalhada = normalize_search_text(product.get("descricao_detalhada"))
+
+        haystack = " ".join(
+            part for part in [codigo, nome, tipo, descricao, descricao_detalhada] if part
+        )
+
+        if normalized_query not in haystack and not all(term in haystack for term in terms):
+            continue
+
+        score = 0
+
+        if codigo == normalized_query:
+            score += 160
+        elif codigo.startswith(normalized_query):
+            score += 120
+        elif normalized_query in codigo:
+            score += 80
+
+        if nome == normalized_query:
+            score += 150
+        elif nome.startswith(normalized_query):
+            score += 110
+        elif normalized_query in nome:
+            score += 75
+
+        if tipo == normalized_query:
+            score += 70
+        elif tipo.startswith(normalized_query):
+            score += 40
+        elif normalized_query in tipo:
+            score += 25
+
+        if normalized_query in descricao:
+            score += 22
+
+        if normalized_query in descricao_detalhada:
+            score += 12
+
+        for term in terms:
+            if term in codigo:
+                score += 35
+            if term in nome:
+                score += 28
+            if term in tipo:
+                score += 14
+            if term in descricao:
+                score += 10
+            if term in descricao_detalhada:
+                score += 5
+
+        score += min(int(product.get("vendas") or 0), 30)
+
+        scored_products.append((score, product))
+
+    scored_products.sort(
+        key=lambda item: (
+            item[0],
+            int(item[1].get("vendas") or 0),
+            item[1].get("data_lancamento") or "",
+            item[1].get("nome") or "",
+        ),
+        reverse=True,
+    )
+
+    results = [product for _, product in scored_products]
+    if limit is not None:
+        return results[:limit]
+    return results
 
 
 def get_product_by_codigo(codigo: str) -> dict[str, Any] | None:

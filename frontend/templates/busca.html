@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Busca | Anything Else</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='base.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='layout.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='components.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='pages/home.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='pages/novidades.css') }}"
+    />
+  </head>
+  <body>
+    {% include 'partials/site_header.html' %}
+
+    <main class="nov-page container">
+      <div class="nov-breadcrumb">
+        <a href="{{ url_for('home') }}">Página inicial</a>
+        <span>›</span>
+        <strong>Busca</strong>
+      </div>
+
+      <section class="nov-toolbar">
+        <div>
+          <span class="nov-eyebrow">Busca inteligente</span>
+          <h1>Resultados para "{{ query or 'tudo' }}"</h1>
+          <p class="search-results__description">
+            {{ total_results }} produto{{ '' if total_results == 1 else 's' }}
+            encontrado{{ '' if total_results == 1 else 's' }} no catálogo.
+          </p>
+        </div>
+      </section>
+
+      {% if products %}
+      <section class="nov-products">
+        <div class="products-grid">
+          {% for product in products %}
+          <article
+            class="product-card"
+            data-url="{{ url_for('product_page', codigo=product.codigo) }}"
+          >
+            <a
+              href="{{ url_for('product_page', codigo=product.codigo) }}"
+              class="product-card__image-link"
+            >
+              <div class="product-card__image-box">
+                {% if product.imagem %}
+                <img
+                  class="product-card__image product-card__image--main"
+                  src="{{ url_for('static', filename=product.imagem) }}"
+                  alt="{{ product.nome }}"
+                  loading="lazy"
+                />
+                <img
+                  class="product-card__image product-card__image--hover"
+                  src="{{ url_for('static', filename=product.imagem_hover or product.imagem) }}"
+                  alt=""
+                  loading="lazy"
+                />
+                {% else %}
+                <img
+                  class="product-card__image product-card__image--main"
+                  src="https://via.placeholder.com/500x620?text=Produto"
+                  alt="{{ product.nome }}"
+                  loading="lazy"
+                />
+                <img
+                  class="product-card__image product-card__image--hover"
+                  src="https://via.placeholder.com/500x620?text=Produto"
+                  alt=""
+                  loading="lazy"
+                />
+                {% endif %}
+              </div>
+            </a>
+
+            <div class="product-card__content">
+              <h3 class="product-card__title">{{ product.nome }}</h3>
+              <div class="product-card__rating">★★★★★</div>
+              <div class="product-card__price">
+                R${{ "%.2f"|format(product.preco)|replace(".", ",") }}
+              </div>
+              <div class="product-card__installments">
+                Tipo: {{ product.tipo_produto or "Produto" }}
+              </div>
+              <div class="product-card__pix">
+                <span>
+                  R${{ "%.2f"|format(product.preco * 0.95)|replace(".", ",") }}
+                </span>
+                com PIX (-5%)
+              </div>
+              <a
+                href="{{ url_for('product_page', codigo=product.codigo) }}"
+                class="product-card__button"
+                >Ver produto</a
+              >
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+      {% else %}
+      <section class="search-empty-state">
+        <div class="search-empty-state__card">
+          <h2>Nenhum produto encontrado</h2>
+          <p>
+            Tente buscar por nome, código, categoria ou uma palavra da
+            descrição do item.
+          </p>
+          <a href="{{ url_for('novidades') }}" class="cart-drawer__checkout"
+            >Explorar catálogo</a
+          >
+        </div>
+      </section>
+      {% endif %}
+    </main>
+
+    {% include 'partials/site_overlays.html' %}
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>
