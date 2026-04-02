@@ -1,0 +1,40 @@
+# Segredos e config local
+.env
+.env.*
+!.env.example
+*.secret
+*.key
+*.pem
+*.p12
+*.crt
+
+# Banco de dados / dados locais
+*.db
+*.sqlite
+*.sqlite3
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.python-version
+.venv/
+venv/
+env/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Logs e arquivos temporários
+*.log
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
