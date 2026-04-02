@@ -38,3 +38,20 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Ambientes
+.venv/
+venv/
+env/
+
+# Cache / testes
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Logs
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
